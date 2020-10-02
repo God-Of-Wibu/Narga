@@ -11,6 +11,8 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.messageresolver.IMessageResolver;
+import org.thymeleaf.messageresolver.StandardMessageResolver;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -43,7 +45,8 @@ public class Initializer implements ServletContextListener {
 
 	private SessionFactory getSessionFactory() {
 		if (sessionFactory == null) {
-			StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_PATH)
+			StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+					.configure(HIBERNATE_CFG_PATH)
 					.build();
 			MetadataSources metadataSources = new MetadataSources(registry);
 
@@ -65,7 +68,7 @@ public class Initializer implements ServletContextListener {
 
 	private TemplateEngine getTemplateEngine(final ServletContext servletContext) {
 		if (templateEngine == null) {
-			TemplateEngine templateEngine = new TemplateEngine();
+			templateEngine = new TemplateEngine();
 			templateEngine.setTemplateResolver(getTemplateResolver(servletContext));
 		}
 		return templateEngine;

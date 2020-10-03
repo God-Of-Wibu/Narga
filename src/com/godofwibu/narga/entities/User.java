@@ -30,9 +30,9 @@ public class User {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
-	@Column(name = "username")
+	@Column(name = "user_name")
 	private String name;
 	
-	//@OneToMany(mappedBy = "role_id", fetch = FetchType.LAZY)
-	//private Set<Role> roles;
+	@Column(name = "user_role")
+	private String role;
 }

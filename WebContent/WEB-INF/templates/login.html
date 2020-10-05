@@ -8,7 +8,7 @@
 </head>
 <body>
 	<div class="login-page">
-		<div class="form" style="background-image: url('login-bg-1.jpg')" th:style="|background-image: url(@{static/images/login-bg-1.jpg})|">
+		<div class="form" style="background-image: url('../images/login-bg-1.jpg')" th:style="|background-image: url(@{static/images/login-bg-1.jpg})|">
 			<form class="login-form" action="/login" th:action="@{/login}" method="post">
 				<input type="text" placeholder="username" name="username"/> 
 				<input type="password" placeholder="password" name="password"/>

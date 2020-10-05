@@ -2,3 +2,4 @@ buid/
 target/
 .settings/
 .classpath
+/bin/

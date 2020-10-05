@@ -52,7 +52,7 @@ public class SecurityFilter implements Filter {
 	private boolean needLogin(String url) {
 		if (url.startsWith("/static") || url.startsWith("/login") || url.startsWith("/register"))
 			return false;
-		return false;
+		return true;
 	}
 	
 	private boolean isAllow(String url, HttpSession session) {

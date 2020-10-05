@@ -20,6 +20,8 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import com.godofwibu.narga.entities.User;
+import com.godofwibu.narga.repositories.IUserRepository;
+import com.godofwibu.narga.repositories.UserRepository;
 
 @WebListener
 public class Initializer implements ServletContextListener {
@@ -27,6 +29,7 @@ public class Initializer implements ServletContextListener {
 	private static final String HIBERNATE_CFG_PATH = "hibernate.cfg.xml";
 	private SessionFactory sessionFactory;
 	private TemplateEngine templateEngine;
+	private IUserRepository userRepository;
 	
 	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
 
@@ -39,6 +42,7 @@ public class Initializer implements ServletContextListener {
 
 		ctx.setAttribute(SessionFactory.class.getName(), getSessionFactory());
 		ctx.setAttribute(TemplateEngine.class.getName(), getTemplateEngine(ctx));
+		ctx.setAttribute(IUserRepository.class.getName(), getUserRepository());
 		
 		insertSomeUsers();
 		LOGGER.debug("Initializing done!");
@@ -78,6 +82,13 @@ public class Initializer implements ServletContextListener {
 			templateEngine.setTemplateResolver(getTemplateResolver(servletContext));
 		}
 		return templateEngine;
+	}
+	
+	private IUserRepository getUserRepository() {
+		if (userRepository == null) {
+			userRepository = new UserRepository(getSessionFactory());
+		}
+		return userRepository;
 	}
 	
 	private void insertSomeUsers() {

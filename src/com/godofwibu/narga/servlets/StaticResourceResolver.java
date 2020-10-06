@@ -44,7 +44,7 @@ public class StaticResourceResolver implements IResourceResolver {
 			}
 			
 			@Override
-			public long getContentLenght() {			
+			public long getContentLength() {			
 				try {
 					return inStream.available();
 				} catch (IOException e) {

@@ -5,6 +5,6 @@ import java.io.InputStream;
 
 public interface IResource {
 	String getName();
-	long getContentLenght();
+	long getContentLength();
 	InputStream getInputStream() throws IOException;
 }

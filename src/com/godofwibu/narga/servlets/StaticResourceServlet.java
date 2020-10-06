@@ -2,15 +2,17 @@ package com.godofwibu.narga.servlets;
 
 import javax.servlet.annotation.WebServlet;
 
-
-@WebServlet("/file/*")
-public class FileResourceServingServlet extends ResourceServingServlet {
+@WebServlet("/static/*")
+public class StaticResourceServlet extends ResourceServlet {
 	private static final long serialVersionUID = 1L;
-	private FileResourceResolver resolver;
+	
+	StaticResourceResolver resolver;
+
 	@Override
 	protected IResourceResolver getResourceResolver() {
 		if (resolver == null) {
-			resolver = new FileResourceResolver();
+			resolver = new StaticResourceResolver(getServletContext());
+			resolver.setPrefix("/WEB-INF");
 		}
 		return resolver;
 	}

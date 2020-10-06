@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="../css/login.css"
+	th:href="@{/static/css/login.css}">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="login-page">
+		<div class="form" style="background-image: url('../images/login-bg-1.jpg')" th:style="|background-image: url(@{static/images/login-bg-1.jpg})|">
+			<form class="login-form" action="/login" th:action="@{/login}" method="post">
+				<input type="text" placeholder="username" name="username"/> 
+				<input type="password" placeholder="password" name="password"/>
+				<input class="submit-btn" type="submit" value="Login">
+				<p class="message"> Not registered? <a href="/register" th:href="@{/register}">Create an account</a></p>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

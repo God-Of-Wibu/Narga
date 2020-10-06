@@ -95,9 +95,9 @@ public class Initializer implements ServletContextListener {
 		Session session =  getSessionFactory().getCurrentSession();
 		Transaction transaction = session.beginTransaction();
 		
-		session.save(new User("user_001", "123", "241813141", "0987205513", "Ngo Thoi Trung", "MEMBER"));
-		session.save(new User("user_002", "123", "241813141", "0987205513", "Ngo Thoi Trung", "MEMBER"));
-		session.save(new User("user_003", "123", "241813141", "0987205513", "Ngo Thoi Trung", "MEMBER"));
+		session.save(new User("user_001", "123", "241813141", "0987205513", null,"Ngo Thoi Trung", "MEMBER"));
+		session.save(new User("user_002", "123", "241813141", "0987205513", null,"Ngo Thoi Trung", "MEMBER"));
+		session.save(new User("user_003", "123", "241813141", "0987205513", null,"Ngo Thoi Trung", "MEMBER"));
 		
 		transaction.commit();
 	}

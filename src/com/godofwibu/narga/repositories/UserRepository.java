@@ -12,8 +12,6 @@ import com.godofwibu.narga.entities.User;
 public class UserRepository implements IUserRepository {
 
 	private SessionFactory sessionFactory;
-	
-	
 
 	public UserRepository(SessionFactory sessionFactory) {
 		super();
@@ -58,6 +56,21 @@ public class UserRepository implements IUserRepository {
 	@Override
 	public void delete(String id) {
 
+	}
+
+	@Override
+	public void insert(User user) {
+		Session session = null;
+		Transaction transaction = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+			transaction = session.beginTransaction();
+			session.save(user);
+			transaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			transaction.rollback();
+		}
 	}
 
 }

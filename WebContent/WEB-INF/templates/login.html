@@ -2,11 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="../css/login.css"
-	th:href="@{/static/css/login.css}">
+<link rel="stylesheet" type="text/css" href="../css/login.css" th:href="@{/static/css/login.css}">
 <title>Insert title here</title>
 </head>
-<body>
+<body style="background-image: url('../images/login-bg-2.jpeg')" th:style="|background-image: url(@{static/images/login-bg-2.jpeg})|">
 	<div class="login-page">
 		<div class="form" style="background-image: url('../images/login-bg-1.jpg')" th:style="|background-image: url(@{static/images/login-bg-1.jpg})|">
 			<form class="login-form" action="/login" th:action="@{/login}" method="post">

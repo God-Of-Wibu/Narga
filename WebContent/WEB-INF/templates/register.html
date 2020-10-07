@@ -3,13 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
 <link rel="stylesheet" type="text/css" href="../css/register.css" th:href="@{/static/css/register.css}">
 </head>
 <body>
-	<div class="register-page">
-
-
+	<div class="register-page" style="background-image: url('../images/login-bg-2.jpeg')" th:style="|background-image: url(@{static/images/login-bg-2.jpeg})|">
   <form class="form">
     <h1>Register</h1>
     <p>Please fill in this form to create an account.</p>
@@ -36,10 +33,10 @@
     
 
     <button type="submit" class="registerbtn">Register</button>
-  </form>
-  
-  <div class="container signin">
     <p>Already have an account? <a href="/login" th:href="@{/login}">Sign in</a>.</p>
+  </form>
+ 
+  <div class="container signin" style="background-image: url('../images/bg-bottom-footer.jpg')" th:style="|background-image: url(@{static/images/bg-bottom-footer.jpg})|" >
   </div>
 
 </div>

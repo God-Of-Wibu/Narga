@@ -24,6 +24,16 @@
         <property name="hibernate.dbcp.maxIdle">10</property>
         <property name="hibernate.dbcp.minIdle">5</property>
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
+        
         <mapping class="com.godofwibu.narga.entities.User"/>
+        <mapping class="com.godofwibu.narga.entities.Profile"/>
+        <mapping class="com.godofwibu.narga.entities.Actor"/>
+        <mapping class="com.godofwibu.narga.entities.Category"/>
+        <mapping class="com.godofwibu.narga.entities.Country"/>
+        <mapping class="com.godofwibu.narga.entities.Director"/>
+        <mapping class="com.godofwibu.narga.entities.Film"/>
+        <mapping class="com.godofwibu.narga.entities.ImageData"/>
+        <mapping class="com.godofwibu.narga.entities.Ticket"/>
+        <mapping class="com.godofwibu.narga.entities.TicketType"/>
     </session-factory>
 </hibernate-configuration>

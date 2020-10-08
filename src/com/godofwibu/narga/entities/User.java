@@ -20,19 +20,22 @@ public class User {
 	@Id
 	@Column(name = "user_id")
 	private String id;
-	
+
 	@Column(name = "password", nullable = false)
 	private String password;
-	
+
 	@Column(name = "personal_id")
 	private String personalId;
-	
+
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
+	@Column(name = "email")
+	private String email;
+	
 	@Column(name = "user_name")
 	private String name;
-	
+
 	@Column(name = "user_role")
 	private String role;
 }

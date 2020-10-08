@@ -9,14 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public abstract class ResourceServingServlet extends HttpServlet {
+public abstract class ResourceServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static final int BUFFER_SIZE = 1024 * 100;
        
 	private final String CONTENT_DISPOSITION_HEADER_FMT = "inline;filename=\"%s\"";
    
-    public ResourceServingServlet() {
+    public ResourceServlet() {
         super();
     }
     
@@ -53,7 +53,7 @@ public abstract class ResourceServingServlet extends HttpServlet {
 	private void setHeader(HttpServletResponse res, IResource resource) {
 		res.setHeader("Content-Type", getServletContext().getMimeType(resource.getName()));
 		res.setHeader("Content-Disposition", String.format(CONTENT_DISPOSITION_HEADER_FMT, resource.getName()));
-		res.setHeader("Context-Length", String.valueOf(resource.getContentLenght()));
+		res.setHeader("Context-Length", String.valueOf(resource.getContentLength()));
 	}
 	
 	private void writeContent(HttpServletResponse res, IResource resource) throws IOException {
@@ -65,7 +65,7 @@ public abstract class ResourceServingServlet extends HttpServlet {
 				outStream.write(buffer, 0, byteRead);
 				length += byteRead;
 			}
-			if (resource.getContentLenght() != -1 && !res.isCommitted()) {
+			if (resource.getContentLength() != -1 && !res.isCommitted()) {
 				res.setHeader("Context-Length", String.valueOf(length));
 			}
 		}

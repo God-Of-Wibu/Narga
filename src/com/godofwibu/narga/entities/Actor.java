@@ -22,6 +22,9 @@ public class Actor {
 	@Column(name = "id")
 	private Integer id;
 	
+	@Column(name = "name")
+	private String name;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "gender")
 	private Gender gender;

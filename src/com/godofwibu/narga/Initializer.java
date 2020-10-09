@@ -17,7 +17,9 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import com.godofwibu.narga.entities.User;
+import com.godofwibu.narga.entities.Category;
+import com.godofwibu.narga.repositories.CategoryRepository;
+import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.repositories.UserRepository;
 
@@ -28,11 +30,11 @@ public class Initializer implements ServletContextListener {
 	private SessionFactory sessionFactory;
 	private TemplateEngine templateEngine;
 	private IUserRepository userRepository;
+	private ICategoryRepository categoryRepository;
 	
 	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
 
-	public Initializer() {
-	}
+	public Initializer() { }
 
 	public void contextInitialized(ServletContextEvent sce) {
 		LOGGER.debug("Initializing...");
@@ -41,8 +43,10 @@ public class Initializer implements ServletContextListener {
 		ctx.setAttribute(SessionFactory.class.getName(), getSessionFactory());
 		ctx.setAttribute(TemplateEngine.class.getName(), getTemplateEngine(ctx));
 		ctx.setAttribute(IUserRepository.class.getName(), getUserRepository());
+		ctx.setAttribute(ICategoryRepository.class.getName(), getCategoryRepository());
 		
 		insertSomeUsers();
+		insertCategories();
 		LOGGER.debug("Initializing done!");
 	}
 
@@ -98,5 +102,18 @@ public class Initializer implements ServletContextListener {
 		//session.save(new User("user_003", "123", "241813141", "0987205513", null,"Ngo Thoi Trung", "MEMBER"));
 		
 		transaction.commit();
+	}
+	
+	private void insertCategories() {
+		ICategoryRepository repo = getCategoryRepository();
+		repo.insert(new Category("CMD", "hài"));
+		repo.insert(new Category("ACT", "hành động"));
+	}
+	
+	private ICategoryRepository getCategoryRepository() {
+		if (categoryRepository == null) {
+			categoryRepository = new CategoryRepository(getSessionFactory());
+		}
+		return categoryRepository;
 	}
 }

@@ -25,6 +25,10 @@
         <property name="hibernate.dbcp.minIdle">5</property>
         <property name="hibernate.dbcp.maxWaitMillis">-1</property>
         
+        <property name="hibernate.connection.CharSet">utf8</property>
+		<property name="hibernate.connection.characterEncoding">utf8</property>
+		<property name="hibernate.connection.useUnicode">true</property>
+        
         <mapping class="com.godofwibu.narga.entities.User"/>
         <mapping class="com.godofwibu.narga.entities.Profile"/>
         <mapping class="com.godofwibu.narga.entities.Actor"/>

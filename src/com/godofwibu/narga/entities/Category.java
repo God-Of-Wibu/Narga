@@ -13,7 +13,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity 
@@ -28,4 +27,11 @@ public class Category {
 	
 	@ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
 	private List<Film> films;
+
+	public Category(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
+	
 }

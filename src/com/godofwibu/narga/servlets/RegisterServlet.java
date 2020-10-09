@@ -76,6 +76,6 @@ public class RegisterServlet extends HttpServlet {
 	}
 
 	private boolean isAlreadyExist(String username) {
-		return userRepository.get(username) != null;
+		return userRepository.findById(username) != null;
 	}
 }

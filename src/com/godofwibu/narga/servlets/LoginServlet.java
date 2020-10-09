@@ -52,7 +52,7 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	private void login(HttpServletRequest req, HttpServletResponse res, String username, String password) throws ServletException, IOException {
-		User user = userRepository.get(username);
+		User user = userRepository.findById(username);
 		
 		if (user != null && user.getPassword().equals(password)) {
 			HttpSession session = req.getSession();

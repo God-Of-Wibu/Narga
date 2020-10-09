@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSessionIdListener;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
+import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.repositories.UserRepository;
@@ -53,17 +54,17 @@ public class RegisterServlet extends HttpServlet {
 		String personalId = params.get("personalId")[0];
 		String email = params.get("email")[0];
 		String phoneNumber = params.get("phoneNumber")[0];
-		String role = "MEMBER";
-		register(userId, password, personalId, email,phoneNumber, "", role, request, response);
-
+		Role role = Role.MEMBER;
+		//register(userId, password, personalId, email,phoneNumber, "", role, request, response);
 	}
 
 	private void register(String username, String password, String personalID,String email, String phoneNumber, String name,
-			String roles, HttpServletRequest request, HttpServletResponse response)
+			Role role, HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		User user = new User(username, password, personalID, phoneNumber, email, name, roles);
+		//User user = new User(username, password, personalID, phoneNumber, email, name, roles);
+		
 		if (!isAlreadyExist(username)) {
-			userRepository.insert(user);
+			userRepository.insert(null);
 			WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
 			templateEngine.process("registerSuccess", webContext, response.getWriter());
 		} else {

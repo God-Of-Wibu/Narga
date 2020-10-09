@@ -3,39 +3,33 @@ package com.godofwibu.narga.entities;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
+@Data
 @Entity
 @Table(name = "users")
 public class User {
 	@Id
-	@Column(name = "user_id")
+	@Column(name = "id")
 	private String id;
 
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	@Column(name = "personal_id")
-	private String personalId;
-
-	@Column(name = "phone_number")
-	private String phoneNumber;
+	@Column(name = "role", nullable = false)
+	private Role role;
 	
-	@Column(name = "email")
-	private String email;
-	
-	@Column(name = "user_name")
-	private String name;
-
-	@Column(name = "user_role")
-	private String role;
+	@OneToOne
+	@JoinColumn(name = "profile_id", nullable = false)
+	private Profile profile;
 }

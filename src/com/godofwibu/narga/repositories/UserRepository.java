@@ -22,7 +22,7 @@ public class UserRepository implements IUserRepository {
 	}
 
 	@Override
-	public List<User> getAll() {
+	public List<User> findAll() {
 		List<User> users = new ArrayList<User>();
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;

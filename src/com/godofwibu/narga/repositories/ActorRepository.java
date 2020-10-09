@@ -10,54 +10,48 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.godofwibu.narga.entities.Actor;
-import com.godofwibu.narga.entities.Category;
 
-public class CategoryRepository implements ICategoryRepository {
+public class ActorRepository implements IActorRepository {
 	
-	private SessionFactory sessionFactory;
-	
-	public CategoryRepository(SessionFactory sessionFactory) {
-		super();
-		this.sessionFactory = sessionFactory;
-	}
+	private SessionFactory sessionFactory; 
 
 	@Override
-	public List<Category> findAll() {
-		List<Category> categories = null;
-		Transaction tx = null;
+	public List<Actor> findAll() {
+		List<Actor> actors = null;
 		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			categories = session.createQuery("SELECT c FROM Category AS c", Category.class).getResultList();
+			actors = session.createQuery("SELECT a FROM Actor as a", Actor.class)
+					.getResultList();
 			tx.commit();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
-			e.printStackTrace();
 		}
-		return categories;
+		return actors;
 	}
 
 	@Override
-	public Category findById(String id) {
+	public Actor findById(Integer id) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
-		Category category = null;
+		Actor actor = null;
 		try {
 			transaction = session.beginTransaction();
-			category = session.get(Category.class, id);
+			actor = session.get(Actor.class, id);
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
 		}
-		return category;
+		return actor;
 	}
 
 	@Override
-	public String insert(Category entity) {
-		String id = null;
+	public Integer insert(Actor entity) {
+		Integer id = null;
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
@@ -73,7 +67,7 @@ public class CategoryRepository implements ICategoryRepository {
 	}
 
 	@Override
-	public void update(Category entity) {
+	public void update(Actor entity) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
@@ -88,7 +82,7 @@ public class CategoryRepository implements ICategoryRepository {
 	}
 
 	@Override
-	public void deleteById(String id) {
+	public void deleteById(Integer id) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
@@ -105,7 +99,7 @@ public class CategoryRepository implements ICategoryRepository {
 	}
 
 	@Override
-	public void delete(Category entity) {
+	public void delete(Actor entity) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
@@ -118,5 +112,4 @@ public class CategoryRepository implements ICategoryRepository {
 			e.printStackTrace();
 		}
 	}
-
 }

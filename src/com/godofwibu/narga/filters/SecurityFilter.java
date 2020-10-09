@@ -50,9 +50,10 @@ public class SecurityFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException { }
 	
 	private boolean needLogin(String url) {
-		if (url.startsWith("/static") || url.startsWith("/login") || url.startsWith("/register"))
-			return false;
-		return true;
+		//if (url.startsWith("/static") || url.startsWith("/login") || url.startsWith("/register"))
+			//return false;
+		//return true;
+		return false;
 	}
 	
 	private boolean isAllow(String url, HttpSession session) {

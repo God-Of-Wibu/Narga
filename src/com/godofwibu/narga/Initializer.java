@@ -18,8 +18,13 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import com.godofwibu.narga.entities.Category;
+import com.godofwibu.narga.entities.Country;
+import com.godofwibu.narga.repositories.ActorRepository;
 import com.godofwibu.narga.repositories.CategoryRepository;
+import com.godofwibu.narga.repositories.CountryRepository;
+import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
+import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.repositories.UserRepository;
 
@@ -31,23 +36,26 @@ public class Initializer implements ServletContextListener {
 	private TemplateEngine templateEngine;
 	private IUserRepository userRepository;
 	private ICategoryRepository categoryRepository;
+	private IActorRepository actorRepository;
+	private ICountryRepository countryRepository;
 	
 	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
 
 	public Initializer() { }
 
 	public void contextInitialized(ServletContextEvent sce) {
-		LOGGER.debug("Initializing...");
 		ServletContext ctx = sce.getServletContext();
 
 		ctx.setAttribute(SessionFactory.class.getName(), getSessionFactory());
 		ctx.setAttribute(TemplateEngine.class.getName(), getTemplateEngine(ctx));
 		ctx.setAttribute(IUserRepository.class.getName(), getUserRepository());
 		ctx.setAttribute(ICategoryRepository.class.getName(), getCategoryRepository());
+		ctx.setAttribute(IActorRepository.class.getName(), getActorRepository());
+		ctx.setAttribute(ICountryRepository.class.getName(), getCountryRepository());
 		
 		insertSomeUsers();
 		insertCategories();
-		LOGGER.debug("Initializing done!");
+		insertCountries();
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {
@@ -93,6 +101,13 @@ public class Initializer implements ServletContextListener {
 		return userRepository;
 	}
 	
+	private IActorRepository getActorRepository() {
+		if (actorRepository == null) {
+			actorRepository = new ActorRepository(getSessionFactory());
+		}
+		return actorRepository;
+	}
+	
 	private void insertSomeUsers() {
 		Session session =  getSessionFactory().getCurrentSession();
 		Transaction transaction = session.beginTransaction();
@@ -106,9 +121,21 @@ public class Initializer implements ServletContextListener {
 	
 	private void insertCategories() {
 		ICategoryRepository repo = getCategoryRepository();
-		repo.insert(new Category("CMD", "hài"));
-		String id = repo.insert(new Category("ACT", "hành động"));
-		repo.deleteById(id);
+		Category cat = null;
+		repo.insert(cat = new Category("CMD", "comedy"));
+		repo.insert(new Category("RMT", "romantic"));
+		repo.insert(new Category("ACT", "action"));
+		repo.delete(cat);
+	}
+	
+	private void insertCountries() {
+		ICountryRepository repo = getCountryRepository();
+		
+		repo.insert(new Country("vi", "Viet Nam"));
+		repo.insert(new Country("usa", "United States of America"));
+		repo.insert(new Country("uk", "United Kingdom"));
+		repo.insert(new Country("ca", "China"));
+		repo.insert(new Country("jap", "Japan"));
 	}
 	
 	private ICategoryRepository getCategoryRepository() {
@@ -116,5 +143,12 @@ public class Initializer implements ServletContextListener {
 			categoryRepository = new CategoryRepository(getSessionFactory());
 		}
 		return categoryRepository;
+	}
+	
+	private ICountryRepository getCountryRepository() {
+		if (countryRepository == null) {
+			countryRepository = new CountryRepository(getSessionFactory());
+		}
+		return countryRepository;
 	}
 }

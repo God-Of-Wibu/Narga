@@ -74,8 +74,7 @@ public class UserRepository implements IUserRepository {
 	public void deleteById(String id) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
-		try {
-			
+		try {		
 			transaction = session.beginTransaction();
 			Query query = session.createQuery("DELETE FROM User AS u WHERE u.id=:user_id");
 			query.setParameter("user_id", id);

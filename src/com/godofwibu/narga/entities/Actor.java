@@ -4,6 +4,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -22,6 +24,7 @@ public class Actor {
 
 	@Id
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 	
 	@Column(name = "name")
@@ -35,10 +38,10 @@ public class Actor {
 	private Integer age;
 	
 	@ManyToOne
-	@JoinColumn(name = "avatar")
+	@JoinColumn(name = "avatar", referencedColumnName = "id")
 	private ImageData avatar;
 	
 	@ManyToOne
-	@JoinColumn(name = "contry_id")
+	@JoinColumn(name = "contry_id", referencedColumnName = "id")
 	private Country country;
 }

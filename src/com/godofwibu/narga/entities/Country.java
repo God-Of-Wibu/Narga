@@ -14,7 +14,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
@@ -23,7 +22,7 @@ public class Country {
 	
 	@Id
 	@Column(name = "id")
-	private int id;
+	private String id;
 	
 	@Column(name = "name")
 	private String name;
@@ -37,5 +36,11 @@ public class Country {
 	
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private List<Director> directors;
+
+	public Country(String id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+	}
 	
 }

@@ -9,60 +9,60 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.godofwibu.narga.entities.Actor;
-import com.godofwibu.narga.entities.Category;
+import com.godofwibu.narga.entities.Country;
 
-public class CategoryRepository implements ICategoryRepository {
-	
+public class CountryRepository implements ICountryRepository {
+
 	private SessionFactory sessionFactory;
 	
-	public CategoryRepository(SessionFactory sessionFactory) {
+	
+	public CountryRepository(SessionFactory sessionFactory) {
 		super();
 		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
-	public List<Category> findAll() {
-		List<Category> categories = null;
-		Transaction tx = null;
+	public List<Country> findAll() {
+		List<Country> countries = null;
 		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			categories = session.createQuery("SELECT c FROM Category AS c", Category.class).getResultList();
+			countries = session.createQuery("SELECT c FROM Country as c", Country.class)
+					.getResultList();
 			tx.commit();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
-			e.printStackTrace();
 		}
-		return categories;
+		return countries;
 	}
 
 	@Override
-	public Category findById(String id) {
+	public Country findById(String id) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
-		Category category = null;
+		Country country = null;
 		try {
 			transaction = session.beginTransaction();
-			category = session.get(Category.class, id);
+			country = session.get(Country.class, id);
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
 		}
-		return category;
+		return country;
 	}
 
 	@Override
-	public String insert(Category entity) {
+	public String insert(Country entity) {
 		String id = null;
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			id = (String) session.save(entity);
+			id = (String)session.save(entity);
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)
@@ -73,7 +73,7 @@ public class CategoryRepository implements ICategoryRepository {
 	}
 
 	@Override
-	public void update(Category entity) {
+	public void update(Country entity) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
@@ -93,8 +93,8 @@ public class CategoryRepository implements ICategoryRepository {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Query query = session.createQuery("DELETE FROM Category AS c WHERE c.id=:category_id");
-			query.setParameter("category_id", id);
+			Query query = session.createQuery("DELETE FROM Country AS c WHERE c.id=:country_id");
+			query.setParameter("country_id", id);
 			query.executeUpdate();
 			transaction.commit();
 		}catch (HibernateException e) {
@@ -105,7 +105,7 @@ public class CategoryRepository implements ICategoryRepository {
 	}
 
 	@Override
-	public void delete(Category entity) {
+	public void delete(Country entity) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {

@@ -15,6 +15,11 @@ public class ActorRepository implements IActorRepository {
 	
 	private SessionFactory sessionFactory; 
 
+	public ActorRepository(SessionFactory sessionFactory) {
+		super();
+		this.sessionFactory = sessionFactory;
+	}
+
 	@Override
 	public List<Actor> findAll() {
 		List<Actor> actors = null;
@@ -56,7 +61,7 @@ public class ActorRepository implements IActorRepository {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			session.save(entity);
+			id = (Integer)session.save(entity);
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)

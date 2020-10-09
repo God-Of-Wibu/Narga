@@ -107,7 +107,8 @@ public class Initializer implements ServletContextListener {
 	private void insertCategories() {
 		ICategoryRepository repo = getCategoryRepository();
 		repo.insert(new Category("CMD", "hài"));
-		repo.insert(new Category("ACT", "hành động"));
+		String id = repo.insert(new Category("ACT", "hành động"));
+		repo.deleteById(id);
 	}
 	
 	private ICategoryRepository getCategoryRepository() {

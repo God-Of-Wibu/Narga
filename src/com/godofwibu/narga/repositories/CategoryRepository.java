@@ -71,6 +71,7 @@ public class CategoryRepository implements ICategoryRepository {
 			transaction = session.beginTransaction();
 			Query query = session.createQuery("DELETE FROM Category AS c WHERE c.id=:category_id");
 			query.setParameter("category_id", id);
+			query.executeUpdate();
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)

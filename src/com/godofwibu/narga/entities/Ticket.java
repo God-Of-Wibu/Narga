@@ -32,6 +32,6 @@ public class Ticket {
 	TicketType ticketType;
 	
 	@OneToOne
-	@JoinColumn(name = "user_id")
-	private User user;
+	@JoinColumn(name = "owner")
+	private User owner;
 }

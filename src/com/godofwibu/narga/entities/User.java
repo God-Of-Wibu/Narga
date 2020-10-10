@@ -7,6 +7,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -31,5 +34,6 @@ public class User {
 	
 	@OneToOne
 	@JoinColumn(name = "profile_id", nullable = false)
+	@Cascade(CascadeType.ALL)
 	private Profile profile;
 }

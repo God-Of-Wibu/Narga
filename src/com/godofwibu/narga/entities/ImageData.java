@@ -8,10 +8,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
 @Table(name = "image_data")
 public class ImageData {
@@ -26,4 +27,12 @@ public class ImageData {
 	
 	@Column(name = "local_file", nullable = true)
 	private String localFile;
+
+	public ImageData(String url, String localFile) {
+		super();
+		this.url = url;
+		this.localFile = localFile;
+	}
+	
+	
 }

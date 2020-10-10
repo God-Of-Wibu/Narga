@@ -12,9 +12,12 @@
 				<input type="text" placeholder="username" name="username"/> 
 				<input type="password" placeholder="password" name="password"/>
 				<input class="submit-btn" type="submit" value="Login">
+				<div th:if="${}">
+				  <p>Wrong username or password</p>
+				</div>
 				<p class="message"> Not registered? <a href="/register" th:href="@{/register}">Create an account</a></p>
 			</form>
-		</div>
+	</div>
 	</div>
 </body>
 </html>

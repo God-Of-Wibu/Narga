@@ -2,22 +2,28 @@
 
 body {  
 background: #fdf7dc;
+margin: 0px;
+height: 500px;
+background-image: url('../images/bg-bottom-footer.jpg');
+	background-repeat: repeat-x;
+	background-position: bottom;
+	background-size:400px;
+	height: 1000px;
 }
  
-.profile-sidebar {  
-padding: 200px 10px 200px 10px ;  
-background-color: #fdfcf0;
-background-image: url('bg-bottom-footer.jpg'), url('bg-bottom-footer.jpg') ;
-background-position: bottom, top;
-background-repeat: repeat-x ;
+button{
+	background-color: #ffba3b;
+	color: #cf1717;
+	width: 175px;
+    height: 44px;
+    text-align: center;
+    font-size: 24px;
 }
- 
- 
-.profile-userpic img {  
+.profile-userpic {  
 float: none;  
 margin: 0 auto;  
-width: 50%;  
-height: 50%;  
+width: auto;  
+height: 150px;  
 -webkit-border-radius: 50%;  
 -moz-border-radius: 50%;  
 border-radius: 50%;
@@ -27,11 +33,14 @@ border-radius: 50%;
 .profile-usertitle {  
 text-align: center;  
 margin-top: 20px;
+height: auto;
+position: relative;
 }
  
 .profile-userbuttons {  
-text-align: center;  
-margin-top: 10px;
+text-align: center; 
+position: relative; 
+margin: 10px;
 }
  
  
@@ -54,7 +63,20 @@ margin-right: 0px;
 
 #general{
 	color: black;
- font-weight: 600;
- margin-right: 15px;
-text-align: left;
+    font-weight: 600;
+  
+    text-align: left;
+}
+
+header{
+	background-color:#198798;
+	height: 200px;
+}
+
+.rowprofile{
+	border-style: solid;
+	border-width:3px 0px 3px 0px;
+	border-color:	#198798;
+	height:auto;
+	display: block;
 }

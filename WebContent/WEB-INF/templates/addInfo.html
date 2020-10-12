@@ -23,13 +23,14 @@
 	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
 	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
 	crossorigin="anonymous"></script>
+<script type="text/javascript" th:src="@{/static/js/addFilm.js}"></script>
 <title>New Actor</title>
 </head>
 <body>
 	<div class="container">
 		<h1>New Actor</h1>
-		<h3 th:if="${status}" th:text="${status}"></h3>
-		<form action="/new-actor" th:action="@{/admin/add-actor-info}" method="post">
+		<span th:if="${status}" th:text="${status}">status</span>
+		<form action="/new-actor" th:action="@{${submitLink}}" method="post">
 			<div class="form-group">
 				<label for="name">Name:</label>
 				<input type="text" class="form-control" name="name" placeholder="Name">

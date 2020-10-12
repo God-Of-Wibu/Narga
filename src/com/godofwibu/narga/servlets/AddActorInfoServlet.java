@@ -72,6 +72,7 @@ public class AddActorInfoServlet extends HttpServlet {
 		context.setVariable("genderValues", Gender.values());
 		context.setVariable("defaultGender", Gender.MALE);
 		context.setVariable("countries", countryRepository.findAll());
+		context.setVariable("submitLink", "/admin/add-actor-info");
 		templateEngine.process("addActorInfo", context, res.getWriter());
 	}
 

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+	crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+	crossorigin="anonymous"></script>
+<script
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+	integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+	crossorigin="anonymous"></script>
+<script
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+	crossorigin="anonymous"></script>
+<link rel="stylesheet" th:href="@{/static/css/addFilm.css}"
+	href="../css/addFilm.css">
+<script type="text/javascript" src="../js/addFilm.js" th:src="@{/static/js/addFilm.js}"></script>
+<title>Add Film Info</title>
+</head>
+<body>
+	<div id="category-selector-wrapper" class="selector-wrapper">
+		<div id="category-selector">
+			<strong>Category Selector</strong>
+			<div>
+				<input id="category-input" class="form-control" type="text"
+					placeholder="Enter category type">
+			</div>
+		</div>
+	</div>
+	<div id="film-selector-wrapper" class="selector-wrapper">
+	</div>
+	<div class="container">
+		<h1>New Film</h1>
+		<div>
+			<div class="form-group">
+				<label for="title">Title</label> <input class="form-control"
+					type="text" id="title" placeholder="Name">
+			</div>
+			<div class="form-group">
+				<label for="country">Country:</label> <input class="form-control"
+					type="text" id="country" placeholder="Country">
+			</div>
+			<div class="form-group">
+				<label for="director">Director:</label> <input class="form-control"
+					type="text" id="director" placeholder="Country">
+			</div>
+			<div class="container wrapper" id="category-list-wrapper">
+				<strong>Categories:</strong><span class="btn btn-primary" id="show-category-selector-btn">add</span>
+				<div id="category-list">
+					
+				</div>
+			</div>
+			<div class="container wrapper" id="cast-wrapper">
+				<div class="cast">
+					<strong>Cast:</strong><span class="btn btn-primary" id="show-actor-selector-btn">add</span>
+					<div class="actor"><span>mikami yua</span></div> 
+					<div class="actor"> <span>tokuda</span> </div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>

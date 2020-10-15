@@ -9,13 +9,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Category;
 
 public class CategoryRepository implements ICategoryRepository {
-	
+
 	private SessionFactory sessionFactory;
-	
+
 	public CategoryRepository(SessionFactory sessionFactory) {
 		super();
 		this.sessionFactory = sessionFactory;
@@ -28,9 +27,11 @@ public class CategoryRepository implements ICategoryRepository {
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			tx = session.beginTransaction();
-			categories = session.createQuery("SELECT c FROM Category AS c", Category.class).getResultList();
+			categories = session.createQuery(
+					"SELECT new com.godofwibu.narga.entities.Category(cat.name) FROM Category as cat",
+					Category.class).getResultList();
 			tx.commit();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			if (tx != null)
 				tx.rollback();
 			e.printStackTrace();
@@ -47,7 +48,7 @@ public class CategoryRepository implements ICategoryRepository {
 			transaction = session.beginTransaction();
 			category = session.get(Category.class, id);
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
@@ -64,7 +65,7 @@ public class CategoryRepository implements ICategoryRepository {
 			transaction = session.beginTransaction();
 			id = (String) session.save(entity);
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
@@ -80,7 +81,7 @@ public class CategoryRepository implements ICategoryRepository {
 			transaction = session.beginTransaction();
 			session.update(entity);
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
@@ -88,16 +89,16 @@ public class CategoryRepository implements ICategoryRepository {
 	}
 
 	@Override
-	public void deleteById(String id) {
+	public void deleteById(String name) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Query query = session.createQuery("DELETE FROM Category AS c WHERE c.id=:category_id");
-			query.setParameter("category_id", id);
+			Query query = session.createQuery("DELETE FROM Category AS c WHERE c.name=:name");
+			query.setParameter("name", name);
 			query.executeUpdate();
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
@@ -112,7 +113,7 @@ public class CategoryRepository implements ICategoryRepository {
 			transaction = session.beginTransaction();
 			session.delete(entity);
 			transaction.commit();
-		}catch (HibernateException e) {
+		} catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();

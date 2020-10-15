@@ -8,24 +8,18 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet"
-	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
-	integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
-	crossorigin="anonymous">
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-	integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-	crossorigin="anonymous"></script>
+<script src="../js/jquery-3.5.1.min.js"
+	th:src="@{/static/js/jquery-3.5.1.min.js}"></script>
 <script
-	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-	integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-	crossorigin="anonymous"></script>
+	src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script
-	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-	integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
-	crossorigin="anonymous"></script>
+	src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" th:href="@{/static/css/addFilm.css}"
 	href="../css/addFilm.css">
-<script type="text/javascript" src="../js/addFilm.js" th:src="@{/static/js/addFilm.js}"></script>
+<script type="text/javascript" src="../js/addFilm.js"
+	th:src="@{/static/js/addFilm.js}"></script>
 <title>Add Film Info</title>
 </head>
 <body>
@@ -33,43 +27,78 @@
 		<div id="category-selector">
 			<strong>Category Selector</strong>
 			<div>
-				<input id="category-input" class="form-control" type="text"
-					placeholder="Enter category type">
+				<input id="category-ip" class="form-control" type="text"
+					placeholder="Enter category type" list="category-data-ls">
+				<datalist id="category-data-ls">
+
+				</datalist>
 			</div>
 		</div>
 	</div>
-	<div id="film-selector-wrapper" class="selector-wrapper">
+	<div id="actor-selector-wrapper" class="selector-wrapper">
+		<div id="actor-selector">
+			<strong>Actor Selector</strong> <input id="actor-ip"
+				class="form-control" type="text" placeholder="Enter actor's name">
+			<div id="actor-ls" class="container">
+				<div class="actor">
+					<div class="actor-name"></div>
+					<div class="actor-avatar">
+						<div class="actor-country"></div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="container">
+	<form class="container" id="new-film-form"
+		th:action="@{/admin/add-film}" method="post">
 		<h1>New Film</h1>
 		<div>
 			<div class="form-group">
-				<label for="title">Title</label> <input class="form-control"
-					type="text" id="title" placeholder="Name">
+				<label for="title-ip">Title</label> <input class="form-control"
+					type="text" id="title-ip" name="title" placeholder="Name">
+			</div>
+			<div class="form-group-ip">
+				<label for="country">Country:</label> 
+				<select class="form-control" name="country">
+					<option th:each="country : ${countries}" th:text="${country}">country</option>
+				</select>
 			</div>
 			<div class="form-group">
-				<label for="country">Country:</label> <input class="form-control"
-					type="text" id="country" placeholder="Country">
+				<label for="director">Director:</label> 
+				<input class="form-control" type="text" name="director" placeholder="Director">
 			</div>
 			<div class="form-group">
-				<label for="director">Director:</label> <input class="form-control"
-					type="text" id="director" placeholder="Country">
+				<label for="running-time">Running Time(in minute):</label> 
+				<input class="form-control" type="number" name="runningTime" placeholder="Director">
+			</div>
+			<div class="input-group">
+				<div class="input-group-prepend">
+					<span class="input-group-text">Poster</span>
+				</div>
+				<div class="custom-file">
+					<input type="file" class="custom-file-input" name="poster" id="poster-ip">
+					<label class="custom-file-label" id="poster-lb" >Choose
+						poster</label>
+				</div>
 			</div>
 			<div class="container wrapper" id="category-list-wrapper">
-				<strong>Categories:</strong><span class="btn btn-primary" id="show-category-selector-btn">add</span>
-				<div id="category-list">
-					
-				</div>
+				<strong>Categories:</strong><span class="btn btn-primary"
+					id="show-category-selector-btn">add</span>
+				<div id="category-list"></div>
 			</div>
 			<div class="container wrapper" id="cast-wrapper">
 				<div class="cast">
-					<strong>Cast:</strong><span class="btn btn-primary" id="show-actor-selector-btn">add</span>
-					<div class="actor"><span>mikami yua</span></div> 
-					<div class="actor"> <span>tokuda</span> </div>
+					<strong>Cast:</strong><span class="btn btn-primary"
+						id="show-actor-selector-btn">add</span>
 				</div>
 			</div>
+			<button class="btn btn-primary" id="submit-btn">Submit</button>
 		</div>
+	</form>
+	<div class="container" id="status">
+		
 	</div>
+	
 
 </body>
 </html>

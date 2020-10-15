@@ -93,9 +93,10 @@ public class CountryRepository implements ICountryRepository {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Query query = session.createQuery("DELETE FROM Country AS c WHERE c.id=:country_id");
-			query.setParameter("country_id", id);
-			query.executeUpdate();
+			session
+				.createQuery("DELETE FROM Country AS c WHERE c.id=:country_id")
+				.setParameter("country_id", id)
+				.executeUpdate();
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)
@@ -117,6 +118,26 @@ public class CountryRepository implements ICountryRepository {
 				transaction.rollback();
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public Country findByName(String name) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction transaction = null;
+		Country country = null;
+		try {
+			transaction = session.beginTransaction();
+			country = session
+				.createQuery("SELECT c FROM Country AS c WHERE c.name=:name", Country.class)
+				.setParameter("name", name)
+				.getSingleResult();
+			transaction.commit();
+		}catch (HibernateException e) {
+			if (transaction != null)
+				transaction.rollback();
+			e.printStackTrace();
+		}
+		return country;
 	}
 
 }

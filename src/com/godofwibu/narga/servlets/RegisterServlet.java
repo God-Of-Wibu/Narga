@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionIdListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
@@ -20,13 +22,16 @@ import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.repositories.UserRepository;
+import com.godofwibu.narga.services.IAccountService;
+import com.godofwibu.narga.services.UserCreationException;
 
 @WebServlet(name = "registerServlet", urlPatterns = { "/register" })
 public class RegisterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServlet.class);
 
 	private TemplateEngine templateEngine;
-	private IUserRepository userRepository;
+	private IAccountService accountService;
 
 	public RegisterServlet() {
 		super();
@@ -37,7 +42,7 @@ public class RegisterServlet extends HttpServlet {
 		super.init();
 		ServletContext ctx = getServletContext();
 		templateEngine = (TemplateEngine) ctx.getAttribute(TemplateEngine.class.getName());
-		userRepository = (IUserRepository) ctx.getAttribute(IUserRepository.class.getName());
+		accountService = (IAccountService) ctx.getAttribute(IAccountService.class.getName());
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,36 +51,27 @@ public class RegisterServlet extends HttpServlet {
 		templateEngine.process("register", webContext, response.getWriter());
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		Map<String, String[]> params = request.getParameterMap();
+		
+		Map<String, String[]> params = req.getParameterMap();
 		String userId = params.get("userId")[0];
 		String password = params.get("password")[0];
+		String confirmPassword = params.get("confirmPassword")[0];
 		String personalId = params.get("personalId")[0];
-		String email = params.get("email")[0];
-		String phoneNumber = params.get("phoneNumber")[0];
+		String name = params.get("name")[0];
 		Role role = Role.MEMBER;
-		//register(userId, password, personalId, email,phoneNumber, "", role, request, response);
-	}
-
-	private void register(String username, String password, String personalID,String email, String phoneNumber, String name,
-			Role role, HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		//User user = new User(username, password, personalID, phoneNumber, email, name, roles);
 		
-		if (!isAlreadyExist(username)) {
-			userRepository.insert(null);
-			WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
-			templateEngine.process("registerSuccess", webContext, response.getWriter());
-		} else {
-			WebContext webContext = new WebContext(request, response, getServletContext(), request.getLocale());
-			webContext.setVariable("fail", "User is already exist");
-			templateEngine.process("register", webContext, response.getWriter());
-
+		try {
+			accountService.registerNewUser(userId, password, confirmPassword, role, name, personalId);
+			req.getSession().setAttribute("user", accountService.loadUserById(userId));
+			req.getRequestDispatcher("/index").forward(req, res);
+			LOGGER.error("registered new user: {}", userId);
+		} catch (UserCreationException e) {
+			LOGGER.error("Fail to register new user: {}", e.getMessage());
+			WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());
+			webContext.setVariable("message", e.getMessage());
+			templateEngine.process("register", webContext, res.getWriter());
 		}
-	}
-
-	private boolean isAlreadyExist(String username) {
-		return userRepository.findById(username) != null;
 	}
 }

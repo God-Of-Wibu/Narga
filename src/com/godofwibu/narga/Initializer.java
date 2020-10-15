@@ -25,8 +25,13 @@ import com.godofwibu.narga.repositories.CountryRepository;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
+import com.godofwibu.narga.repositories.IImageDataRepository;
 import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.repositories.UserRepository;
+import com.godofwibu.narga.services.AccountService;
+import com.godofwibu.narga.services.IAccountService;
+import com.godofwibu.narga.services.IImageStorageService;
+import com.godofwibu.narga.services.ImageStorageService;
 
 @WebListener
 public class Initializer implements ServletContextListener {
@@ -38,6 +43,9 @@ public class Initializer implements ServletContextListener {
 	private ICategoryRepository categoryRepository;
 	private IActorRepository actorRepository;
 	private ICountryRepository countryRepository;
+	private IAccountService accountService;
+	private IImageStorageService imageStorageService;
+	private IImageDataRepository imageDataRepository;
 	
 	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
 
@@ -52,8 +60,10 @@ public class Initializer implements ServletContextListener {
 		ctx.setAttribute(ICategoryRepository.class.getName(), getCategoryRepository());
 		ctx.setAttribute(IActorRepository.class.getName(), getActorRepository());
 		ctx.setAttribute(ICountryRepository.class.getName(), getCountryRepository());
+		ctx.setAttribute(IAccountService.class.getName(), getAccountService());
+		ctx.setAttribute(IImageDataRepository.class.getName(), getImageDataRepository());
 		
-		insertSomeUsers();
+		insertUsers();
 		insertCategories();
 		insertCountries();
 	}
@@ -108,24 +118,19 @@ public class Initializer implements ServletContextListener {
 		return actorRepository;
 	}
 	
-	private void insertSomeUsers() {
+	private void insertUsers() {
 		Session session =  getSessionFactory().getCurrentSession();
 		Transaction transaction = session.beginTransaction();
-		
-		//session.save(new User("user_001", "123", "241813141", "0987205513", null,"Ngo Thoi Trung", "MEMBER"));
-		//session.save(new User("user_002", "123", "241813141", "0987205513", null,"Ngo Thoi Trung", "MEMBER"));
-		//session.save(new User("user_003", "123", "241813141", "0987205513", null,"Ngo Thoi Trung", "MEMBER"));
 		
 		transaction.commit();
 	}
 	
 	private void insertCategories() {
 		ICategoryRepository repo = getCategoryRepository();
-		Category cat = null;
-		repo.insert(cat = new Category("CMD", "comedy"));
-		repo.insert(new Category("RMT", "romantic"));
-		repo.insert(new Category("ACT", "action"));
-		repo.delete(cat);
+		repo.insert(new Category("comedy"));
+		repo.insert(new Category("romantic"));
+		repo.insert(new Category("action"));
+		repo.insert(new Category("sic-fi"));
 	}
 	
 	private void insertCountries() {
@@ -150,5 +155,23 @@ public class Initializer implements ServletContextListener {
 			countryRepository = new CountryRepository(getSessionFactory());
 		}
 		return countryRepository;
+	}
+	
+	private IAccountService getAccountService() {
+		if (accountService == null) {
+			accountService = new AccountService(getImageStorageService(), getUserRepository());
+		}
+		return accountService;
+	}
+
+	private IImageStorageService getImageStorageService() {
+		if (imageDataRepository == null) {
+			imageStorageService = new ImageStorageService("/Narga", "file", getImageDataRepository());
+		}
+		return imageStorageService;
+	}
+
+	private IImageDataRepository getImageDataRepository() {
+		return null;
 	}
 }

@@ -7,7 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -24,9 +26,12 @@ public class Country {
 	@Column(name = "id")
 	private String id;
 	
-	@Column(name = "name")
+	@Column(name = "name", unique = true)
 	private String name;
 	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "flag")
+	private ImageData flag;
 	
 	@OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
 	private List<Film> films;

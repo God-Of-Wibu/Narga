@@ -2,9 +2,11 @@ package com.godofwibu.narga.entities;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,26 +39,26 @@ public class Film {
 	@JoinColumn(name = "country_id")
 	private Country country;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "poster")
 	private ImageData poster;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "film_category",
 			joinColumns = { @JoinColumn(name = "film_id") },
 			inverseJoinColumns = { @JoinColumn(name = "category_id") }
 	)
-	private List<Category> categories;
+	private Set<Category> categories;
 	
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
-			name = "cast",
+			name = "casting",
 			joinColumns = { @JoinColumn(name = "film_id") },
 			inverseJoinColumns = { @JoinColumn(name = "actor_id") }
 	)
-	private List<Actor> cast;
+	private Set<Actor> cast;
 	
 	@Column(name = "running_time")
 	private Integer runningTime;

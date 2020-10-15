@@ -17,44 +17,49 @@ public class ImageStorageService implements IImageStorageService {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(ImageStorageService.class);
 	private final static int BUFF_SIZE = 1024 * 100;
-	private byte[] buff;
-	private File dir;
-	private IImageDataRepository repo;
+	private File rootDirectory;
+	private IImageDataRepository imageDataRepository;
+	private String contextPath;
 	
-	public ImageStorageService(String path, IImageDataRepository repo) {
-		this.dir = new File(path);
-		if (!dir.exists()) {
-			dir.mkdir();
+	public ImageStorageService(String contextPath, String path, IImageDataRepository imageDataRepository) {
+		this.rootDirectory = new File(path);
+		if (!rootDirectory.exists()) {
+			rootDirectory.mkdir();
 		}
-		buff = new byte[BUFF_SIZE];
+		this.imageDataRepository = imageDataRepository;
+		this.contextPath = contextPath;
 	}
 	
 	@Override
 	public ImageData saveImage(InputStream inputStream, String filename) throws IOException {
-		File f = new File(dir, filename);
-		if (f.createNewFile()) {
-			OutputStream os = new FileOutputStream(f);
-			int byteRead = -1;
-			while ((byteRead = inputStream.read(buff)) != -1) {
-				os.write(buff, 0, byteRead);
+		try (
+				inputStream;
+				OutputStream outputStream = new FileOutputStream(new File(rootDirectory, filename)); 
+		) {
+			byte[] buffer = new byte[BUFF_SIZE];
+			int read = -1;
+			while ((read = inputStream.read(buffer,0, BUFF_SIZE)) != -1) {
+				outputStream.write(buffer, 0, read);
 			}
-			os.close();
-			LOGGER.debug("Save :" + filename);
-			Integer id = repo.insert(new ImageData());
-			
-			return repo.findById(id);
-		}
-		inputStream.close();
-		return null;
+			Integer id = imageDataRepository.insert(new ImageData(contextPath + "/" + "file" + "/" + filename, filename));
+			ImageData imageData = imageDataRepository.findById(id);
+			LOGGER.info("Saved image: {}", imageData);
+			return imageData;
+		}	
 	}
 
 	@Override
 	public void deleteImage(ImageData imageData) {
-		if (imageData.getLocalFile() != null) {
-			File f = new File(dir, imageData.getLocalFile());
+		if (imageData != null && imageData.getFilePath() != null) {
+			File f = new File(rootDirectory, imageData.getFilePath());
 			f.delete();
 		}
-		repo.delete(imageData);
+		imageDataRepository.delete(imageData);
 	}
 
+	@Override
+	public ImageData saveImage(String url) {
+		Integer id = imageDataRepository.insert(new ImageData(url, null));
+		return imageDataRepository.findById(id);
+	}
 }

@@ -29,16 +29,7 @@ public abstract class ResourceServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		IResource resource = null;
 		
-		String name = req.getPathInfo();
-		
-		if (name == null || name.isEmpty() || "/".equals(name)) {
-			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
-			return;
-		}
-		
-		name = name.substring(1);
-		
-		resource = getResourceResolver().getResource(name);
+		resource = resolveResource(req);
 		
 		if (resource == null)
 		{
@@ -71,6 +62,6 @@ public abstract class ResourceServlet extends HttpServlet {
 		}
 	}
 	
-	protected abstract IResourceResolver getResourceResolver();
+	protected abstract IResource resolveResource(HttpServletRequest req);
 
 }

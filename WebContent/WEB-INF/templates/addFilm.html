@@ -55,12 +55,12 @@
 		<div>
 			<div class="form-group">
 				<label for="title-ip">Title</label> <input class="form-control"
-					type="text" id="title-ip" name="title" placeholder="Name">
+					type="text" id="title-ip" name="title" placeholder="Name" >
 			</div>
 			<div class="form-group-ip">
 				<label for="country">Country:</label> 
 				<select class="form-control" name="country">
-					<option th:each="country : ${countries}" th:text="${country}">country</option>
+					<option th:each="country : ${countries}" th:text="${country.name}">country</option>
 				</select>
 			</div>
 			<div class="form-group">
@@ -69,14 +69,19 @@
 			</div>
 			<div class="form-group">
 				<label for="running-time">Running Time(in minute):</label> 
-				<input class="form-control" type="number" name="runningTime" placeholder="Director">
+				<input class="form-control" type="number" name="runningTime" placeholder="Running Time">
+			</div>
+			<div id="preview-wrapper">
+				<img id="preview" src="#"/>
 			</div>
 			<div class="input-group">
+				
 				<div class="input-group-prepend">
 					<span class="input-group-text">Poster</span>
 				</div>
 				<div class="custom-file">
-					<input type="file" class="custom-file-input" name="poster" id="poster-ip">
+					
+					<input type="file" class="custom-file-input" name="poster" id="poster-ip" accept="image/jpeg, image/png, image/jpg">
 					<label class="custom-file-label" id="poster-lb" >Choose
 						poster</label>
 				</div>
@@ -92,13 +97,12 @@
 						id="show-actor-selector-btn">add</span>
 				</div>
 			</div>
+			<div class="input-group">
+				<label for="description" style="display: block;">Description</label>
+				<textarea class="form-control" rows="5" name="description"></textarea>
+			</div>
 			<button class="btn btn-primary" id="submit-btn">Submit</button>
 		</div>
 	</form>
-	<div class="container" id="status">
-		
-	</div>
-	
-
 </body>
 </html>

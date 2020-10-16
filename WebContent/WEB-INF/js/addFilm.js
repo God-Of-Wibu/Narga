@@ -1,7 +1,7 @@
 
 
 Array.prototype.removeByValue = function(value) {
-	var idx = this.indexOf(value)
+	let idx = this.indexOf(value)
 	if (idx > -1)
 		this.splice(idx, 1)
 	return this;
@@ -73,7 +73,7 @@ $("document").ready(function(){
 	})
 
 	$("#category-list").click(".category", function categoryOnClick(evt){
-		if ($("#category-list") !== $(evt.target)) {
+		if ($("#category-list")[0] !== evt.target) {
 			formModel.removeCategory($(evt.target).text())
 		}
 	})
@@ -84,20 +84,26 @@ $("document").ready(function(){
 		$("#category-selector-wrapper").hide()
 	})
 	
+	$("#poster-ip").change(function() {
+		console.log("poster-ip onChange")
+		if (this.files && this.files[0]) {
+			let file = this.files[0]
+			let url = URL.createObjectURL(file)
+			$("#preview").attr("src", url)
+			$("#poster-lb").text("Change poster")
+		}
+	})
+	
 	$("#new-film-form").submit(function newFilmFormOnSubmit(event) {
 		event.preventDefault()
-		var formElement = document.getElementById("new-film-form")
-		var formData = new FormData(formElement)
-		var url = $(formElement).attr("action")
+		let formElement = document.getElementById("new-film-form")
+		let formData = new FormData(formElement)
+		let url = $(formElement).attr("action")
 		
 		formModel.categories.forEach(cat => {
 			formData.append("categories", cat)
 		})
 		
-		
-		formData.forEach(function(value, key, parent){
-			console.log(`${key}: ${value}`)
-		})
 				
 		jQuery.ajax({
 			type: "POST",
@@ -110,7 +116,7 @@ $("document").ready(function(){
             timeout: 600000,
 			dataType: "text",
             success: function (responseData) {
-				alert("successed film's imformation was added to database")
+				alert(responseData)
             },
             error: function (err) {
 				alert("failed:" + err)

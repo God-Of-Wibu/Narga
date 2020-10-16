@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.repositories.CategoryRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
+import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.services.CategoryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.google.gson.JsonArray;
@@ -31,12 +33,14 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 @WebServlet(urlPatterns = { "/admin/add-film", "/admin/get-cats" })
+@MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class AddFilmServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(AddFilmServlet.class);
 
 	private TemplateEngine templateEngine;
 	private ICategoryRepository categoryRepository;
+	private ICountryRepository countryRepository;
 	private CategoryService helper;
 	private IFilmService filmService;
 	
@@ -48,6 +52,7 @@ public class AddFilmServlet extends HttpServlet {
 		templateEngine = (TemplateEngine) getServletContext().getAttribute(TemplateEngine.class.getName());
 		categoryRepository = (ICategoryRepository) getServletContext().getAttribute(ICategoryRepository.class.getName());
 		filmService = (IFilmService) getServletContext().getAttribute(IFilmService.class.getName());
+		countryRepository = (ICountryRepository) getServletContext().getAttribute(ICountryRepository.class.getName());
 		helper = new CategoryService(categoryRepository);
 		
 	}
@@ -63,6 +68,7 @@ public class AddFilmServlet extends HttpServlet {
 
 	private void doGetForm(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());
+		webContext.setVariable("countries", countryRepository.findAll());
 		templateEngine.process("addFilm", webContext, res.getWriter());
 	}
 
@@ -77,6 +83,8 @@ public class AddFilmServlet extends HttpServlet {
 			throws ServletException, IOException {
 		
 		Map<String, String[]> parameters = req.getParameterMap();
+		LOGGER.debug("parameter count: " + parameters.size());
+		LOGGER.debug(req.getRequestURI());
 		String title = parameters.get("title")[0];
 		String country = parameters.get("country")[0];
 		String director = parameters.get("director")[0];
@@ -91,6 +99,8 @@ public class AddFilmServlet extends HttpServlet {
 		} catch (Exception e) {
 			res.setContentType("text/plain");
 			res.getWriter().print("something wrong happened: "+ e.getMessage());
+			e.printStackTrace();
+			LOGGER.error("some thing wrong happened: " + e.getMessage());
 		}
  	}
 }

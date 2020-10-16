@@ -2,6 +2,8 @@ package com.godofwibu.narga.services;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.servlet.http.Part;
 
@@ -9,9 +11,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.godofwibu.narga.entities.Category;
 import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.ImageData;
+import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.repositories.IFilmRepository;
 
@@ -21,6 +25,7 @@ public class FilmService implements IFilmService {
 	private IFilmRepository filmRepository;
 	private IImageStorageService imageStorageService;
 	private ICountryRepository countryRepository;
+	private ICategoryRepository categoryRepository;
 	
 	private static final String IMAGE_FILE_EXTENSIONS[] = {
 			"png", "jpg", "jpeg" 
@@ -28,10 +33,15 @@ public class FilmService implements IFilmService {
 	
 	
 
-	public FilmService(IFilmRepository filmRepository, IImageStorageService imageStorageService) {
+	
+
+	public FilmService(IFilmRepository filmRepository, IImageStorageService imageStorageService,
+			ICountryRepository countryRepository, ICategoryRepository categoryRepository) {
 		super();
 		this.filmRepository = filmRepository;
 		this.imageStorageService = imageStorageService;
+		this.countryRepository = countryRepository;
+		this.categoryRepository = categoryRepository;
 	}
 
 	@Override
@@ -48,6 +58,17 @@ public class FilmService implements IFilmService {
 		Film film = new Film();
 		film.setTitle(title);
 		film.setCountry(country);
+		film.setRunningTime(runningTime);
+		film.setDirector(null);
+		
+		Set<Category> cats = new HashSet<Category>();
+		Category cat = null;
+		for (String category : categories) {
+			if ((cat = categoryRepository.findById(category)) != null) {
+				cats.add(cat);
+			}
+		}
+		film.setCategories(cats);
 		
 		Integer filmId =  filmRepository.insert(film);
 		
@@ -56,6 +77,7 @@ public class FilmService implements IFilmService {
 		
 		film.setId(filmId);
 		film.setPoster(posterImageData);
+	
 		
 		filmRepository.update(film);
 	}

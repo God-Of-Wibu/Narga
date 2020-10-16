@@ -25,13 +25,13 @@ public class ImageData {
 	@Column(name = "url", nullable = false)
 	private String url;
 	
-	@Column(name = "file_path", nullable = true)
-	private String filePath;
+	@Column(name = "file_location", nullable = true)
+	private String fileLocation;
 
-	public ImageData(String url, String filePath) {
+	public ImageData(String url, String fileLocation) {
 		super();
 		this.url = url;
-		this.filePath = filePath;
+		this.fileLocation = fileLocation;
 	}
 	
 	

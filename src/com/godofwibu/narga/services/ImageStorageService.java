@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +23,13 @@ public class ImageStorageService implements IImageStorageService {
 	private IImageDataRepository imageDataRepository;
 	private String contextPath;
 	
-	public ImageStorageService(String contextPath, String path, IImageDataRepository imageDataRepository) {
+	public ImageStorageService(String contextPath, String path, IImageDataRepository imageDataRepository) throws IOException {
 		this.rootDirectory = new File(path);
-		if (!rootDirectory.exists()) {
-			rootDirectory.mkdir();
+		if (rootDirectory.exists()) {
+			FileUtils.deleteDirectory(rootDirectory);
+			
 		}
+		rootDirectory.mkdir();
 		this.imageDataRepository = imageDataRepository;
 		this.contextPath = contextPath;
 	}
@@ -36,6 +40,7 @@ public class ImageStorageService implements IImageStorageService {
 				inputStream;
 				OutputStream outputStream = new FileOutputStream(new File(rootDirectory, filename)); 
 		) {
+			System.out.println(new File(rootDirectory, filename).getAbsolutePath());
 			byte[] buffer = new byte[BUFF_SIZE];
 			int read = -1;
 			while ((read = inputStream.read(buffer,0, BUFF_SIZE)) != -1) {
@@ -50,8 +55,8 @@ public class ImageStorageService implements IImageStorageService {
 
 	@Override
 	public void deleteImage(ImageData imageData) {
-		if (imageData != null && imageData.getFilePath() != null) {
-			File f = new File(rootDirectory, imageData.getFilePath());
+		if (imageData != null && imageData.getFileLocation() != null) {
+			File f = new File(rootDirectory, imageData.getFileLocation());
 			f.delete();
 		}
 		imageDataRepository.delete(imageData);

@@ -1,5 +1,7 @@
 package com.godofwibu.narga;
 
+import java.io.IOException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -22,14 +24,19 @@ import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.repositories.ActorRepository;
 import com.godofwibu.narga.repositories.CategoryRepository;
 import com.godofwibu.narga.repositories.CountryRepository;
+import com.godofwibu.narga.repositories.FilmRepository;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
+import com.godofwibu.narga.repositories.IFilmRepository;
 import com.godofwibu.narga.repositories.IImageDataRepository;
 import com.godofwibu.narga.repositories.IUserRepository;
+import com.godofwibu.narga.repositories.ImageDataRepository;
 import com.godofwibu.narga.repositories.UserRepository;
 import com.godofwibu.narga.services.AccountService;
+import com.godofwibu.narga.services.FilmService;
 import com.godofwibu.narga.services.IAccountService;
+import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.IImageStorageService;
 import com.godofwibu.narga.services.ImageStorageService;
 
@@ -46,6 +53,9 @@ public class Initializer implements ServletContextListener {
 	private IAccountService accountService;
 	private IImageStorageService imageStorageService;
 	private IImageDataRepository imageDataRepository;
+	private IFilmService filmService;
+	private IFilmRepository filmRepository;
+	private String contextPath;
 	
 	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
 
@@ -53,7 +63,7 @@ public class Initializer implements ServletContextListener {
 
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext ctx = sce.getServletContext();
-
+		this.contextPath = sce.getServletContext().getContextPath();
 		ctx.setAttribute(SessionFactory.class.getName(), getSessionFactory());
 		ctx.setAttribute(TemplateEngine.class.getName(), getTemplateEngine(ctx));
 		ctx.setAttribute(IUserRepository.class.getName(), getUserRepository());
@@ -62,6 +72,8 @@ public class Initializer implements ServletContextListener {
 		ctx.setAttribute(ICountryRepository.class.getName(), getCountryRepository());
 		ctx.setAttribute(IAccountService.class.getName(), getAccountService());
 		ctx.setAttribute(IImageDataRepository.class.getName(), getImageDataRepository());
+		ctx.setAttribute(IFilmService.class.getName(), getFilmService());
+		ctx.setAttribute(IFilmRepository.class.getName(), getFilmRepository());
 		
 		insertUsers();
 		insertCategories();
@@ -165,13 +177,38 @@ public class Initializer implements ServletContextListener {
 	}
 
 	private IImageStorageService getImageStorageService() {
-		if (imageDataRepository == null) {
-			imageStorageService = new ImageStorageService("/Narga", "file", getImageDataRepository());
+		if (imageStorageService == null) {
+			try {
+				imageStorageService = new ImageStorageService(getContextPath(), "file", getImageDataRepository());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		return imageStorageService;
 	}
 
 	private IImageDataRepository getImageDataRepository() {
-		return null;
+		if (imageDataRepository == null) {
+			imageDataRepository = new ImageDataRepository(getSessionFactory());
+		}
+		return imageDataRepository;
+	}
+	
+	private String getContextPath() {
+		return contextPath;
+	}
+
+	public IFilmService getFilmService() {
+		if (filmService == null) {
+			filmService = new FilmService(getFilmRepository(), getImageStorageService(), getCountryRepository(), getCategoryRepository());
+		}
+		return filmService;
+	}
+
+	public IFilmRepository getFilmRepository() {
+		if (filmRepository == null) {
+			filmRepository = new FilmRepository(getSessionFactory());
+		}
+		return filmRepository;
 	}
 }

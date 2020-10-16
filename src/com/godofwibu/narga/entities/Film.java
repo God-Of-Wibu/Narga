@@ -1,9 +1,11 @@
 package com.godofwibu.narga.entities;
 
 import java.sql.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,11 +37,10 @@ public class Film {
 	@Column(name = "title")
 	private String title;
 	
-	@ManyToOne
-	@JoinColumn(name = "country_id")
-	private Country country;
+	@Column(name = "description")
+	private String description;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	@JoinColumn(name = "poster")
 	private ImageData poster;
 	
@@ -49,7 +50,7 @@ public class Film {
 			joinColumns = { @JoinColumn(name = "film_id") },
 			inverseJoinColumns = { @JoinColumn(name = "category_id") }
 	)
-	private Set<Category> categories;
+	private Set<Category> categories = new HashSet<Category>();
 	
 	
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -58,7 +59,7 @@ public class Film {
 			joinColumns = { @JoinColumn(name = "film_id") },
 			inverseJoinColumns = { @JoinColumn(name = "actor_id") }
 	)
-	private Set<Actor> cast;
+	private Set<Actor> cast = new HashSet<Actor>();
 	
 	@Column(name = "running_time")
 	private Integer runningTime;
@@ -67,6 +68,10 @@ public class Film {
 	private Date releaseDate;
 	
 	@ManyToOne
+	@JoinColumn(name = "country_id")
+	private Country country;
+	
+	@ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "director_id")
 	private Director director;
 }

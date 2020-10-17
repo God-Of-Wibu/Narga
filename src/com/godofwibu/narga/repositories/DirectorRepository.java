@@ -12,60 +12,60 @@ import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
-import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Director;
 
-public class ActorRepository implements IActorRepository {
+public class DirectorRepository implements IDirectorRepository {
+	private SessionFactory sessionFactory;
 	
-	private SessionFactory sessionFactory; 
-
-	public ActorRepository(SessionFactory sessionFactory) {
+	public DirectorRepository(SessionFactory sessionFactory) {
 		super();
 		this.sessionFactory = sessionFactory;
 	}
 
 	@Override
-	public List<Actor> findAll() {
-		List<Actor> actors = null;
+	public List<Director> findAll() {
+		List<Director> actors = null;
 		Session session = sessionFactory.getCurrentSession();
 		Transaction tx = null;
 		try {
 			tx = session.beginTransaction();
-			actors = session.createQuery("SELECT a FROM Actor as a", Actor.class)
+			actors = session.createQuery("FROM Director", Director.class)
 					.getResultList();
 			tx.commit();
+			return actors;
 		} catch (Exception e) {
-			if (tx != null)
+			if (tx != null && tx.isActive())
 				tx.rollback();
+			throw e;
 		}
-		return actors;
+		
 	}
 
 	@Override
-	public Actor findById(Integer id) {
+	public Director findById(Integer id) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
-		Actor actor = null;
+		Director director = null;
 		try {
 			transaction = session.beginTransaction();
-			actor = session.get(Actor.class, id);
+			director = session.get(Director.class, id);
 			transaction.commit();
+			return director;
 		}catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
-			e.printStackTrace();
+			throw e;
 		}
-		return actor;
 	}
 
 	@Override
-	public Integer insert(Actor entity) {
+	public Integer insert(Director director) {
 		Integer id = null;
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			id = (Integer)session.save(entity);
+			id = (Integer)session.save(director);
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)
@@ -76,12 +76,12 @@ public class ActorRepository implements IActorRepository {
 	}
 
 	@Override
-	public void update(Actor entity) {
+	public void update(Director director) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			session.update(entity);
+			session.update(director);
 			transaction.commit();
 		}catch (HibernateException e) {
 			if (transaction != null)
@@ -96,38 +96,38 @@ public class ActorRepository implements IActorRepository {
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			Query query = session.createQuery("DELETE FROM Category AS c WHERE c.id=:category_id");
-			query.setParameter("category_id", id);
+			Query query = session.createQuery("DELETE FROM Director AS this_ WHERE this_.id=:director_id");
+			query.setParameter("director_id", id);
 			query.executeUpdate();
 			transaction.commit();
 		}catch (HibernateException e) {
-			if (transaction != null)
+			if (transaction != null && transaction.isActive())
 				transaction.rollback();
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
 	@Override
-	public void delete(Actor entity) {
+	public void delete(Director director) {
 		Session session = sessionFactory.getCurrentSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
-			session.delete(entity);
+			session.delete(director);
 			transaction.commit();
 		}catch (HibernateException e) {
-			if (transaction != null)
+			if (transaction != null && transaction.isActive())
 				transaction.rollback();
-			e.printStackTrace();
+			throw e;
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Actor> search(String input) {
+	public List<Director> search(String input) {
 		FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
 		Transaction transaction = null;
-		List<Actor> searhResult = null;
+		List<Director> searhResult = null;
 		try {
 			transaction = fullTextSession.beginTransaction();
 			QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
@@ -139,7 +139,7 @@ public class ActorRepository implements IActorRepository {
 					.onField("name")
 					.matching(input)
 					.createQuery();
-			javax.persistence.Query hibernateQuery = fullTextSession.createFullTextQuery(luceneQuery, Actor.class);
+			javax.persistence.Query hibernateQuery = fullTextSession.createFullTextQuery(luceneQuery, Director.class);
 			
 			searhResult = hibernateQuery
 					.setMaxResults(10)

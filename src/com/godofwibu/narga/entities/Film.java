@@ -1,8 +1,6 @@
 package com.godofwibu.narga.entities;
 
-import java.sql.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,33 +16,49 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.DateBridge;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+import org.hibernate.search.annotations.Resolution;
+import org.hibernate.search.annotations.Store;
+
+import com.google.gson.annotations.Expose;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Data
+@Indexed
 @Entity
 @Table(name = "film")
 public class Film {
+	@Expose
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "title")
+	@Expose
+	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+	@Column(name = "title", unique = true)
 	private String title;
 	
+	@Expose
 	@Column(name = "description")
 	private String description;
 	
+	@Expose
 	@ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
 	@JoinColumn(name = "poster")
 	private ImageData poster;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
+	@Expose
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 	@JoinTable(
 			name = "film_category",
 			joinColumns = { @JoinColumn(name = "film_id") },
@@ -52,25 +66,34 @@ public class Film {
 	)
 	private Set<Category> categories = new HashSet<Category>();
 	
-	
+	@Expose
 	@ManyToMany(fetch = FetchType.EAGER)
+	@IndexedEmbedded
 	@JoinTable(
 			name = "casting",
 			joinColumns = { @JoinColumn(name = "film_id") },
 			inverseJoinColumns = { @JoinColumn(name = "actor_id") }
 	)
-	private Set<Actor> cast = new HashSet<Actor>();
+	private Set<Actor> casting = new HashSet<Actor>();
 	
+	@Expose
 	@Column(name = "running_time")
 	private Integer runningTime;
 	
+	@Field(index = Index.YES, analyze = Analyze.NO, store = Store.YES)
+	@DateBridge(resolution = Resolution.YEAR)
+	@Expose
 	@Column(name = "release_date")
-	private Date releaseDate;
+	private java.util.Date releaseDate;
 	
+	@Expose
+	@IndexedEmbedded
 	@ManyToOne
 	@JoinColumn(name = "country_id")
 	private Country country;
 	
+	@IndexedEmbedded
+	@Expose
 	@ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "director_id")
 	private Director director;

@@ -14,13 +14,18 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Category;
 import com.godofwibu.narga.entities.Country;
+import com.godofwibu.narga.entities.Director;
+import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.repositories.ActorRepository;
 import com.godofwibu.narga.repositories.CategoryRepository;
 import com.godofwibu.narga.repositories.CountryRepository;
@@ -34,8 +39,14 @@ import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.repositories.ImageDataRepository;
 import com.godofwibu.narga.repositories.UserRepository;
 import com.godofwibu.narga.services.AccountService;
+import com.godofwibu.narga.services.ActorService;
+import com.godofwibu.narga.services.CategoryService;
+import com.godofwibu.narga.services.CountryService;
 import com.godofwibu.narga.services.FilmService;
 import com.godofwibu.narga.services.IAccountService;
+import com.godofwibu.narga.services.IActorService;
+import com.godofwibu.narga.services.ICategoryService;
+import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.IImageStorageService;
 import com.godofwibu.narga.services.ImageStorageService;
@@ -56,6 +67,9 @@ public class Initializer implements ServletContextListener {
 	private IFilmService filmService;
 	private IFilmRepository filmRepository;
 	private String contextPath;
+	private ICategoryService categoryService;
+	private ICountryService countryService;
+	private IActorService actorService;
 	
 	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
 
@@ -64,20 +78,33 @@ public class Initializer implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext ctx = sce.getServletContext();
 		this.contextPath = sce.getServletContext().getContextPath();
-		ctx.setAttribute(SessionFactory.class.getName(), getSessionFactory());
 		ctx.setAttribute(TemplateEngine.class.getName(), getTemplateEngine(ctx));
-		ctx.setAttribute(IUserRepository.class.getName(), getUserRepository());
-		ctx.setAttribute(ICategoryRepository.class.getName(), getCategoryRepository());
-		ctx.setAttribute(IActorRepository.class.getName(), getActorRepository());
-		ctx.setAttribute(ICountryRepository.class.getName(), getCountryRepository());
 		ctx.setAttribute(IAccountService.class.getName(), getAccountService());
-		ctx.setAttribute(IImageDataRepository.class.getName(), getImageDataRepository());
 		ctx.setAttribute(IFilmService.class.getName(), getFilmService());
-		ctx.setAttribute(IFilmRepository.class.getName(), getFilmRepository());
-		
+		ctx.setAttribute(ICategoryService.class.getName(), getCategoryService());
+		ctx.setAttribute(ICountryService.class.getName(), getCountryService());
+		ctx.setAttribute(IActorService.class.getName(), getActorService());
 		insertUsers();
 		insertCategories();
 		insertCountries();
+		createIndexer();
+	}
+
+	private void createIndexer() {
+		FullTextSession fullTextSession = Search.getFullTextSession(getSessionFactory().getCurrentSession());
+		try {
+			fullTextSession.createIndexer(
+				Film.class, 
+				Actor.class, 
+				Director.class, 
+				Country.class
+			).startAndWait();
+			fullTextSession.close();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} finally {
+			fullTextSession.close();
+		}
 	}
 
 	public void contextDestroyed(ServletContextEvent sce) {
@@ -200,7 +227,12 @@ public class Initializer implements ServletContextListener {
 
 	public IFilmService getFilmService() {
 		if (filmService == null) {
-			filmService = new FilmService(getFilmRepository(), getImageStorageService(), getCountryRepository(), getCategoryRepository());
+			filmService = new FilmService(
+					getFilmRepository(), 
+					getImageStorageService(), 
+					getCountryRepository(), 
+					getCategoryRepository()
+			);
 		}
 		return filmService;
 	}
@@ -210,5 +242,27 @@ public class Initializer implements ServletContextListener {
 			filmRepository = new FilmRepository(getSessionFactory());
 		}
 		return filmRepository;
+	}
+	
+	public ICategoryService getCategoryService() {
+		if (categoryService == null) {
+			categoryService = new CategoryService(getCategoryRepository());
+		}
+		return categoryService;
+	}
+	
+	
+	private ICountryService getCountryService() {
+		if (countryService == null) {
+			countryService = new CountryService(getCountryRepository());
+		}
+		return countryService;
+	}
+	
+	private IActorService getActorService() {
+		if (actorService == null) {
+			actorService = new ActorService(getImageStorageService(), getActorRepository(), getCountryRepository());
+		}
+		return actorService;
 	}
 }

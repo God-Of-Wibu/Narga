@@ -2,10 +2,14 @@ package com.godofwibu.narga.repositories;
 
 import java.util.List;
 
+import org.apache.lucene.search.Query;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.godofwibu.narga.entities.Film;
 
@@ -20,8 +24,21 @@ public class FilmRepository implements IFilmRepository {
 
 	@Override
 	public List<Film> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = sessionFactory.getCurrentSession();
+		Transaction transaction = null;
+		List<Film> films = null;
+		try {
+			transaction = session.beginTransaction();
+			films = session.createQuery("FROM Film", Film.class)
+					.getResultList();
+			transaction.commit();
+			return films;
+		} catch (HibernateException e) {
+			if (transaction != null)
+				transaction.rollback();
+			e.printStackTrace();
+			throw e;
+		}
 	}
 
 	@Override
@@ -35,12 +52,14 @@ public class FilmRepository implements IFilmRepository {
 					.setParameter("id", id)
 					.getSingleResult();
 			transaction.commit();
+			return film;
 		} catch (HibernateException e) {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
+			throw e;
 		}
-		return film;
+		
 	}
 
 	@Override
@@ -56,6 +75,7 @@ public class FilmRepository implements IFilmRepository {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
+			throw e;
 		}
 		return id;
 	}
@@ -72,6 +92,7 @@ public class FilmRepository implements IFilmRepository {
 			if (transaction != null)
 				transaction.rollback();
 			e.printStackTrace();
+			throw e;
 		}
 	}
 
@@ -85,6 +106,39 @@ public class FilmRepository implements IFilmRepository {
 	public void delete(Film entity) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Film> search(String input) {
+		FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
+		Transaction transaction = null;
+		List<Film> searchResult = null;
+		try {
+		transaction = fullTextSession.beginTransaction();
+		QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
+				.buildQueryBuilder()
+				.forEntity(Film.class)
+				.get();
+		Query luceneQuery = queryBuilder
+				.keyword()
+				.onFields("title", "casting.name", "director.name", "country.name")
+				.matching(input)
+				.createQuery();
+		javax.persistence.Query jpaQuery = fullTextSession.createFullTextQuery(luceneQuery, Film.class);
+		searchResult = jpaQuery
+				.setMaxResults(5)
+				.getResultList();
+		transaction.commit();
+		fullTextSession.close();
+		return searchResult;
+		} catch (HibernateException e) {
+			if (transaction != null && transaction.isActive())
+				transaction.rollback();
+			throw e;
+		} finally {
+			fullTextSession.close();
+		}
 	}
 
 }

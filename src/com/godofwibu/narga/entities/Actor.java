@@ -11,11 +11,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Index;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@Indexed
 @NoArgsConstructor
 @Data
 @Entity
@@ -27,6 +33,7 @@ public class Actor {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Integer id;
 	
+	@Field(analyze = Analyze.YES, index = Index.YES, store = Store.NO)
 	@Column(name = "name")
 	private String name;
 	

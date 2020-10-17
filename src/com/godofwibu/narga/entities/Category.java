@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +22,7 @@ import lombok.Setter;
 @Table(name = "category")
 public class Category {
 	
+	@Expose
 	@Id
 	@Column(name = "name", nullable = false)
 	private String name;

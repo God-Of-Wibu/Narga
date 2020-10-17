@@ -3,6 +3,7 @@ package com.godofwibu.narga.services;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.Part;
@@ -18,6 +19,8 @@ import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.repositories.IFilmRepository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class FilmService implements IFilmService {
 	private final static Logger LOGGER = LoggerFactory.getLogger(FilmService.class);
@@ -26,15 +29,12 @@ public class FilmService implements IFilmService {
 	private IImageStorageService imageStorageService;
 	private ICountryRepository countryRepository;
 	private ICategoryRepository categoryRepository;
+	private Gson gson;
 	
 	private static final String IMAGE_FILE_EXTENSIONS[] = {
 			"png", "jpg", "jpeg" 
 	};
 	
-	
-
-	
-
 	public FilmService(IFilmRepository filmRepository, IImageStorageService imageStorageService,
 			ICountryRepository countryRepository, ICategoryRepository categoryRepository) {
 		super();
@@ -42,6 +42,11 @@ public class FilmService implements IFilmService {
 		this.imageStorageService = imageStorageService;
 		this.countryRepository = countryRepository;
 		this.categoryRepository = categoryRepository;
+		
+		
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gson =  gsonBuilder.excludeFieldsWithoutExposeAnnotation().create();
+		
 	}
 
 	@Override
@@ -91,14 +96,25 @@ public class FilmService implements IFilmService {
 	}
 
 	private String extractFileExtensionFromPart(Part part) {
-		final String partHeader = part.getHeader("content-disposition");
-		LOGGER.info("Part Header = {0}", partHeader);
 		for (String content : part.getHeader("content-disposition").split(";")) {
 			if (content.trim().startsWith("filename")) {
 				return FilenameUtils.getExtension(content.substring(content.indexOf('=') + 1).trim().replace("\"", ""));
 			}
 		}
 		return null;
+	}
+	
+	@Override
+	public String getAllFilmAsJson() {
+		List<Film> films = filmRepository.findAll();
+		return gson.toJson(films);
+	}
+
+	@Override
+	public String searchFilmAsJson(String input) {
+		List<Film> searchResult = filmRepository.search(input);
+		
+		return gson.toJson(searchResult);
 	}
 
 }

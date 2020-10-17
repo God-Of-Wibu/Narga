@@ -9,7 +9,7 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class CategoryService {
+public class CategoryService implements ICategoryService{
 	private ICategoryRepository categoryRepository;
 	private Gson gson;
 
@@ -33,7 +33,6 @@ public class CategoryService {
 	
 	public String getAllCategoriesAsJson() {
 		List<Category> categories = categoryRepository.findAll();
-		
 		return gson.toJson(categories);
 	}
 	

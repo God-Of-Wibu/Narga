@@ -1,4 +1,6 @@
-
+/**
+ * 
+ */
 
 Array.prototype.removeByValue = function(value) {
 	let idx = this.indexOf(value)
@@ -13,6 +15,21 @@ function makeCategoryElement(name) {
 
 function makeOptionElement(name) {
 	return `<option>${name}</option>`;
+}
+
+function showNew(){
+   document.getElementById('actor-selector-wrapper').style.display = "block";
+   document.getElementById('actor-selector-wrapper').style.backgroundColor="black";
+   document.getElementById('actor-selector').style.display = "block";
+   document.getElementById('actor-selector-wrapper').style.opacity="0.7";
+}
+
+var img=document.getElementsByClassName('close-button');
+img.onclick()=closeAddActor();
+
+function closeAddActor(){
+	document.getElementById('actor-selector-wrapper').style.display = "none";
+	document.getElementById('actor-selector').style.display = "none";
 }
 
 $("document").ready(function(){	

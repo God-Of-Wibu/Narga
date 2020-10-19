@@ -14,9 +14,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Analyzer;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
 import org.hibernate.search.annotations.Store;
 
 import com.google.gson.annotations.Expose;
@@ -37,6 +39,7 @@ public class Director {
 	private Integer id;
 	
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
+	@Analyzer(definition = "customAnalayzer")
 	@Column(name = "name", unique = true)
 	private String name;
 	
@@ -49,6 +52,7 @@ public class Director {
 	@JoinColumn(name = "avatar")
 	private ImageData avatar;
 	
+	@IndexedEmbedded
 	@Expose
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "contry_id")

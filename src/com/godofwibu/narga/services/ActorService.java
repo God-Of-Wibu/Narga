@@ -12,13 +12,15 @@ import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class ActorService implements IActorService {
 
 	private IImageStorageService imageStorageService;
 	private IActorRepository actorRepository;
 	private ICountryRepository countryRepository;
-	
+	private Gson gson;
 	
 
 	public ActorService(IImageStorageService imageStorageService, IActorRepository actorRepository,
@@ -27,6 +29,9 @@ public class ActorService implements IActorService {
 		this.imageStorageService = imageStorageService;
 		this.actorRepository = actorRepository;
 		this.countryRepository = countryRepository;
+		gson = new GsonBuilder()
+				.excludeFieldsWithoutExposeAnnotation()
+				.create();
 	}
 
 	@Override
@@ -57,6 +62,21 @@ public class ActorService implements IActorService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public String getAllActorsAsJson() {
+		return gson.toJson(actorRepository.findAll());
+	}
+
+	@Override
+	public String searchActorAsJson(String input, int maxResult) {
+		return gson.toJson(actorRepository.searchByName(input, maxResult));
+	}
+
+	@Override
+	public String getFirstActorsAsJson(int maxResult) {
+		return gson.toJson(actorRepository.findFirst(maxResult));
 	}
 
 }

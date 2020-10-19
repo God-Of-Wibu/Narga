@@ -26,7 +26,7 @@ public class FileResourceServlet extends ResourceServlet {
 		String prefix = "file";
 		
 		if (config.getInitParameter("prefix") != null) {
-			prefix = config.getInitParameter(prefix);
+			prefix = config.getInitParameter("prefix");
 		}
 		
 		directory = new File(prefix);

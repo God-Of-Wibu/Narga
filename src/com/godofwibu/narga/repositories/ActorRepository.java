@@ -1,5 +1,6 @@
 package com.godofwibu.narga.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -10,6 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
+import org.hibernate.search.exception.EmptyQueryException;
 import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.godofwibu.narga.entities.Actor;
@@ -124,7 +126,7 @@ public class ActorRepository implements IActorRepository {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Actor> search(String input) {
+	public List<Actor> searchByName(String input, int maxResult) {
 		FullTextSession fullTextSession = Search.getFullTextSession(sessionFactory.getCurrentSession());
 		Transaction transaction = null;
 		List<Actor> searhResult = null;
@@ -136,13 +138,13 @@ public class ActorRepository implements IActorRepository {
 					.get();
 			org.apache.lucene.search.Query luceneQuery = queryBuilder
 					.keyword()
-					.onField("name")
+					.onFields("name", "country.name")
 					.matching(input)
 					.createQuery();
-			javax.persistence.Query hibernateQuery = fullTextSession.createFullTextQuery(luceneQuery, Actor.class);
-			
+			javax.persistence.Query hibernateQuery = fullTextSession
+					.createFullTextQuery(luceneQuery, Actor.class)
+					.setMaxResults(maxResult);
 			searhResult = hibernateQuery
-					.setMaxResults(10)
 					.getResultList();
 			transaction.commit();
 			fullTextSession.close();
@@ -151,8 +153,29 @@ public class ActorRepository implements IActorRepository {
 			if (transaction != null && transaction.isActive())
 				transaction.rollback();
 			throw e;
-		} finally {
+		} catch (EmptyQueryException e) {
+			return new ArrayList<Actor>();
+		}finally {
 			fullTextSession.close();
+		}
+	}
+
+	@Override
+	public List<Actor> findFirst(int maxResult) {
+		List<Actor> actors = null;
+		Session session = sessionFactory.getCurrentSession();
+		Transaction tx = null;
+		try {
+			tx = session.beginTransaction();
+			actors = session.createQuery("FROM Actor", Actor.class)
+					.setMaxResults(maxResult)
+					.getResultList();
+			tx.commit();
+			return actors;
+		} catch (Exception e) {
+			if (tx != null && tx.isActive())
+				tx.rollback();
+			throw e;
 		}
 	}	
 }

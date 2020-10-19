@@ -8,4 +8,10 @@ import com.godofwibu.narga.entities.Gender;
 
 public interface IActorService {
 	void addNewActor(String name, int age, Gender gender, String countryName, Part avatarPart) throws IOException;
+
+	String getAllActorsAsJson();
+
+	String searchActorAsJson(String input, int maxResult);
+
+	String getFirstActorsAsJson(int maxResult);
 }

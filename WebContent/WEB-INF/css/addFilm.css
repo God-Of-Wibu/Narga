@@ -1,14 +1,15 @@
 @charset "UTF-8";
+
+
 .selector-wrapper {
 	position: fixed;
-	z-index: 2; 
-	display: none;
+    display:none;
 	height: 100%;
 	width: 100%;
+	opacity: 1;
 }
 
 #actor-selector{
-	z-index:3;
 	position:fixed;
 	left:25%;
 	top:25%;
@@ -16,7 +17,6 @@
 	height: 500px;
 	background-color: white;
 	border: 2px solid black;
-	display: none;
 	overflow-y: scroll;
 }
 
@@ -84,7 +84,7 @@ div.info{
 	margin: 10px 0px 10px 0px;
 }
 
-#show-category-selector-btn, #show-actor-selector-btn {
+#show-category-selector-btn, #show-cast-selector-btn {
 	float: right;
 }
 

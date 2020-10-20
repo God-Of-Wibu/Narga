@@ -17,21 +17,6 @@ function makeOptionElement(name) {
 	return `<option>${name}</option>`;
 }
 
-function showNew(){
-   document.getElementById('actor-selector-wrapper').style.display = "block";
-   document.getElementById('actor-selector-wrapper').style.backgroundColor="black";
-   document.getElementById('actor-selector').style.display = "block";
-   document.getElementById('actor-selector-wrapper').style.opacity="0.7";
-}
-
-var img=document.getElementsByClassName('close-button');
-img.onclick()=closeAddActor();
-
-function closeAddActor(){
-	document.getElementById('actor-selector-wrapper').style.display = "none";
-	document.getElementById('actor-selector').style.display = "none";
-}
-
 $("document").ready(function(){	
 	var formModel = {
 		casting: [],
@@ -80,11 +65,19 @@ $("document").ready(function(){
 	
 	
 	$("#show-category-selector-btn").click(function(){
-		$("#category-selector-wrapper").fadeIn(500);
+		$("#category-selector-wrapper")
+			.css("z-index", "1")
+			.fadeIn(200)
 		$("#category-ip").focus()
 	}) 
 	
+	$("#show-cast-selector-btn").click(function(){
+	    $("#actor-selector-wrapper").css("z-index", "3").fadeIn(200);
+    })
 	
+	$("closeBt").click(function(){
+		$("#actor-selector-wrapper").css("z-index", "1");
+	})
 	$("#category-selector-wrapper").focusout(function() {
 		$(this).hide()
 	})
@@ -153,4 +146,6 @@ $("document").ready(function(){
 		}
 	})
 	
-})
+})/**
+ * 
+ */

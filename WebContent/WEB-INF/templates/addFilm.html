@@ -22,7 +22,7 @@
 	th:src="@{/static/js/addFilm.js}"></script>
 <title>Add Film Info</title>
 </head>
-<body>
+<body class="body">
 	<div id="category-selector-wrapper" class="selector-wrapper">
 		<div id="category-selector">
 			<strong>Category Selector</strong>
@@ -37,17 +37,55 @@
 	</div>
 	<div id="actor-selector-wrapper" class="selector-wrapper">
 		<div id="actor-selector">
-			<strong>Actor Selector</strong> <input id="actor-ip"
-				class="form-control" type="text" placeholder="Enter actor's name">
+			<img class="close-button" id="closeBt" alt="close"
+				src="../images/icons/close-icon.png" >
+			<div class="searrch">
+				<strong>Actor Selector</strong> <input id="actor-ip"
+					class="form-control" type="text" placeholder="Enter actor's name">
+			</div>
 			<div id="actor-ls" class="container">
 				<div class="actor">
-					<div class="actor-name"></div>
-					<div class="actor-avatar">
-						<div class="actor-country"></div>
+					<div id="actor-avatar">
+						<img class="actor-avatar" src="../images/actors/StanLee.jpg">
+					</div>
+					<div class="actor-name">Stanley Martin Lieber
+					</div>
+					<br> <img class="nation"
+						src="../images/nation/Flag-America.png">
+					<div class="info">
+						<button class="bt-choose-detail">Detail</button>
+						<br>
+						<button class="bt-choose-add">Add Actor</button>
+					</div>
+				</div>
+				<div class="actor">
+					<div id="actor-avatar">
+						<img class="actor-avatar" src="../images/actors/StanLee.jpg">
+					</div>
+					<div class="actor-name">Stanley Martin Lieber</div>
+					<br> <img class="nation"
+						src="../images/nation/Flag-America.png">
+					<div class="info">
+						<button class="bt-choose-detail">Detail</button>
+						<br>
+						<button class="bt-choose-add">Add Actor</button>
+					</div>
+				</div>
+				<div class="actor">
+					<div id="actor-avatar">
+						<img class="actor-avatar" src="../images/actors/StanLee.jpg">
+					</div>
+					<div class="actor-name">Stanley Martin Lieber</div>
+					<br> <img class="nation"
+						src="../images/nation/Flag-America.png">
+					<div class="info">
+						<button class="bt-choose-detail">Detail</button>
+						<br>
+						<button class="bt-choose-add">Add Actor</button>
 					</div>
 				</div>
 			</div>
-		</div>
+			</div>
 	</div>
 	<form class="container" id="new-film-form"
 		th:action="@{/admin/add-film}" method="post">
@@ -55,34 +93,36 @@
 		<div>
 			<div class="form-group">
 				<label for="title-ip">Title</label> <input class="form-control"
-					type="text" id="title-ip" name="title" placeholder="Name" >
+					type="text" id="title-ip" name="title" placeholder="Name">
 			</div>
 			<div class="form-group-ip">
-				<label for="country">Country:</label> 
-				<select class="form-control" name="country">
+				<label for="country">Country:</label> <select class="form-control"
+					name="country">
 					<option th:each="country : ${countries}" th:text="${country.name}">country</option>
 				</select>
 			</div>
 			<div class="form-group">
-				<label for="director">Director:</label> 
-				<input class="form-control" type="text" name="director" placeholder="Director">
+				<label for="director">Director:</label> <input class="form-control"
+					type="text" name="director" placeholder="Director">
 			</div>
 			<div class="form-group">
-				<label for="running-time">Running Time(in minute):</label> 
-				<input class="form-control" type="number" name="runningTime" placeholder="Running Time">
+				<label for="running-time">Running Time(in minute):</label> <input
+					class="form-control" type="number" name="runningTime"
+					placeholder="Running Time">
 			</div>
 			<div id="preview-wrapper">
-				<img id="preview" src="#"/>
+				<img id="preview" src="#" />
 			</div>
 			<div class="input-group">
-				
+
 				<div class="input-group-prepend">
 					<span class="input-group-text">Poster</span>
 				</div>
 				<div class="custom-file">
-					
-					<input type="file" class="custom-file-input" name="poster" id="poster-ip" accept="image/jpeg, image/png, image/jpg">
-					<label class="custom-file-label" id="poster-lb" >Choose
+
+					<input type="file" class="custom-file-input" name="poster"
+						id="poster-ip" accept="image/jpeg, image/png, image/jpg">
+					<label class="custom-file-label" id="poster-lb">Choose
 						poster</label>
 				</div>
 			</div>
@@ -94,7 +134,7 @@
 			<div class="container wrapper" id="cast-wrapper">
 				<div class="cast">
 					<strong>Cast:</strong><span class="btn btn-primary"
-						id="show-actor-selector-btn">add</span>
+						id="show-cast-selector-btn">add</span>
 				</div>
 			</div>
 			<div class="input-group">

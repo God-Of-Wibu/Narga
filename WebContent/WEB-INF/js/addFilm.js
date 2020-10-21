@@ -1,4 +1,6 @@
-
+/**
+ * 
+ */
 
 Array.prototype.removeByValue = function(value) {
 	let idx = this.indexOf(value)
@@ -63,11 +65,21 @@ $("document").ready(function(){
 	
 	
 	$("#show-category-selector-btn").click(function(){
-		$("#category-selector-wrapper").fadeIn(500);
+		$("#category-selector-wrapper")
+			.css("z-index", "1")
+			.fadeIn(200)
 		$("#category-ip").focus()
 	}) 
 	
+	$("#show-cast-selector-btn").click(function(){
+	    $("#actor-selector-wrapper")
+			.css("z-index", "1")
+			.fadeIn(200);
+    })
 	
+	$("closeBt").click(function(){
+		$("#actor-selector-wrapper").hide()
+	})
 	$("#category-selector-wrapper").focusout(function() {
 		$(this).hide()
 	})
@@ -136,4 +148,6 @@ $("document").ready(function(){
 		}
 	})
 	
-})
+})/**
+ * 
+ */

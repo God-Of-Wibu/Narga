@@ -72,11 +72,13 @@ $("document").ready(function(){
 	}) 
 	
 	$("#show-cast-selector-btn").click(function(){
-	    $("#actor-selector-wrapper").css("z-index", "3").fadeIn(200);
+	    $("#actor-selector-wrapper")
+			.css("z-index", "1")
+			.fadeIn(200);
     })
 	
 	$("closeBt").click(function(){
-		$("#actor-selector-wrapper").css("z-index", "1");
+		$("#actor-selector-wrapper").hide()
 	})
 	$("#category-selector-wrapper").focusout(function() {
 		$(this).hide()

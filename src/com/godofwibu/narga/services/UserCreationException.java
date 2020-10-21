@@ -1,6 +1,6 @@
 package com.godofwibu.narga.services;
 
-public class UserCreationException extends Exception {
+public class UserCreationException extends ServiceLayerException {
 	
 	private String userId;
 	

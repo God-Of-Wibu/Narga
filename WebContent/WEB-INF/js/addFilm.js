@@ -53,7 +53,7 @@ $("document").ready(function(){
 		
 	}
 	
-	jQuery.ajax(location.origin + "/Narga/admin/get-cats")
+	jQuery.ajax(location.origin + "/Narga/api/category/all")
 		.done(function(reponseData){
 			reponseData.forEach(category => {
 				console.log(category)

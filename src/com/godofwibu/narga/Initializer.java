@@ -50,11 +50,15 @@ import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.IImageStorageService;
 import com.godofwibu.narga.services.ImageStorageService;
+import com.godofwibu.narga.services.TransactionalOperationExecutor;
 
 @WebListener
 public class Initializer implements ServletContextListener {
 
 	private static final String HIBERNATE_CFG_PATH = "hibernate.cfg.xml";
+	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
+	private final static String FILE_DIRECTORY = "file";
+	
 	private SessionFactory sessionFactory;
 	private TemplateEngine templateEngine;
 	private IUserRepository userRepository;
@@ -71,7 +75,7 @@ public class Initializer implements ServletContextListener {
 	private ICountryService countryService;
 	private IActorService actorService;
 	
-	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
+	
 
 	public Initializer() { }
 
@@ -165,21 +169,26 @@ public class Initializer implements ServletContextListener {
 	}
 	
 	private void insertCategories() {
+		TransactionalOperationExecutor operationExecutor = getTransactionalOperationExecutor();
 		ICategoryRepository repo = getCategoryRepository();
-		repo.insert(new Category("comedy"));
-		repo.insert(new Category("romantic"));
-		repo.insert(new Category("action"));
-		repo.insert(new Category("sic-fi"));
+		operationExecutor.execute(() -> {
+			repo.insert(new Category("comedy"));
+			repo.insert(new Category("romantic"));
+			repo.insert(new Category("action"));
+			repo.insert(new Category("sic-fi"));
+		});
 	}
 	
 	private void insertCountries() {
+		TransactionalOperationExecutor operationExecutor = getTransactionalOperationExecutor();
 		ICountryRepository repo = getCountryRepository();
-		
-		repo.insert(new Country("vi", "Viet Nam"));
-		repo.insert(new Country("usa", "United States of America"));
-		repo.insert(new Country("uk", "United Kingdom"));
-		repo.insert(new Country("ca", "China"));
-		repo.insert(new Country("jap", "Japan"));
+		operationExecutor.execute(() -> {
+			repo.insert(new Country("vi", "Viet Nam"));
+			repo.insert(new Country("usa", "United States of America"));
+			repo.insert(new Country("uk", "United Kingdom"));
+			repo.insert(new Country("ca", "China"));
+			repo.insert(new Country("jap", "Japan")); 
+		});
 	}
 	
 	private ICategoryRepository getCategoryRepository() {
@@ -198,7 +207,8 @@ public class Initializer implements ServletContextListener {
 	
 	private IAccountService getAccountService() {
 		if (accountService == null) {
-			accountService = new AccountService(getImageStorageService(), getUserRepository());
+			accountService = new AccountService(getImageStorageService(), 
+					getUserRepository(), getTransactionalOperationExecutor());
 		}
 		return accountService;
 	}
@@ -206,7 +216,12 @@ public class Initializer implements ServletContextListener {
 	private IImageStorageService getImageStorageService() {
 		if (imageStorageService == null) {
 			try {
-				imageStorageService = new ImageStorageService(getContextPath(), "file", getImageDataRepository());
+				imageStorageService = new ImageStorageService(
+						getContextPath(), 
+						FILE_DIRECTORY, 
+						getImageDataRepository(), 
+						getTransactionalOperationExecutor()
+				);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -231,7 +246,8 @@ public class Initializer implements ServletContextListener {
 					getFilmRepository(), 
 					getImageStorageService(), 
 					getCountryRepository(), 
-					getCategoryRepository()
+					getCategoryRepository(),
+					getTransactionalOperationExecutor()
 			);
 		}
 		return filmService;
@@ -246,7 +262,7 @@ public class Initializer implements ServletContextListener {
 	
 	public ICategoryService getCategoryService() {
 		if (categoryService == null) {
-			categoryService = new CategoryService(getCategoryRepository());
+			categoryService = new CategoryService(getCategoryRepository(), getTransactionalOperationExecutor());
 		}
 		return categoryService;
 	}
@@ -254,15 +270,19 @@ public class Initializer implements ServletContextListener {
 	
 	private ICountryService getCountryService() {
 		if (countryService == null) {
-			countryService = new CountryService(getCountryRepository());
+			countryService = new CountryService(getCountryRepository(), getTransactionalOperationExecutor());
 		}
 		return countryService;
 	}
 	
 	private IActorService getActorService() {
 		if (actorService == null) {
-			actorService = new ActorService(getImageStorageService(), getActorRepository(), getCountryRepository());
+			actorService = new ActorService(getImageStorageService(), getActorRepository(), getCountryRepository(), getTransactionalOperationExecutor());
 		}
 		return actorService;
+	}
+	
+	private TransactionalOperationExecutor getTransactionalOperationExecutor() {
+		return new TransactionalOperationExecutor(getSessionFactory()); 
 	}
 }

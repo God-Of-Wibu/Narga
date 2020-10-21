@@ -17,13 +17,14 @@ import org.thymeleaf.context.WebContext;
 
 import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.repositories.IUserRepository;
+import com.godofwibu.narga.services.IAccountService;
 
 @WebServlet(name = "loginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private TemplateEngine templateEngine;
-	private IUserRepository userRepository;
+	private IAccountService accountService;
 
 	public LoginServlet() {
 		super();
@@ -34,7 +35,7 @@ public class LoginServlet extends HttpServlet {
 		super.init();
 		ServletContext ctx = getServletContext();
 		templateEngine = (TemplateEngine) ctx.getAttribute(TemplateEngine.class.getName());
-		userRepository = (IUserRepository) ctx.getAttribute(IUserRepository.class.getName());
+		accountService = (IAccountService) ctx.getAttribute(IAccountService.class.getName());
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -52,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	private void login(HttpServletRequest req, HttpServletResponse res, String username, String password) throws ServletException, IOException {
-		User user = userRepository.findById(username);
+		User user = accountService.loadUserById(username);
 		
 		if (user != null && user.getPassword().equals(password)) {
 			HttpSession session = req.getSession();

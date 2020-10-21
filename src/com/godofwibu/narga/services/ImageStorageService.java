@@ -22,8 +22,9 @@ public class ImageStorageService implements IImageStorageService {
 	private File rootDirectory;
 	private IImageDataRepository imageDataRepository;
 	private String contextPath;
+	private TransactionalOperationExecutor operationExecutor;
 	
-	public ImageStorageService(String contextPath, String path, IImageDataRepository imageDataRepository) throws IOException {
+	public ImageStorageService(String contextPath, String path, IImageDataRepository imageDataRepository, TransactionalOperationExecutor operationExecutor) throws IOException {
 		this.rootDirectory = new File(path);
 		if (rootDirectory.exists()) {
 			FileUtils.deleteDirectory(rootDirectory);
@@ -32,10 +33,11 @@ public class ImageStorageService implements IImageStorageService {
 		rootDirectory.mkdir();
 		this.imageDataRepository = imageDataRepository;
 		this.contextPath = contextPath;
+		this.operationExecutor = operationExecutor;
 	}
 	
 	@Override
-	public ImageData saveImage(InputStream inputStream, String filename) throws IOException {
+	public ImageData saveImage(InputStream inputStream, String filename) throws ServiceLayerException {
 		try (
 				inputStream;
 				OutputStream outputStream = new FileOutputStream(new File(rootDirectory, filename)); 
@@ -50,7 +52,10 @@ public class ImageStorageService implements IImageStorageService {
 			ImageData imageData = imageDataRepository.findById(id);
 			LOGGER.info("Saved image: {}", imageData);
 			return imageData;
-		}	
+		} catch (IOException e) {
+			LOGGER.error("Failed to save image: {}" + e.getMessage());
+			throw new ServiceLayerException(e.getMessage(), e);
+		}
 	}
 
 	@Override

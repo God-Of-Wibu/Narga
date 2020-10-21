@@ -1,7 +1,5 @@
 package com.godofwibu.narga.services;
 
-import java.io.IOException;
-
 import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
@@ -21,38 +19,39 @@ public class ActorService implements IActorService {
 	private IActorRepository actorRepository;
 	private ICountryRepository countryRepository;
 	private Gson gson;
-	
+	private TransactionalOperationExecutor operationExecutor;
 
 	public ActorService(IImageStorageService imageStorageService, IActorRepository actorRepository,
-			ICountryRepository countryRepository) {
+			ICountryRepository countryRepository, TransactionalOperationExecutor operationExecutor) {
 		super();
 		this.imageStorageService = imageStorageService;
 		this.actorRepository = actorRepository;
 		this.countryRepository = countryRepository;
-		gson = new GsonBuilder()
-				.excludeFieldsWithoutExposeAnnotation()
-				.create();
+		this.operationExecutor = operationExecutor;
+		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 	}
 
 	@Override
-	public void addNewActor(String name, int age, Gender gender, String countryName, Part avatarPart) throws IOException {
+	public void addNewActor(String name, int age, Gender gender, String countryName, Part avatarPart)
+			throws ServiceLayerException {
+		operationExecutor.execute(() -> {
+			Country country = countryRepository.findById(countryName);
+			Actor actor = new Actor();
+			actor.setName(name);
+			actor.setAge(age);
+			actor.setCountry(country);
 
-		Country country = countryRepository.findById(countryName);
-		Actor actor = new Actor();
-		actor.setName(name);
-		actor.setAge(age);
-		actor.setCountry(country);
+			Integer actorId = actorRepository.insert(actor);
 
-		Integer actorId = actorRepository.insert(actor);
+			String avatarExtension = extractFileExtensionFromPart(avatarPart);
+			String fileName = "actor_avatar_" + actorId + "." + avatarExtension;
 
-		String avatarExtension = extractFileExtensionFromPart(avatarPart);
-		String fileName = "actor_avatar_" + actorId + "." + avatarExtension;
-		
-		ImageData imageData =  imageStorageService.saveImage(avatarPart.getInputStream(), fileName);
-		
-		actor.setAvatar(imageData);
-		actor.setId(actorId);
-		actorRepository.update(actor);
+			ImageData imageData = imageStorageService.saveImage(avatarPart.getInputStream(), fileName);
+
+			actor.setAvatar(imageData);
+			actor.setId(actorId);
+			actorRepository.update(actor);
+		});
 	}
 
 	private String extractFileExtensionFromPart(Part part) {
@@ -65,18 +64,18 @@ public class ActorService implements IActorService {
 	}
 
 	@Override
-	public String getAllActorsAsJson() {
-		return gson.toJson(actorRepository.findAll());
+	public String getAllActorsAsJson() throws ServiceLayerException {
+		return operationExecutor.execute(() -> gson.toJson(actorRepository.findAll()));
 	}
 
 	@Override
-	public String searchActorAsJson(String input, int maxResult) {
-		return gson.toJson(actorRepository.searchByName(input, maxResult));
+	public String searchActorAsJson(String input, int maxResult) throws ServiceLayerException {
+		return operationExecutor.execute(() -> gson.toJson(actorRepository.searchByName(input, maxResult)));
 	}
 
 	@Override
-	public String getFirstActorsAsJson(int maxResult) {
-		return gson.toJson(actorRepository.findFirst(maxResult));
+	public String getFirstActorsAsJson(int maxResult) throws ServiceLayerException {
+		return operationExecutor.execute(() -> gson.toJson(actorRepository.findFirst(maxResult)));
 	}
 
 }

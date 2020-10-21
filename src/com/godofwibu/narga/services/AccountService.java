@@ -1,6 +1,5 @@
 package com.godofwibu.narga.services;
 
-import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.entities.Profile;
 import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
@@ -10,11 +9,16 @@ public class AccountService implements IAccountService {
 
 	private IImageStorageService imageStorageService;
 	private IUserRepository userRepository;
+	private TransactionalOperationExecutor operationExecutor;
 
-	public AccountService(IImageStorageService imageStorageService, IUserRepository userRepository) {
+	
+
+	public AccountService(IImageStorageService imageStorageService, IUserRepository userRepository,
+			TransactionalOperationExecutor operationExecutor) {
 		super();
 		this.imageStorageService = imageStorageService;
 		this.userRepository = userRepository;
+		this.operationExecutor = operationExecutor;
 	}
 
 	@Override
@@ -44,6 +48,7 @@ public class AccountService implements IAccountService {
 		user.setRole(role);
 		user.setProfile(profile);
 
+		
 		userRepository.insert(user);
 
 		return null;

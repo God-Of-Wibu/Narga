@@ -6,17 +6,19 @@ import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.repositories.ICountryRepository;
 
 public class CountryService implements ICountryService {
-	
-	private ICountryRepository countryRepository;
 
-	public CountryService(ICountryRepository countryRepository) {
+	private ICountryRepository countryRepository;
+	private TransactionalOperationExecutor operationExecutor;
+
+	public CountryService(ICountryRepository countryRepository, TransactionalOperationExecutor operationExecutor) {
 		super();
 		this.countryRepository = countryRepository;
+		this.operationExecutor = operationExecutor;
 	}
 
 	@Override
-	public List<Country> getAllCoutries() {
-		return countryRepository.findAll();
+	public List<Country> getAllCountries() throws ServiceLayerException {
+		return operationExecutor.execute(() -> countryRepository.findAll());
 	}
 
 }

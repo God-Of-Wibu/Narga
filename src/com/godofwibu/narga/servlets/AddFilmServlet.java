@@ -23,7 +23,9 @@ import com.godofwibu.narga.repositories.CategoryRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.services.CategoryService;
+import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
+import com.godofwibu.narga.services.ServiceLayerException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -39,49 +41,26 @@ public class AddFilmServlet extends HttpServlet {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AddFilmServlet.class);
 
 	private TemplateEngine templateEngine;
-	private ICategoryRepository categoryRepository;
-	private ICountryRepository countryRepository;
-	private CategoryService helper;
+	private ICountryService countryService;
 	private IFilmService filmService;
 	
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
-
 		templateEngine = (TemplateEngine) getServletContext().getAttribute(TemplateEngine.class.getName());
-		categoryRepository = (ICategoryRepository) getServletContext().getAttribute(ICategoryRepository.class.getName());
 		filmService = (IFilmService) getServletContext().getAttribute(IFilmService.class.getName());
-		countryRepository = (ICountryRepository) getServletContext().getAttribute(ICountryRepository.class.getName());
-		helper = new CategoryService(categoryRepository);
-		
+		countryService = (ICountryService) getServletContext().getAttribute(ICountryService.class.getName());
 	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
-		if (req.getRequestURI().equals(req.getContextPath() + "/admin/get-cats")) {
-			doGetCat(req, res);
-		} else if (req.getRequestURI().equals(req.getContextPath() + "/admin/add-film")) {
-			doGetForm(req, res);
-		}
-	}
-
-	private void doGetForm(HttpServletRequest req, HttpServletResponse res) throws IOException {
 		WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());
-		webContext.setVariable("countries", countryRepository.findAll());
+		webContext.setVariable("countries", countryService.getAllCountries());
 		templateEngine.process("addFilm", webContext, res.getWriter());
-	}
-
-	private void doGetCat(HttpServletRequest req, HttpServletResponse res) throws IOException {
-		res.setContentType("application/json");
-        res.setCharacterEncoding("UTF-8");
-        res.getWriter().write(helper.getAllCategoriesAsJson());
-        res.getWriter().flush();
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		
 		Map<String, String[]> parameters = req.getParameterMap();
 		LOGGER.debug("parameter count: " + parameters.size());
 		LOGGER.debug(req.getRequestURI());
@@ -96,7 +75,7 @@ public class AddFilmServlet extends HttpServlet {
 			filmService.addNewFilm(title, poster, country, director, runningTime, categories, casting);
 			res.setContentType("text/plain");
 			res.getWriter().print("film's data was added to database sucessfully!");
-		} catch (Exception e) {
+		} catch (ServiceLayerException e) {
 			res.setContentType("text/plain");
 			res.getWriter().print("something wrong happened: "+ e.getMessage());
 			e.printStackTrace();

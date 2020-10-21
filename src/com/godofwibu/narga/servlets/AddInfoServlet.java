@@ -19,12 +19,17 @@ import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.services.IActorService;
 import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IDirectorService;
+import com.godofwibu.narga.services.ServiceLayerException;
 
 import static com.godofwibu.narga.servlets.ParameterUtils.*;
 
 @WebServlet(urlPatterns = { "/admin/add-info/*" })
-@MultipartConfig(location = "/tmp", fileSizeThreshold = 1024 * 1024, maxFileSize = 1024 * 1024
-		* 5, maxRequestSize = 1024 * 1024 * 5 * 5)
+@MultipartConfig(
+		location = "/tmp", 
+		fileSizeThreshold = 1024 * 1024, 
+		maxFileSize = 1024 * 1024 * 5, 
+		maxRequestSize = 1024 * 1024 * 5 * 5
+)
 public class AddInfoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private TemplateEngine templateEngine;
@@ -52,7 +57,7 @@ public class AddInfoServlet extends HttpServlet {
 		String countryName = getParamAsString(params, "country");
 		int age = getParamAsInteger(params, "age");
 		Part avatarPart = req.getPart("avatar");
-		
+
 		WebContext context = new WebContext(req, res, getServletContext(), req.getLocale());
 		String typeToBeAdded = getTypeToBeAdded(req);
 		try {
@@ -67,35 +72,36 @@ public class AddInfoServlet extends HttpServlet {
 				res.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				return;
 			}
-			
-			context.setVariable("status", name +" was added to database");
-			
-			
+
+			context.setVariable("status", name + " was added to database");
+
 		} catch (Exception e) {
 			context.setVariable("status", "something wrong happened: " + e.getMessage());
 		}
 		context.setVariable("genderValues", Gender.values());
 		context.setVariable("defaultGender", gender);
-		context.setVariable("countries", countryService.getAllCoutries());
+		context.setVariable("countries", countryService.getAllCountries());
 		context.setVariable("submitLink", req.getRequestURI());
 		templateEngine.process("addInfo", context, res.getWriter());
+
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
+
 		String typeToBeAdded = getTypeToBeAdded(req);
 		if (!typeToBeAdded.equals("actor") && !typeToBeAdded.equals("director")) {
 			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
-		
+
 		WebContext context = new WebContext(req, res, getServletContext(), req.getLocale());
 		context.setVariable("genderValues", Gender.values());
 		context.setVariable("defaultGender", Gender.MALE);
-		context.setVariable("countries", countryService.getAllCoutries());
+		context.setVariable("countries", countryService.getAllCountries());
 		context.setVariable("submitLink", req.getRequestURI());
 		templateEngine.process("addInfo", context, res.getWriter());
+
 	}
 
 	private String getTypeToBeAdded(HttpServletRequest req) {

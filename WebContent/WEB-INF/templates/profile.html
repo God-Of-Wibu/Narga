@@ -1,34 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <link rel="stylesheet" type="text/css" href="../css/profile.css" th:href="@{/static/css/profile.css}">
-<div class="container" >
+<header class="header">
+  <img class="logo" src="../images/logo.png" >
+</header>
  <h1 class="text-center">Member Info</h1> 
- <div class="container"> 
-  <div class="row profile">        
-   <div class="col-md-3">     
-    <div class="profile-sidebar">                          
+  <div class="rowprofile">                                 
      <div class="profile-userpic"><img class="img-responsive" alt="Thong tin ca nhan">               
      </div>                                            
      <div class="profile-usertitle">                   
-      <div id="general" class="profile-usertitle">                   
-      <div id="general" class="profile-usertitle-name">                     Name:                </div>                  
-      <div id="general" class="profile-usertitle-age">                      Age:                   </div>
-      <div id="general" class="profile-usertitle-email">                    Email:                   </div>
-      <div id="general" class="profile-usertitle-film">                     Favourite type of film:  </div>
+       <div id="general" class="profile-usertitle">                   
+       <div id="general" class="profile-usertitle-name">                     Name:                </div>                  
+       <div id="general" class="profile-usertitle-age">                      Age:                   </div>
+       <div id="general" class="profile-usertitle-email">                    Email:                   </div>
+       <div id="general" class="profile-usertitle-film">                     Favourite type of film:  </div>
      </div>                                                
      <div class="profile-userbuttons">                 
-      <button type="button" class="btn btn-success btn-sm">Home Page</button>                  
-      <button type="button" class="btn btn-danger btn-sm">Exit</button> 
        <button type="button" class="btn btn-danger btn-sm">Update</button> 
        <button type="button" class="btn btn-danger btn-sm">Thong tin ve da dat</button> 
      </div> 
      </div> 
-     </div>
-   </div>      
-   <div class="col-md-9"> 
-   <div class="bg-footer"></div>
-  </div>
- </div> 
- </div>
-</div>
+     </div>   
+   <div class="bg-footer"></div> 
 </html>

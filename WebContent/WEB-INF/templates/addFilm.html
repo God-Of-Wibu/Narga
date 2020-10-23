@@ -19,7 +19,13 @@
 <link rel="stylesheet" th:href="@{/static/css/addFilm.css}"
 	href="../css/addFilm.css">
 <script type="text/javascript" src="../js/addFilm.js"
-	th:src="@{/static/js/addFilm.js}"></script>
+    th:src="@{/static/js/addFilm.js}"></script>
+<script type="text/javascript" src="../js/jquery.ui.widget.js"
+	th:src="@{/static/js/jquery.ui.widget.js}"></script>
+<script type="text/javascript" src="../js/jquery.iframe-transport.js"
+	th:src="@{/static/js/jquery.iframe-transport.js}"></script>
+<script type="text/javascript" src="../js/jquery.fileupload.js"
+	th:src="@{/static/js/jquery.fileupload.js}"></script>
 <title>Add Film Info</title>
 </head>
 <body class="body">
@@ -110,27 +116,20 @@
 					class="form-control" type="number" name="runningTime"
 					placeholder="Running Time">
 			</div>
-			<div id="preview-wrapper">
-				<img id="preview" src="#" />
+			
+			<div class="dropZone">
+			    <input type="file" id="imagePoster" name="attachments[]" multiple>
+			    <div class="imagePre"></div>
+			    <div id="error" style="color: red"></div>
+			    <div id="progress" style="color: red"></div>
 			</div>
-			<div class="input-group">
-
-				<div class="input-group-prepend">
-					<span class="input-group-text">Poster</span>
-				</div>
-				<div class="custom-file">
-
-					<input type="file" class="custom-file-input" name="poster"
-						id="poster-ip" accept="image/jpeg, image/png, image/jpg">
-					<label class="custom-file-label" id="poster-lb">Choose
-						poster</label>
-				</div>
-			</div>
+			
 			<div class="container wrapper" id="category-list-wrapper">
 				<strong>Categories:</strong><span class="btn btn-primary"
 					id="show-category-selector-btn">add</span>
 				<div id="category-list"></div>
 			</div>
+			
 			<div class="container wrapper" id="cast-wrapper">
 				<div class="cast">
 					<strong>Cast:</strong><span class="btn btn-primary"
@@ -138,7 +137,7 @@
 				</div>
 			</div>
 			<div class="input-group">
-				<label for="description" style="display: block;">Description</label>
+				<label for="description">Description</label>
 				<textarea class="form-control" rows="5" name="description"></textarea>
 			</div>
 			<button class="btn btn-primary" id="submit-btn">Submit</button>

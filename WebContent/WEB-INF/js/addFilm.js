@@ -64,7 +64,9 @@ $("document").ready(function(){
 		})
 	
 	
+
 	$("#show-category-selector-btn").click(function(){
+		console.log("hello")
 		$("#category-selector-wrapper")
 			.css("z-index", "1")
 			.fadeIn(200)
@@ -72,14 +74,16 @@ $("document").ready(function(){
 	}) 
 	
 	$("#show-cast-selector-btn").click(function(){
+		console.log("hello")
 	    $("#actor-selector-wrapper")
 			.css("z-index", "1")
-			.fadeIn(200);
+			.fadeIn(200);	
     })
 	
-	$("closeBt").click(function(){
+	$("#closeBt").click(function(){
 		$("#actor-selector-wrapper").hide()
 	})
+	
 	$("#category-selector-wrapper").focusout(function() {
 		$(this).hide()
 	})
@@ -90,6 +94,26 @@ $("document").ready(function(){
 		}
 	})
 	
+	 var image = $(".imagePre");
+	 $("#imagePoster").fileupload({
+	 url:'url den file xu ly upload server',
+	 fileName:"INPUT_FILE_NAME",
+	 dropZone: '#dropZone',
+	 dataType: 'json',
+	 autoUpload: false
+	 }).on('fileuploadadd', function(e,data){
+		var fileTypeAllowed = /.\.(jpg|png|jpeg)$/i;
+		var fileName = data.originalFiles[0]['name'];
+		var fileSize = data.originalFiles[0]['size']; 
+        if(!fileTypeAllowed.test(fileName))
+			 $("#error").html('Only image are allowed !');
+		else {
+			 $("#error").html('Ok nha');
+			data.submit();
+		}	
+				   
+	  }).on('fileuploaddone', function(e, data){})
+
 	$("#category-ip").change(function categoryInpOnChange(){
 		formModel.addCategory($(this).val());
 		$(this).val("")

@@ -121,3 +121,21 @@ div.info{
 #actor-ls{
 	padding: 0px;
 }
+
+.imagePre{
+	height:auto;
+	width:80px;
+	padding-top: 10px; 
+}
+
+#poster-inp{
+	display: block;
+}
+
+.dropZone{
+	height:175px;
+	padding: 10px 5px 5px 10px;
+	border: 1px solid;
+	border-color:#ced4da; 
+	border-radius: 5px; 
+}

@@ -94,40 +94,22 @@ $("document").ready(function(){
 		}
 	})
 	
-	 var image = $(".imagePre");
-	 $("#imagePoster").fileupload({
-	 url:'url den file xu ly upload server',
-	 fileName:"INPUT_FILE_NAME",
-	 dropZone: '#dropZone',
-	 dataType: 'json',
-	 autoUpload: false
-	 }).on('fileuploadadd', function(e,data){
-		var fileTypeAllowed = /.\.(jpg|png|jpeg)$/i;
-		var fileName = data.originalFiles[0]['name'];
-		var fileSize = data.originalFiles[0]['size']; 
-        if(!fileTypeAllowed.test(fileName))
-			 $("#error").html('Only image are allowed !');
-		else {
-			 $("#error").html('Ok nha');
-			data.submit();
-		}	
-				   
-	  }).on('fileuploaddone', function(e, data){})
+	 
+
+     $("#poster-inp").change(function (){
+        var form = document.getElementById("new-film-form")
+        var url = URL.createObjectURL(this.files[0])
+        $(".imagePre").attr("src", url)
+     })
+
+    $(".imagePre").click(function(){
+	   
+}) 
 
 	$("#category-ip").change(function categoryInpOnChange(){
 		formModel.addCategory($(this).val());
 		$(this).val("")
 		$("#category-selector-wrapper").hide()
-	})
-	
-	$("#poster-ip").change(function() {
-		console.log("poster-ip onChange")
-		if (this.files && this.files[0]) {
-			let file = this.files[0]
-			let url = URL.createObjectURL(file)
-			$("#preview").attr("src", url)
-			$("#poster-lb").text("Change poster")
-		}
 	})
 	
 	$("#new-film-form").submit(function newFilmFormOnSubmit(event) {

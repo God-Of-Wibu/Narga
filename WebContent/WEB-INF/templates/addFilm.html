@@ -118,11 +118,15 @@
 			</div>
 			
 			<div class="dropZone">
-			    <input type="file" id="imagePoster" name="attachments[]" multiple>
-			    <div class="imagePre"></div>
+			    <input type="file" id="poster-inp" name="poster" required>
+			    <img class="imagePre"></img>
 			    <div id="error" style="color: red"></div>
-			    <div id="progress" style="color: red"></div>
 			</div>
+			
+		
+			<div id="myModal" class="modal">
+                <img class="modal-content" id="img01">
+           </div>
 			
 			<div class="container wrapper" id="category-list-wrapper">
 				<strong>Categories:</strong><span class="btn btn-primary"

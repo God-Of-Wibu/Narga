@@ -7,6 +7,6 @@ import com.google.gson.JsonElement;
 
 public interface IActorRepository extends ICurdRepository<Actor, Integer>{
 	List<Actor> searchByName(String input, int maxResult);
-
 	List<Actor> findFirst(int maxResult);
+	Actor findByName(String name);
 }

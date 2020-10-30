@@ -5,5 +5,5 @@ import java.util.List;
 import com.godofwibu.narga.entities.Film;
 
 public interface IFilmRepository extends ICurdRepository<Film, Integer>{
-	List<Film> search(String input, int maxResult);
+	List<Film> search(String input, int maxResult) throws DataAccessLayerException;
 }

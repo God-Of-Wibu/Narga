@@ -184,10 +184,10 @@ dt{
 }
 
 .cast{
-	text-decoration: none;
 	color: #cf1717;
 	font-family: 'Roboto Slab', serif;
 	font-size: 18px;
+	margin-left: 10px;
 }
 
 .cast:hover {

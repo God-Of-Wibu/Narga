@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
+import com.godofwibu.narga.dto.AddFilmFormData;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.repositories.CategoryRepository;
@@ -26,6 +27,7 @@ import com.godofwibu.narga.services.CategoryService;
 import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.ServiceLayerException;
+import com.godofwibu.narga.utils.RequiredFieldException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -34,13 +36,10 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-@WebServlet(urlPatterns = { "/admin/add-film", "/admin/get-cats" })
+@WebServlet(urlPatterns = { "/admin/add/film"})
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
-public class AddFilmServlet extends HttpServlet {
+public class AddFilmServlet extends NargaServlet {
 	private static final long serialVersionUID = 1L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(AddFilmServlet.class);
-
-	private TemplateEngine templateEngine;
 	private ICountryService countryService;
 	private IFilmService filmService;
 	
@@ -48,38 +47,27 @@ public class AddFilmServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		templateEngine = (TemplateEngine) getServletContext().getAttribute(TemplateEngine.class.getName());
-		filmService = (IFilmService) getServletContext().getAttribute(IFilmService.class.getName());
-		countryService = (ICountryService) getServletContext().getAttribute(ICountryService.class.getName());
+		filmService = getDepenencyByClassName(IFilmService.class);
+		countryService = getDepenencyByClassName(ICountryService.class);
 	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());
 		webContext.setVariable("countries", countryService.getAllCountries());
-		templateEngine.process("addFilm", webContext, res.getWriter());
+		getTemplateEngine().process("addFilm", webContext, res.getWriter());
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		Map<String, String[]> parameters = req.getParameterMap();
-		LOGGER.debug("parameter count: " + parameters.size());
-		LOGGER.debug(req.getRequestURI());
-		String title = parameters.get("title")[0];
-		String country = parameters.get("country")[0];
-		String director = parameters.get("director")[0];
-		String[] categories = parameters.get("categories");
-		String[] casting = parameters.get("casting");
-		Part poster = req.getPart("poster");
-		int runningTime = Integer.parseInt(parameters.get("runningTime")[0]);
-		try {
-			filmService.addNewFilm(title, poster, country, director, runningTime, categories, casting);
+		
+		try {	
+			AddFilmFormData addFilmFormData = getFormObjectBinder().getFormObject(req, AddFilmFormData.class);
+			filmService.addNewFilm(addFilmFormData);
 			res.setContentType("text/plain");
-			res.getWriter().print("film's data was added to database sucessfully!");
-		} catch (ServiceLayerException e) {
+			res.getWriter().print("successfully!");
+		} catch (ServiceLayerException | RequiredFieldException e) {
 			res.setContentType("text/plain");
-			res.getWriter().print("something wrong happened: "+ e.getMessage());
-			e.printStackTrace();
-			LOGGER.error("some thing wrong happened: " + e.getMessage());
+			res.getWriter().print(e.getMessage());
 		}
  	}
 }

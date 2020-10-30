@@ -1,11 +1,9 @@
 package com.godofwibu.narga.services;
 
-import javax.servlet.http.Part;
-
-import com.godofwibu.narga.entities.Gender;
+import com.godofwibu.narga.dto.AddActorFormData;
 
 public interface IActorService {
-	void addNewActor(String name, int age, Gender gender, String countryName, Part avatarPart) throws ServiceLayerException;
+	void addNewActor(AddActorFormData formData) throws ServiceLayerException;
 
 	String getAllActorsAsJson() throws ServiceLayerException;
 

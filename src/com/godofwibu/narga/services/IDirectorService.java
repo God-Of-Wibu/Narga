@@ -1,11 +1,9 @@
 package com.godofwibu.narga.services;
 
-import javax.servlet.http.Part;
-
-import com.godofwibu.narga.entities.Gender;
+import com.godofwibu.narga.dto.AddActorFormData;
 
 public interface IDirectorService {
 
-	void addNewDirector(String name, int age, Gender gender, String countryName, Part avatarPart);
+	void addNewDirector(AddActorFormData formData) throws ServiceLayerException;
 
 }

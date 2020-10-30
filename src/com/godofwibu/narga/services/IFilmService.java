@@ -1,9 +1,11 @@
 package com.godofwibu.narga.services;
 
-import javax.servlet.http.Part;
+import com.godofwibu.narga.dto.AddFilmFormData;
+import com.godofwibu.narga.entities.Film;
 
 public interface IFilmService {
-	void addNewFilm(String title, Part poster, String country, String director, int runningTime, String[] categories, String[] casting) throws ServiceLayerException;
+	void addNewFilm(AddFilmFormData filmFormData) throws ServiceLayerException;
 	String getAllFilmAsJson() throws ServiceLayerException;
 	String searchFilmAsJson(String input) throws ServiceLayerException;
+	Film getFilmDetail(int filmId) throws ServiceLayerException;
 }

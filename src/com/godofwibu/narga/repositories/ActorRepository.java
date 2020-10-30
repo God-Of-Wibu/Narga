@@ -3,6 +3,9 @@ package com.godofwibu.narga.repositories;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.search.FullTextSession;
 import org.hibernate.search.Search;
@@ -38,20 +41,33 @@ public class ActorRepository extends CurdRepository<Actor, Integer> implements I
 					.setMaxResults(maxResult);
 			searhResult = hibernateQuery
 					.getResultList();
-			fullTextSession.close();
 			return searhResult;
 		} catch (EmptyQueryException e) {
 			return new ArrayList<Actor>();
-		}finally {
-			fullTextSession.close();
 		}
 	}
 
 	@Override
 	public List<Actor> findFirst(int maxResult) {
-			return  getSession()
-					.createQuery("FROM Actor", Actor.class)
-					.setMaxResults(maxResult)
-					.getResultList();
+		try {
+		return  getSession()
+			.createQuery("FROM Actor", Actor.class)
+			.setMaxResults(maxResult)
+			.getResultList(); 
+		} catch (PersistenceException e) {
+			throw new DataAccessLayerException("failed to execute find query", e);
+		}
+	}
+
+	@Override
+	public Actor findByName(String name) {
+		try {
+		return getSession()
+			.createQuery("SELECT FORM Actor a WHERE a.name=:name", Actor.class)
+			.setParameter("name", name)
+			.uniqueResult();
+		} catch (PersistenceException e) {
+			throw new DataAccessLayerException("failed to execute find query", e);
+		}
 	}	
 }

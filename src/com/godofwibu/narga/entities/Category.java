@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -22,9 +24,14 @@ import lombok.Setter;
 @Table(name = "category")
 public class Category {
 	
-	@Expose
 	@Id
-	@Column(name = "name", nullable = false)
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Expose
+	private Integer id;
+	
+	@Expose
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 	
 	@ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)

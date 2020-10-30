@@ -1,6 +1,6 @@
 package com.godofwibu.narga.services;
 
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +14,12 @@ import com.godofwibu.narga.entities.Category;
 import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.ImageData;
+import com.godofwibu.narga.dto.AddFilmFormData;
+import com.godofwibu.narga.entities.Actor;
+import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
+import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
 import com.godofwibu.narga.repositories.IFilmRepository;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,80 +31,81 @@ public class FilmService implements IFilmService {
 	private IImageStorageService imageStorageService;
 	private ICountryRepository countryRepository;
 	private ICategoryRepository categoryRepository;
+	private IActorRepository actorRepository;
 	private Gson gson;
-	private TransactionalOperationExecutor operationExecutor;
-
-	private static final String IMAGE_FILE_EXTENSIONS[] = { "png", "jpg", "jpeg" };
+	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
 
 	public FilmService(IFilmRepository filmRepository, IImageStorageService imageStorageService,
-			ICountryRepository countryRepository, ICategoryRepository categoryRepository, TransactionalOperationExecutor operationExecutor) {
+			ICountryRepository countryRepository, ICategoryRepository categoryRepository, IActorRepository actorRepository, IDbOperationExecutionWrapper dbOperationExecutionWrapper) {
 		super();
 		this.filmRepository = filmRepository;
 		this.imageStorageService = imageStorageService;
 		this.countryRepository = countryRepository;
 		this.categoryRepository = categoryRepository;
-		this.operationExecutor = operationExecutor;
+		this.dbOperationExecutionWrapper = dbOperationExecutionWrapper;
+		this.actorRepository = actorRepository;
 		
 		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
 	}
 
 	@Override
-	public void addNewFilm(String title, Part poster, String countryName, String director, int runningTime,
-			String[] categories, String[] casting) throws ServiceLayerException {
+	public void addNewFilm(AddFilmFormData formData) throws ServiceLayerException {
 
-		operationExecutor.execute(() -> {
-			String extension = extractFileExtensionFromPart(poster);
-			if (!isIsValidImageFileExtension(extension))
-				throw new ServiceLayerException("poster must be image file: " + Arrays.toString(IMAGE_FILE_EXTENSIONS));
-
-			Country country = countryRepository.findByName(countryName);
-			if (country == null)
-				throw new ServiceLayerException("country name is incorect:" + countryName);
-			Film film = new Film();
-			film.setTitle(title);
-			film.setCountry(country);
-			film.setRunningTime(runningTime);
-			film.setDirector(null);
-
-			Set<Category> cats = new HashSet<Category>();
-			Category cat = null;
-			for (String category : categories) {
-				if ((cat = categoryRepository.findById(category)) != null) {
-					cats.add(cat);
+		dbOperationExecutionWrapper.execute(() -> {
+			try {
+				String extension = extractFileExtensionFromPart(formData.getPosterPart());
+				
+				Country country = countryRepository.findByName(formData.getCountryName());
+				
+				Film film = new Film();
+				film.setTitle(formData.getTitle());
+				film.setCountry(country);
+				film.setRunningTime(formData.getRunningTime());
+				film.setDirector(null);
+				film.setDescription(formData.getDescription());
+	
+				Set<Category> categories = new HashSet<Category>();
+				Category category = null;
+				for (Integer categoryId : formData.getCategories()) {
+					if ((category = categoryRepository.findById(categoryId)) != null) {
+						categories.add(category);
+					}
 				}
+				film.setCategories(categories);
+				
+				Set<Actor> casting = new HashSet<>();
+				Actor actor = null;
+				for (Integer actorId : formData.getCasting()) {
+					if ((actor = actorRepository.findById(actorId)) != null) {
+						casting.add(actor);
+					}
+				}
+				film.setCasting(casting);
+				
+				Integer filmId = filmRepository.insert(film);
+	
+				String fileName = "film_poster_" + filmId + "." + extension;
+				ImageData posterImageData = imageStorageService.saveImage(formData.getPosterPart().getInputStream(), fileName);
+	
+				film.setId(filmId);
+				film.setPoster(posterImageData);
+	
+				filmRepository.update(film);
+			} catch (IOException e) {
+				throw new ServiceLayerException("Unable to get input stream form part", e);
 			}
-			film.setCategories(cats);
-
-			Integer filmId = filmRepository.insert(film);
-
-			String fileName = "film_poster_" + filmId + "." + extension;
-			ImageData posterImageData = imageStorageService.saveImage(poster.getInputStream(), fileName);
-
-			film.setId(filmId);
-			film.setPoster(posterImageData);
-
-			filmRepository.update(film);
 		});
-
 	}
 
 	@Override
 	public String getAllFilmAsJson() throws ServiceLayerException {
-		return operationExecutor.execute(() -> gson.toJson(filmRepository.findAll()));
+		return dbOperationExecutionWrapper.execute(() -> gson.toJson(filmRepository.findAll()));
 	}
 
 	@Override
 	public String searchFilmAsJson(String input) throws ServiceLayerException {
-		return operationExecutor.execute(() -> gson.toJson(filmRepository.search(input, 15)));
-	}
-
-	private boolean isIsValidImageFileExtension(String extension) {
-		for (String ext : IMAGE_FILE_EXTENSIONS) {
-			if (extension.equals(ext))
-				return true;
-		}
-		return false;
+		return dbOperationExecutionWrapper.execute(() -> gson.toJson(filmRepository.search(input, 15)));
 	}
 
 	private String extractFileExtensionFromPart(Part part) {
@@ -110,6 +115,11 @@ public class FilmService implements IFilmService {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public Film getFilmDetail(int filmId) throws ServiceLayerException {
+		return dbOperationExecutionWrapper.execute(() -> filmRepository.findById(filmId));
 	}
 
 }

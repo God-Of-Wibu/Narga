@@ -3,12 +3,14 @@ package com.godofwibu.narga.repositories;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.PersistenceException;
+
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-
 public class CurdRepository<E, I extends Serializable> implements ICurdRepository<E, I> {
-	
+
 	private SessionFactory sessionFactory;
 	private Class<E> entityType;
 
@@ -20,22 +22,18 @@ public class CurdRepository<E, I extends Serializable> implements ICurdRepositor
 
 	@Override
 	public List<E> findAll() {
-		return (List<E>) getSession()
-				.createQuery("FROM " + entityType.getName(), entityType)
-				.getResultList();
+		return (List<E>) getSession().createQuery("FROM " + entityType.getName(), entityType).getResultList();
 	}
 
 	@Override
 	public E findById(I id) {
-		return getSession()
-				.get(entityType, id);
+		return getSession().get(entityType, id);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public I insert(E entity) {
-		return (I) getSession()
-				.save(entity);
+		return (I) getSession().save(entity);
 	}
 
 	@Override
@@ -53,7 +51,7 @@ public class CurdRepository<E, I extends Serializable> implements ICurdRepositor
 	public void delete(E entity) {
 		getSession().delete(entity);
 	}
-	
+
 	protected Session getSession() {
 		return sessionFactory.getCurrentSession();
 	}

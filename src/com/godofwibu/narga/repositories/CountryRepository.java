@@ -15,6 +15,6 @@ public class CountryRepository extends CurdRepository<Country, String> implement
 		return getSession()
 				.createQuery("SELECT c FROM Country AS c WHERE c.name=:name", Country.class)
 				.setParameter("name", name)
-				.getSingleResult();
+				.uniqueResult();
 	}
 }

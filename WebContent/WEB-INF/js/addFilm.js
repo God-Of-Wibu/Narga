@@ -1,145 +1,190 @@
-/**
- * 
- */
-
-Array.prototype.removeByValue = function(value) {
-	let idx = this.indexOf(value)
-	if (idx > -1)
+Array.prototype.removeEq = function(value) {
+	let idx = this.indexOfEq(value)
+	if (idx !== -1) {
 		this.splice(idx, 1)
-	return this;
+		return true
+	}
+	return false
 }
 
-function makeCategoryElement(name) {
-	return `<span class=\"category\">${name}</span>`
+Array.prototype.hasEq = function (value) {
+	return this.indexOfEq(value) !== -1;
 }
 
-function makeOptionElement(name) {
-	return `<option>${name}</option>`;
+Array.prototype.indexOfEq = function(value) {
+	for (var i = 0; i < this.length; ++i) {
+		if (_.isEqual(this[i], value)) {
+			return i
+		}
+	}
+	return -1;
+}
+
+function showInfoDialog(msg) {
+	alert(msg)
+}
+
+function showErrorDialog(msg) {
+	alert(msg)
 }
 
 $("document").ready(function(){	
 	var formModel = {
 		casting: [],
 		categories: [],
-		callbacks: [],
-		
-		fireEvent: function(evt) {
-			for (const callback of this.callbacks) {
-				callback(evt)
-			}
-		},
+		director: null,
 		
 		addCategory: function(cat) {
 			this.categories.push(cat)
-			var evt = {
-				field: "categories",
-				operation: "add",
-				value: cat
-			}
-			this.fireEvent(evt)
+			this.onAddCategory(cat);
 		},
 		
 		removeCategory: function(cat) {
-			this.categories.removeByValue(cat);
-			var evt = {
-				field: "categories",
-				operation: "rmv",
-				value: cat
-			}
-			this.fireEvent(evt)
+			this.categories.removeEq(cat)
+			this.onRemoveCategory(cat)
 		},
 		
-		onChange: function(callbackfn) {
-			this.callbacks.push(callbackfn)
-		}
+		addActor: function(actor) {
+			if (!this.casting.hasEq(actor)) {
+				this.casting.push(actor)
+				this.onAddActor(actor)
+			}
+		},
 		
-	}
+		removeActor: function(actor) {
+			if (this.casting.removeEq(actor)) {
+				this.onRemoveActor(actor)
+			}
+		},
+		onAddActor : function(actor) {},
+		onRemoveActor: function(actor){},
+		onAddCategory: function(category) {},
+		onRemoveCategory: function(category) {}
+	} 
 	
 	jQuery.ajax(location.origin + "/Narga/api/category/all")
-		.done(function(reponseData){
-			reponseData.forEach(category => {
-				console.log(category)
-				$("#category-data-ls").append(makeOptionElement(category.name))
+		.done(function(reponseData) {
+			reponseData.forEach(function(category) {
+				$("#availiableCategories")
+				.append(
+					$(`<span class="category">${category.name}</span>`)
+					.click(function() {
+						formModel.addCategory(category)
+						$(this).remove()
+					})
+				)
 			})		
 		})
-	
-	
 
-	$("#show-category-selector-btn").click(function(){
-		console.log("hello")
-		$("#category-selector-wrapper")
+	$("#showCategorySelectorBtn").click(function() {
+		$("#categorySelectorWrapper")
 			.css("z-index", "1")
 			.fadeIn(200)
-		$("#category-ip").focus()
 	}) 
 	
-	$("#show-cast-selector-btn").click(function(){
-		console.log("hello")
-	    $("#actor-selector-wrapper")
+	$("#closeCategorySelectorBtn").click(function() {
+		$("#categorySelectorWrapper").fadeOut(200)
+	})
+	
+	$("#showActorSelectorBtn").click(function() {
+	    $("#actorSelectorWrapper")
 			.css("z-index", "1")
-			.fadeIn(200);	
+			.fadeIn(200);
+		$("#actorSearchInp").focus()	
     })
 	
-	$("#closeBt").click(function(){
-		$("#actor-selector-wrapper").hide()
+	$("#closeActorSelectorBtn").click(function() {
+		$("#actorSelectorWrapper").hide()
 	})
 	
-	$("#category-selector-wrapper").focusout(function() {
-		$(this).hide()
-	})
-
-	$("#category-list").click(".category", function categoryOnClick(evt){
-		if ($("#category-list")[0] !== evt.target) {
-			formModel.removeCategory($(evt.target).text())
-		}
-	})
-	
-	 var image = $(".imagePre");
-	 $("#imagePoster").fileupload({
-	 url:'url den file xu ly upload server',
-	 fileName:"INPUT_FILE_NAME",
-	 dropZone: '#dropZone',
-	 dataType: 'json',
-	 autoUpload: false
-	 }).on('fileuploadadd', function(e,data){
-		var fileTypeAllowed = /.\.(jpg|png|jpeg)$/i;
-		var fileName = data.originalFiles[0]['name'];
-		var fileSize = data.originalFiles[0]['size']; 
-        if(!fileTypeAllowed.test(fileName))
-			 $("#error").html('Only image are allowed !');
-		else {
-			 $("#error").html('Ok nha');
-			data.submit();
-		}	
-				   
-	  }).on('fileuploaddone', function(e, data){})
-
-	$("#category-ip").change(function categoryInpOnChange(){
+	$("#categoryInp").change(function categoryInpOnChange() {
 		formModel.addCategory($(this).val());
 		$(this).val("")
-		$("#category-selector-wrapper").hide()
+		$("#categorySelectorWrapper").hide()
 	})
 	
-	$("#poster-ip").change(function() {
-		console.log("poster-ip onChange")
+	$("#posterInp").change(function() {
 		if (this.files && this.files[0]) {
 			let file = this.files[0]
 			let url = URL.createObjectURL(file)
+			$("#previewImage").attr("src", url);
 			$("#preview").attr("src", url)
-			$("#poster-lb").text("Change poster")
+			$("#showPosterSelectorBtn").text("Change poster")
 		}
 	})
 	
-	$("#new-film-form").submit(function newFilmFormOnSubmit(event) {
+	$("#showPosterSelectorBtn").click(function() {
+		$("#posterSelectorWrapper")
+			.css("z-index", 1)
+			.fadeIn(200)
+	})
+	
+	$("#closePosterSelectorBtn").click(function() {
+		$("#posterSelectorWrapper").fadeOut(200)
+	})
+	
+	let actorSearchList = $("#actorSearchResult")
+	
+	$("#actorSearchInp").keydown(function() {
+		jQuery.get(location.origin + "/Narga/api/actor/search", {input: $(this).val()})
+			.done(function(searchResult) {
+				actorSearchList.empty()
+				if (searchResult.length == 0) {
+					actorSearchList.append(
+						$("<div ><span>No result</span></div>")
+						.css("text-align", "center")
+					)
+				} else {
+					for (let actor of searchResult) {
+						actorSearchList.append(
+							$(`
+								<div class="item">
+									<div class="avatar">
+										<img src="${actor.avatar.url}">
+									</div>
+									<div class="description">
+										<img src="${actor.country.flag.url}">
+										<span>${actor.name}</span>
+									</div>
+								</div>
+							`)
+							.click(function() {
+								formModel.addActor(actor)
+							})
+						)
+					}
+				}
+			})
+			.fail(function(){
+				actorSearchList.empty()
+				actorSearchList.append("<span>error</span>")
+			})
+	})
+	
+	$("#newFilmForm").submit(function(event) {
 		event.preventDefault()
-		let formElement = document.getElementById("new-film-form")
+		let formElement = $(this)[0];
 		let formData = new FormData(formElement)
 		let url = $(formElement).attr("action")
+		let posterInputElement = $("#posterInp")[0];
 		
-		formModel.categories.forEach(cat => {
-			formData.append("categories", cat)
+		if (!posterInputElement.files || !posterInputElement.files[0]) {
+			showErrorDialog("please select film poster")
+			return
+		}
+		
+		formData.append("poster", posterInputElement.files[0])
+		
+		formModel.categories.forEach(function(category) {
+			console.log(category)
+			formData.append("categories", category.id)
 		})
 		
+		formModel.casting.forEach(function(actor) {
+			formData.append("casting", actor.id)
+		})
+		
+		formData.append("director", "null")
 				
 		jQuery.ajax({
 			type: "POST",
@@ -151,27 +196,44 @@ $("document").ready(function(){
             cache: false,
             timeout: 600000,
 			dataType: "text",
-            success: function (responseData) {
-				alert(responseData)
-            },
-            error: function (err) {
-				alert("failed:" + err)
-            }
+            success: showInfoDialog,
+            error: showErrorDialog
 		})
 	}) 
 	
-	formModel.onChange(function(evt){
-		if(evt.field === "categories" && evt.operation === "add") {
-			$("#category-list").append(makeCategoryElement(evt.value))
-		} else if (evt.field === "categories" && evt.operation === "rmv") {
-			$(".category").each(function(index, element) {
-				if (element.innerText === evt.value) {
-					element.remove()
-				}
+	formModel.onAddCategory  = function(category) {
+		$("#categoryList").append(
+			$(`<span class="category">${category.name}</span>`)
+			.click(function() {
+				$(this).remove()
+				$("#availiableCategories").append(
+					$(`<span class="category">${category.name}</span>`)
+					.click(function() {
+						formModel.onRemoveCategory(category)
+						$(this).remove()
+					})
+				)
 			})
-		}
-	})
+		)
+	}
 	
-})/**
- * 
- */
+	formModel.onAddActor = function(actor) {
+		$("#casting").append(
+			$(`
+			<div class="item">
+				<div class="avatar">
+					<img src="${actor.avatar.url}">
+				</div>
+				<div class="description">
+					<img src="${actor.country.flag.url}">
+					<span>${actor.name}</span>
+				</div>
+			</div>
+			`)
+			.click(function() {
+				formModel.removeActor(actor)
+				$(this).remove()
+			})
+		)
+	}
+})

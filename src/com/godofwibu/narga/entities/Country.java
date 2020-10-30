@@ -3,6 +3,7 @@ package com.godofwibu.narga.entities;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -44,7 +45,7 @@ public class Country {
 	private String name;
 	
 	@Expose
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "flag")
 	private ImageData flag;
 	
@@ -61,6 +62,13 @@ public class Country {
 		super();
 		this.id = id;
 		this.name = name;
+	}
+
+	public Country(String id, String name, ImageData flag) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.flag = flag;
 	}
 	
 }

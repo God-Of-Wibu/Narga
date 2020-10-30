@@ -3,22 +3,19 @@ package com.godofwibu.narga.services;
 import com.godofwibu.narga.entities.Profile;
 import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
+import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
 import com.godofwibu.narga.repositories.IUserRepository;
 
 public class AccountService implements IAccountService {
 
-	private IImageStorageService imageStorageService;
 	private IUserRepository userRepository;
-	private TransactionalOperationExecutor operationExecutor;
-
-	
+	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
 
 	public AccountService(IImageStorageService imageStorageService, IUserRepository userRepository,
-			TransactionalOperationExecutor operationExecutor) {
+			IDbOperationExecutionWrapper executonWrapper) {
 		super();
-		this.imageStorageService = imageStorageService;
 		this.userRepository = userRepository;
-		this.operationExecutor = operationExecutor;
+		this.dbOperationExecutionWrapper = executonWrapper;
 	}
 
 	@Override
@@ -29,44 +26,62 @@ public class AccountService implements IAccountService {
 	@Override
 	public User registerNewUser(String userId, String password, String confirmPassword, Role role, String name,
 			String personalId) throws UserCreationException {
+		return dbOperationExecutionWrapper.execute(() -> {
+			if (isUserAlreadyExist(userId))
+				throw new UserCreationException("user already exist: " + userId, userId);
+			if (!password.equals(confirmPassword))
+				throw new UserCreationException("password does not match confirm password", userId);
 
-		if (userId == null || password == null || confirmPassword == null || role == null || name == null
-				|| personalId == null)
-			throw new UserCreationException("you must fill all required fileds", null);
-		if (userRepository.hasUser(userId))
-			throw new UserCreationException("user already exist: " + userId, userId);
-		if (!password.equals(confirmPassword))
-			throw new UserCreationException("password does not match confirm password", userId);
+			Profile profile = new Profile();
+			profile.setPersonalId(personalId);
+			profile.setName(name);
 
-		Profile profile = new Profile();
-		profile.setPersonalId(personalId);
-		profile.setName(name);
+			User user = new User();
+			user.setId(userId);
+			user.setPassword(password);
+			user.setRole(role);
+			user.setProfile(profile);
 
-		User user = new User();
-		user.setId(userId);
-		user.setPassword(password);
-		user.setRole(role);
-		user.setProfile(profile);
+			String createdUserId = userRepository.insert(user);
+			return userRepository.findById(createdUserId);
+		});
+	}
 
-		
-		userRepository.insert(user);
+	@Override
+	public void changeUserPassword(String userId, String oldPassword, String newPassword, String confirmNewPassword)
+			throws ServiceLayerException {
 
+	}
+
+	@Override
+	public boolean checkPassword(String userId, String password) throws ServiceLayerException {
+		return false;
+	}
+
+	@Override
+	public boolean isUserAlreadyExist(String userId) throws ServiceLayerException {
+		return userRepository.hasUser(userId);
+	}
+
+	@Override
+	public boolean isStrongPassword(String password) throws ServiceLayerException {
+		return false;
+	}
+
+	@Override
+	public void updateUserProfile(String userId, Profile profile) throws ServiceLayerException {
+
+	}
+
+	@Override
+	public Profile getProfileForUser(String userId) throws ServiceLayerException {
 		return null;
 	}
 
 	@Override
-	public void updateUserProfile(User user, Profile profile) {
-	}
-
-	@Override
-	public void changeUserPassword(String userId, String oldPassword, String newPassword, String confirmNewPassword) {
-
-	}
-
-	@Override
-	public boolean checkPassword(String userId, String password) {
-		User user = userRepository.findById(userId);
-		return user != null && user.getPassword().equals(password);
+	public boolean isPersonalIdInUsed(String personalId) throws ServiceLayerException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

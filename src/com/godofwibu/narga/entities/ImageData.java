@@ -36,6 +36,11 @@ public class ImageData {
 		this.url = url;
 		this.fileLocation = fileLocation;
 	}
+
+	public ImageData(String url) {
+		super();
+		this.url = url;
+	}
 	
 	
 }

@@ -3,19 +3,19 @@ package com.godofwibu.narga.services;
 import com.godofwibu.narga.entities.Profile;
 import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
-import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
 import com.godofwibu.narga.repositories.IUserRepository;
+import com.godofwibu.narga.utils.ITransactionTemplate;
 
 public class AccountService implements IAccountService {
 
 	private IUserRepository userRepository;
-	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
+	private ITransactionTemplate transactionTemplate;
 
 	public AccountService(IImageStorageService imageStorageService, IUserRepository userRepository,
-			IDbOperationExecutionWrapper executonWrapper) {
+			ITransactionTemplate executonWrapper) {
 		super();
 		this.userRepository = userRepository;
-		this.dbOperationExecutionWrapper = executonWrapper;
+		this.transactionTemplate = executonWrapper;
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class AccountService implements IAccountService {
 	@Override
 	public User registerNewUser(String userId, String password, String confirmPassword, Role role, String name,
 			String personalId) throws UserCreationException {
-		return dbOperationExecutionWrapper.execute(() -> {
+		return transactionTemplate.execute(() -> {
 			if (isUserAlreadyExist(userId))
 				throw new UserCreationException("user already exist: " + userId, userId);
 			if (!password.equals(confirmPassword))

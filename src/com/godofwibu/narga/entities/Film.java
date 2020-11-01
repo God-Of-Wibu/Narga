@@ -87,11 +87,11 @@ public class Film {
 	@Expose
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	@Analyzer(definition = "customAnalayzer")
-	@Column(name = "title", unique = true)
+	@Column(name = "title", unique = true, columnDefinition = "nvarchar(100)")
 	private String title;
 	
 	@Expose
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "nvarchar(1000)")
 	private String description;
 	
 	@Expose

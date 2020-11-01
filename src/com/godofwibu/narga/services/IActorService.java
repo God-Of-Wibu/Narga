@@ -4,10 +4,6 @@ import com.godofwibu.narga.dto.AddActorFormData;
 
 public interface IActorService {
 	void addNewActor(AddActorFormData formData) throws ServiceLayerException;
-
 	String getAllActorsAsJson() throws ServiceLayerException;
-
 	String searchActorAsJson(String input, int maxResult) throws ServiceLayerException;
-
-	String getFirstActorsAsJson(int maxResult) throws ServiceLayerException;
 }

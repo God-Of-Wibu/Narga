@@ -1,4 +1,4 @@
-package com.godofwibu.narga.repositories;
+package com.godofwibu.narga.utils;
 
 @FunctionalInterface
 public interface IOperationWithOutResult {

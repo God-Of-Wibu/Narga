@@ -31,21 +31,21 @@
 					<dt>Đạo diễn:</dt>
 					<dd>
 						<a class="directors" th:if="${film.director}"
-							href="@{/director/{id}(id={film.director.id})}"
+							href="@{'/director/'+${director.id}}"
 							th:href="${film.director.name}">Thịn Thịn</a>
 					</dd>
 					<br>
 					<dt class="dt-category">Thể loại:</dt>
 					<dd>
 						<a class="categorry" th:each="category : ${film.categories}"
-							href="@{/category/{id}(id=${category.id})}"
+							th:href="@{'/category/'+${category.id}}"
 							th:text="${category.name}">Hoạt hình</a>
 					</dd>
 					<br>
 					<dt>Diễn viên:</dt>
 					<dd>
 						<a class="cast" href="#" th:each="actor : ${film.casting}"
-							th:text="${actor.name}" th:href="@{/actor/{id}(id=${actor.id})}">Thịn</a>
+							th:text="${actor.name}" th:href="@{'/actor/'+${actor.id}}">Thịn</a>
 					</dd>
 					<br>
 					<dt>Ngày khởi chiếu:</dt>
@@ -72,9 +72,5 @@
 			</div>
 		</div>
 	</div>
-	<footer class="footer">
-		<img class="br" src="../images/bg-bottom-footer.jpg"
-			th:src="@{/static/images/bg-bottom-footer.jpg}">
-	</footer>
 </body>
 </html>

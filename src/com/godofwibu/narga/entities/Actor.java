@@ -42,7 +42,7 @@ public class Actor {
 	@Field(analyze = Analyze.YES, index = Index.YES, store = Store.NO)
 	@Analyzer(definition = "customAnalayzer")
 	@Expose
-	@Column(name = "name", unique = true)
+	@Column(name = "name", unique = true, columnDefinition = "nvarchar(100)")
 	private String name;
 	
 	@Enumerated(EnumType.STRING)

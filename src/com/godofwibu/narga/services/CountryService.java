@@ -4,25 +4,25 @@ import java.util.List;
 
 import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.repositories.ICountryRepository;
-import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
+import com.godofwibu.narga.utils.ITransactionTemplate;
 
 public class CountryService implements ICountryService {
 
 	private ICountryRepository countryRepository;
-	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
+	private ITransactionTemplate transactionTemplate;
 
 
-	public CountryService(ICountryRepository countryRepository, IDbOperationExecutionWrapper dbOperationExecutionWrapper) {
+	public CountryService(ICountryRepository countryRepository, ITransactionTemplate transactionTemplate) {
 		super();
 		this.countryRepository = countryRepository;
-		this.dbOperationExecutionWrapper = dbOperationExecutionWrapper;
+		this.transactionTemplate = transactionTemplate;
 	}
 
 
 
 	@Override
 	public List<Country> getAllCountries() throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> countryRepository.findAll());
+		return transactionTemplate.execute(() -> countryRepository.findAll());
 	}
 
 }

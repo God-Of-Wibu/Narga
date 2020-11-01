@@ -41,7 +41,7 @@ public class Country {
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	@Analyzer(definition = "customAnalayzer")
 	@Expose
-	@Column(name = "name", unique = true)
+	@Column(name = "name", unique = true, columnDefinition = "nvarchar(100)")
 	private String name;
 	
 	@Expose

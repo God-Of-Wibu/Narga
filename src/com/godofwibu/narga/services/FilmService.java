@@ -19,8 +19,8 @@ import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
-import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
 import com.godofwibu.narga.repositories.IFilmRepository;
+import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -33,16 +33,16 @@ public class FilmService implements IFilmService {
 	private ICategoryRepository categoryRepository;
 	private IActorRepository actorRepository;
 	private Gson gson;
-	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
+	private ITransactionTemplate transactionTemplate;
 
 	public FilmService(IFilmRepository filmRepository, IImageStorageService imageStorageService,
-			ICountryRepository countryRepository, ICategoryRepository categoryRepository, IActorRepository actorRepository, IDbOperationExecutionWrapper dbOperationExecutionWrapper) {
+			ICountryRepository countryRepository, ICategoryRepository categoryRepository, IActorRepository actorRepository, ITransactionTemplate transactionTemplate) {
 		super();
 		this.filmRepository = filmRepository;
 		this.imageStorageService = imageStorageService;
 		this.countryRepository = countryRepository;
 		this.categoryRepository = categoryRepository;
-		this.dbOperationExecutionWrapper = dbOperationExecutionWrapper;
+		this.transactionTemplate = transactionTemplate;
 		this.actorRepository = actorRepository;
 		
 		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -52,7 +52,7 @@ public class FilmService implements IFilmService {
 	@Override
 	public void addNewFilm(AddFilmFormData formData) throws ServiceLayerException {
 
-		dbOperationExecutionWrapper.execute(() -> {
+		transactionTemplate.execute(() -> {
 			try {
 				String extension = extractFileExtensionFromPart(formData.getPosterPart());
 				
@@ -100,12 +100,12 @@ public class FilmService implements IFilmService {
 
 	@Override
 	public String getAllFilmAsJson() throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> gson.toJson(filmRepository.findAll()));
+		return transactionTemplate.execute(() -> gson.toJson(filmRepository.findAll()));
 	}
 
 	@Override
 	public String searchFilmAsJson(String input) throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> gson.toJson(filmRepository.search(input, 15)));
+		return transactionTemplate.execute(() -> gson.toJson(filmRepository.search(input, 15)));
 	}
 
 	private String extractFileExtensionFromPart(Part part) {
@@ -119,7 +119,7 @@ public class FilmService implements IFilmService {
 
 	@Override
 	public Film getFilmDetail(int filmId) throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> filmRepository.findById(filmId));
+		return transactionTemplate.execute(() -> filmRepository.findById(filmId));
 	}
 
 }

@@ -188,7 +188,7 @@ $("document").ready(function(){
 				
 		jQuery.ajax({
 			type: "POST",
-            enctype: 'multipart/form-data',
+            enctype: 'multipart/form-data; charset=UTF-8',
             url: url,
             data: formData,
             processData: false,
@@ -209,7 +209,7 @@ $("document").ready(function(){
 				$("#availiableCategories").append(
 					$(`<span class="category">${category.name}</span>`)
 					.click(function() {
-						formModel.onRemoveCategory(category)
+						formModel.onCategory(category)
 						$(this).remove()
 					})
 				)

@@ -32,11 +32,9 @@ import com.godofwibu.narga.repositories.ActorRepository;
 import com.godofwibu.narga.repositories.CategoryRepository;
 import com.godofwibu.narga.repositories.CountryRepository;
 import com.godofwibu.narga.repositories.FilmRepository;
-import com.godofwibu.narga.repositories.HibernateOpertionExecutionWrapper;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
-import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
 import com.godofwibu.narga.repositories.IFilmRepository;
 import com.godofwibu.narga.repositories.IImageDataRepository;
 import com.godofwibu.narga.repositories.IUserRepository;
@@ -56,6 +54,8 @@ import com.godofwibu.narga.services.IImageStorageService;
 import com.godofwibu.narga.services.ImageStorageService;
 import com.godofwibu.narga.utils.FormObjectBinder;
 import com.godofwibu.narga.utils.GenderConverter;
+import com.godofwibu.narga.utils.HibernateTransactionTemplate;
+import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.godofwibu.narga.utils.IntegerArrayConverter;
 import com.godofwibu.narga.utils.IntegerConverter;
 import com.godofwibu.narga.utils.StringArrayConverter;
@@ -86,7 +86,7 @@ public class Initializer implements ServletContextListener {
 	private ICategoryService categoryService;
 	private ICountryService countryService;
 	private IActorService actorService;
-	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
+	private ITransactionTemplate transactionTemplate;
 	private FormObjectBinder formObjectBinder;
 	
 	
@@ -148,6 +148,7 @@ public class Initializer implements ServletContextListener {
 		templateResolver.setPrefix("/WEB-INF/templates/");
 		templateResolver.setSuffix(".html");
 		templateResolver.setCharacterEncoding("UTF-8");
+		
 		templateResolver.setCacheTTLMs(Long.valueOf(3600000L));
 		templateResolver.setCacheable(true);
 		return templateResolver;
@@ -178,7 +179,7 @@ public class Initializer implements ServletContextListener {
 	private void insertCategories() {
 		ICategoryRepository repo = getCategoryRepository();
 		try {
-			getDbOpExecutionWrapper().execute(() -> {
+			getTransactionTemplate().execute(() -> {
 				repo.insert(new Category("comedy"));
 				repo.insert(new Category("romantic"));
 				repo.insert(new Category("action"));
@@ -192,7 +193,7 @@ public class Initializer implements ServletContextListener {
 	private void insertCountries() {
 		ICountryRepository repo = getCountryRepository();
 		try {
-			getDbOpExecutionWrapper().execute(() -> {
+			getTransactionTemplate().execute(() -> {
 				repo.insert(new Country("vi", "Viet Nam", 
 						new ImageData(toStaticUrl("/images/flags/vietnam.png"))));
 				repo.insert(new Country("usa", "United States of America",
@@ -205,7 +206,7 @@ public class Initializer implements ServletContextListener {
 						new ImageData(toStaticUrl("/images/flags/japan.png"))));
 			});
 		}catch (Exception e) {
-			// TODO: handle exception
+			LOGGER.error("insert countries fail", e);
 		}
 	}
 	
@@ -226,7 +227,7 @@ public class Initializer implements ServletContextListener {
 	private IAccountService getAccountService() {
 		if (accountService == null) {
 			accountService = new AccountService(getImageStorageService(), 
-					getUserRepository(), getDbOpExecutionWrapper());
+					getUserRepository(), getTransactionTemplate());
 		}
 		return accountService;
 	}
@@ -239,7 +240,8 @@ public class Initializer implements ServletContextListener {
 						FILE_DIRECTORY,
 						FILE_RESOURCE_PREFIX,
 						getImageDataRepository(), 
-						getDbOpExecutionWrapper()
+						getTransactionTemplate(),
+						false
 				);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -267,7 +269,7 @@ public class Initializer implements ServletContextListener {
 					getCountryRepository(), 
 					getCategoryRepository(),
 					getActorRepository(),
-					getDbOpExecutionWrapper()
+					getTransactionTemplate()
 			);
 		}
 		return filmService;
@@ -282,7 +284,7 @@ public class Initializer implements ServletContextListener {
 	
 	private ICategoryService getCategoryService() {
 		if (categoryService == null) {
-			categoryService = new CategoryService(getCategoryRepository(), getDbOpExecutionWrapper());
+			categoryService = new CategoryService(getCategoryRepository(), getTransactionTemplate());
 		}
 		return categoryService;
 	}
@@ -290,23 +292,23 @@ public class Initializer implements ServletContextListener {
 	
 	private ICountryService getCountryService() {
 		if (countryService == null) {
-			countryService = new CountryService(getCountryRepository(), getDbOpExecutionWrapper());
+			countryService = new CountryService(getCountryRepository(), getTransactionTemplate());
 		}
 		return countryService;
 	}
 	
 	private IActorService getActorService() {
 		if (actorService == null) {
-			actorService = new ActorService(getImageStorageService(), getActorRepository(), getCountryRepository(), getDbOpExecutionWrapper());
+			actorService = new ActorService(getImageStorageService(), getActorRepository(), getCountryRepository(), getTransactionTemplate());
 		}
 		return actorService;
 	}
 	
-	private IDbOperationExecutionWrapper getDbOpExecutionWrapper() {
-		if (dbOperationExecutionWrapper == null) {
-			dbOperationExecutionWrapper = new HibernateOpertionExecutionWrapper(getSessionFactory());
+	private ITransactionTemplate getTransactionTemplate() {
+		if (transactionTemplate == null) {
+			transactionTemplate = new HibernateTransactionTemplate(getSessionFactory());
 		}
-		return dbOperationExecutionWrapper;
+		return transactionTemplate;
 	}
 	
 	private FormObjectBinder getFormObjectBinder() {

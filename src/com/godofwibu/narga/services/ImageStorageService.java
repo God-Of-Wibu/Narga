@@ -10,8 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.godofwibu.narga.entities.ImageData;
-import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
 import com.godofwibu.narga.repositories.IImageDataRepository;
+import com.godofwibu.narga.utils.ITransactionTemplate;
 
 public class ImageStorageService implements IImageStorageService {
 
@@ -20,23 +20,27 @@ public class ImageStorageService implements IImageStorageService {
 	private File rootDirectory;
 	private IImageDataRepository imageDataRepository;
 	private String contextPath;
-	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
+	private ITransactionTemplate transactionTemplate;
 	private String fileResourcePrefix;
 
 	public ImageStorageService(String contextPath, String rootDiretoryPath, String fileResourcePrefix,
-			IImageDataRepository imageDataRepository, IDbOperationExecutionWrapper dbOperationExecutionWrapper) throws IOException {
+			IImageDataRepository imageDataRepository, ITransactionTemplate transactionTemplate, boolean clearOnStartup) throws IOException {
 		this.rootDirectory = new File(rootDiretoryPath);
-		if (!rootDirectory.exists())
-			rootDirectory.mkdir();
+		if (clearOnStartup && this.rootDirectory.exists()) {
+			FileUtils.deleteDirectory(rootDirectory);
+		}
+		if (!this.rootDirectory.exists()) {
+			this.rootDirectory.mkdir();
+		}
 		this.imageDataRepository = imageDataRepository;
 		this.contextPath = contextPath;
-		this.dbOperationExecutionWrapper = dbOperationExecutionWrapper;
+		this.transactionTemplate = transactionTemplate;
 		this.fileResourcePrefix = fileResourcePrefix;
 	}
 
 	@Override
 	public ImageData saveImage(InputStream inputStream, String fileName) throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> {
+		return transactionTemplate.execute(() -> {
 			try  {
 				writeToFile(inputStream, fileName);
 				String url = contextPath + fileResourcePrefix + "/" + fileName;
@@ -51,7 +55,7 @@ public class ImageStorageService implements IImageStorageService {
 
 	@Override
 	public void deleteImage(ImageData imageData) {
-		dbOperationExecutionWrapper.execute(() -> {                                                                               
+		transactionTemplate.execute(() -> {                                                                               
 			if (imageData != null && imageData.getFileLocation() != null) {
 				File f = new File(rootDirectory, imageData.getFileLocation());
 				f.delete();
@@ -62,7 +66,7 @@ public class ImageStorageService implements IImageStorageService {
 
 	@Override
 	public ImageData saveImage(String url) {
-		return dbOperationExecutionWrapper.execute(() -> {
+		return transactionTemplate.execute(() -> {
 			Integer id = imageDataRepository.insert(new ImageData(url, null));
 			return imageDataRepository.findById(id);
 		});

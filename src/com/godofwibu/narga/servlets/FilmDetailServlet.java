@@ -29,6 +29,8 @@ public class FilmDetailServlet extends NargaServlet {
 		int filmId = Integer.parseInt(req.getPathInfo().substring(1));
 		
 		webContext.setVariable("film", filmService.getFilmDetail(filmId));
+		res.setContentType("text/html; charset=UTF-8");
+		res.setCharacterEncoding("UTF-8");
 		getTemplateEngine().process("filmDetail", webContext, res.getWriter());
 	}
 }

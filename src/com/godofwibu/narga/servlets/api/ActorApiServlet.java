@@ -5,10 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.godofwibu.narga.services.IActorService;
-import com.godofwibu.narga.services.ServiceLayerException;
 
 @WebServlet(urlPatterns = "/api/actor/*")
 public class ActorApiServlet extends ApiServlet {
@@ -23,52 +20,15 @@ public class ActorApiServlet extends ApiServlet {
 	public void init() throws ServletException {
 		super.init();
 		actorService = (IActorService) getServletContext().getAttribute(IActorService.class.getName());
+		addAction("all", this::all);
+		addAction("search", this::search);
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		String action = getAction(req);
-		switch (action) {
-		case "all":
-			getAllActors(req, res);
-			break;
-		case "search":
-			searchActors(req, res);
-			break;
-		default:
-			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
-			break;
-		}
+	private String all(HttpServletRequest req) throws IOException, ServletException {
+		return actorService.getAllActorsAsJson();
 	}
-
-	private void getAllActors(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		try {
-			res.setContentType("application/json");
-			res.setCharacterEncoding("UTF-8");
-			res.getWriter().write(actorService.getAllActorsAsJson());
-			res.flushBuffer();
-		} catch (ServiceLayerException e) {
-			res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	private void searchActors(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		try {
-			String input = req.getParameter("input");
-			if (input == null) {
-				res.sendError(HttpServletResponse.SC_BAD_REQUEST);
-				return;
-			}
-			res.setContentType("application/json");
-			res.setCharacterEncoding("UTF-8");
-			if (input.equals("")) {
-				res.getWriter().write(actorService.getFirstActorsAsJson(15));
-			} else {
-				res.getWriter().write(actorService.searchActorAsJson(input, 15));
-			}
-			res.flushBuffer();
-		} catch (ServiceLayerException e) {
-			res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		}
+	
+	private String search(HttpServletRequest req) throws IOException, ServletException {
+		return actorService.searchActorAsJson(req.getParameter("input"), 15);
 	}
 }

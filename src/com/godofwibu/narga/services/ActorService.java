@@ -9,11 +9,10 @@ import org.apache.commons.io.FilenameUtils;
 import com.godofwibu.narga.dto.AddActorFormData;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Country;
-import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
-import com.godofwibu.narga.repositories.IDbOperationExecutionWrapper;
+import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -23,43 +22,43 @@ public class ActorService implements IActorService {
 	private IActorRepository actorRepository;
 	private ICountryRepository countryRepository;
 	private Gson gson;
-	private IDbOperationExecutionWrapper dbOperationExecutionWrapper;
+	private ITransactionTemplate transactionTemplate;
 
 	public ActorService(IImageStorageService imageStorageService, IActorRepository actorRepository,
-			ICountryRepository countryRepository, IDbOperationExecutionWrapper dbOperationExecutionWrapper) {
+			ICountryRepository countryRepository, ITransactionTemplate transactionTemplate) {
 		super();
 		this.imageStorageService = imageStorageService;
 		this.actorRepository = actorRepository;
 		this.countryRepository = countryRepository;
-		this.dbOperationExecutionWrapper = dbOperationExecutionWrapper;
+		this.transactionTemplate = transactionTemplate;
 		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 	}
 
 	@Override
 	public void addNewActor(AddActorFormData formData) throws ServiceLayerException {
-		dbOperationExecutionWrapper.execute(() -> {
+		transactionTemplate.execute(() -> {
 			try {
 				Country country = countryRepository.findById(formData.getCountryId());
 				Actor actor = new Actor();
 				actor.setName(formData.getName());
 				actor.setAge(formData.getAge());
 				actor.setCountry(country);
-	
+
 				Integer actorId = actorRepository.insert(actor);
-	
+
 				if (formData.getAvatarPart() != null) {
 					String avatarExtension = extractFileExtensionFromPart(formData.getAvatarPart());
 					String fileName = "actor_avatar_" + actorId + "." + avatarExtension;
-	
+
 					ImageData imageData = imageStorageService.saveImage(formData.getAvatarPart().getInputStream(),
 							fileName);
-	
+
 					actor.setAvatar(imageData);
 					actor.setId(actorId);
 					actorRepository.update(actor);
 				}
-			} catch(IOException e) {
-				throw new ServiceLayerException("Unable to get input stream form part", e);
+			} catch (IOException e) {
+				throw new ServiceLayerException("Failed to save film data" ,e);
 			}
 		});
 	}
@@ -75,17 +74,11 @@ public class ActorService implements IActorService {
 
 	@Override
 	public String getAllActorsAsJson() throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> gson.toJson(actorRepository.findAll()));
+		return transactionTemplate.execute(() -> gson.toJson(actorRepository.findAll()));
 	}
 
 	@Override
 	public String searchActorAsJson(String input, int maxResult) throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> gson.toJson(actorRepository.searchByName(input, maxResult)));
+		return transactionTemplate.execute(() -> gson.toJson(actorRepository.searchByName(input, maxResult)));
 	}
-
-	@Override
-	public String getFirstActorsAsJson(int maxResult) throws ServiceLayerException {
-		return dbOperationExecutionWrapper.execute(() -> gson.toJson(actorRepository.findFirst(maxResult)));
-	}
-
 }

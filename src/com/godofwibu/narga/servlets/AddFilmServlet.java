@@ -59,7 +59,7 @@ public class AddFilmServlet extends NargaServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		
+		req.setCharacterEncoding("UTF-8");
 		try {	
 			AddFilmFormData addFilmFormData = getFormObjectBinder().getFormObject(req, AddFilmFormData.class);
 			filmService.addNewFilm(addFilmFormData);

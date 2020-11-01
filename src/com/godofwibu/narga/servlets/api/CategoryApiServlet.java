@@ -23,27 +23,10 @@ public class CategoryApiServlet extends ApiServlet {
 	public void init() throws ServletException {
 		super.init();
 		categoryService = (ICategoryService) getServletContext().getAttribute(ICategoryService.class.getName());
+		addAction("all", this::all);
 	}
 
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		String action = getAction(req);
-		if ("all".equals(action)) {
-			getAllCategories(res);
-		} else {
-			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
-		}
-	}
-
-	private void getAllCategories(HttpServletResponse res) throws IOException {
-		try {
-			res.setContentType("application/json");
-			res.setCharacterEncoding("UTF-8");
-			res.getWriter().print(categoryService.getAllCategoriesAsJson());
-			res.flushBuffer();
-		} catch (ServiceLayerException e) {
-			res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		}
-
+	private String all(HttpServletRequest req) throws IOException, ServletException{
+		return categoryService.getAllCategoriesAsJson();
 	}
 }

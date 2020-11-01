@@ -5,5 +5,5 @@ import java.util.List;
 import com.godofwibu.narga.entities.Director;
 
 public interface IDirectorRepository extends ICurdRepository<Director, Integer> {
-	List<Director> search(String input) throws DataAccessLayerException;
+	List<Director> search(String input);
 }

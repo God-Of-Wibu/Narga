@@ -47,6 +47,7 @@ header{
 	border-width:3px 0px 3px 0px;
 	border-color:	#198798;
 	display: block;
+	width: 100%;
 }
 
 .thumb{

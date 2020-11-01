@@ -1,120 +1,73 @@
 package com.godofwibu.narga.repositories;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.Query;
+import javax.persistence.PersistenceException;
 
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.search.FullTextSession;
+import org.hibernate.search.Search;
+import org.hibernate.search.exception.EmptyQueryException;
+import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.godofwibu.narga.entities.Actor;
+import com.godofwibu.narga.entities.Director;
 
-public class ActorRepository implements IActorRepository {
+public class ActorRepository extends CurdRepository<Actor, Integer> implements IActorRepository {
 	
-	private SessionFactory sessionFactory; 
-
 	public ActorRepository(SessionFactory sessionFactory) {
-		super();
-		this.sessionFactory = sessionFactory;
+		super(sessionFactory, Actor.class);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Actor> findAll() {
-		List<Actor> actors = null;
-		Session session = sessionFactory.getCurrentSession();
-		Transaction tx = null;
+	public List<Actor> searchByName(String input, int maxResult) {
+		FullTextSession fullTextSession = Search.getFullTextSession(getSession());
+		List<Actor> searhResult = null;
 		try {
-			tx = session.beginTransaction();
-			actors = session.createQuery("SELECT a FROM Actor as a", Actor.class)
+			QueryBuilder queryBuilder = fullTextSession.getSearchFactory()
+					.buildQueryBuilder()
+					.forEntity(Director.class)
+					.get();
+			org.apache.lucene.search.Query luceneQuery = queryBuilder
+					.keyword()
+					.onFields("name", "country.name")
+					.matching(input)
+					.createQuery();
+			javax.persistence.Query hibernateQuery = fullTextSession
+					.createFullTextQuery(luceneQuery, Actor.class)
+					.setMaxResults(maxResult);
+			searhResult = hibernateQuery
 					.getResultList();
-			tx.commit();
-		} catch (Exception e) {
-			if (tx != null)
-				tx.rollback();
-		}
-		return actors;
-	}
-
-	@Override
-	public Actor findById(Integer id) {
-		Session session = sessionFactory.getCurrentSession();
-		Transaction transaction = null;
-		Actor actor = null;
-		try {
-			transaction = session.beginTransaction();
-			actor = session.get(Actor.class, id);
-			transaction.commit();
-		}catch (HibernateException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
-		}
-		return actor;
-	}
-
-	@Override
-	public Integer insert(Actor entity) {
-		Integer id = null;
-		Session session = sessionFactory.getCurrentSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			id = (Integer)session.save(entity);
-			transaction.commit();
-		}catch (HibernateException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
-		}
-		return id;
-	}
-
-	@Override
-	public void update(Actor entity) {
-		Session session = sessionFactory.getCurrentSession();
-		Transaction transaction = null;
-		try {
-			transaction = session.beginTransaction();
-			session.update(entity);
-			transaction.commit();
-		}catch (HibernateException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
+			return searhResult;
+		} catch (EmptyQueryException e) {
+			return new ArrayList<Actor>();
 		}
 	}
 
 	@Override
-	public void deleteById(Integer id) {
-		Session session = sessionFactory.getCurrentSession();
-		Transaction transaction = null;
+	public List<Actor> findFirst(int maxResult) {
 		try {
-			transaction = session.beginTransaction();
-			Query query = session.createQuery("DELETE FROM Category AS c WHERE c.id=:category_id");
-			query.setParameter("category_id", id);
-			query.executeUpdate();
-			transaction.commit();
-		}catch (HibernateException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
+		return  getSession()
+			.createQuery("FROM Actor", Actor.class)
+			.setMaxResults(maxResult)
+			.getResultList(); 
+		} catch (PersistenceException e) {
+			throw new DataAccessLayerException("failed to execute find query", e);
 		}
 	}
 
 	@Override
-	public void delete(Actor entity) {
-		Session session = sessionFactory.getCurrentSession();
-		Transaction transaction = null;
+	public Actor findByName(String name) {
 		try {
-			transaction = session.beginTransaction();
-			session.delete(entity);
-			transaction.commit();
-		}catch (HibernateException e) {
-			if (transaction != null)
-				transaction.rollback();
-			e.printStackTrace();
+		return getSession()
+			.createQuery("SELECT FORM Actor a WHERE a.name=:name", Actor.class)
+			.setParameter("name", name)
+			.uniqueResult();
+		} catch (PersistenceException e) {
+			throw new DataAccessLayerException("failed to execute find query", e);
 		}
-	}
+	}	
 }

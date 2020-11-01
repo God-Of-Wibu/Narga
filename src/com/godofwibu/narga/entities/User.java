@@ -2,6 +2,9 @@ package com.godofwibu.narga.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -29,11 +32,11 @@ public class User {
 	@Column(name = "password", nullable = false)
 	private String password;
 
+	@Enumerated(EnumType.STRING)
 	@Column(name = "role", nullable = false)
 	private Role role;
 	
-	@OneToOne
-	@JoinColumn(name = "profile_id", nullable = false)
+	@OneToOne(fetch = FetchType.EAGER)
 	@Cascade(CascadeType.ALL)
 	private Profile profile;
 }

@@ -5,32 +5,44 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
-import lombok.Data;
+import com.google.gson.annotations.Expose;
+
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @NoArgsConstructor
-@Data
+@Setter
+@Getter
 @Entity 
 @Table(name = "category")
 public class Category {
+	
 	@Id
 	@Column(name = "id")
-	private String id;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Expose
+	private Integer id;
 	
-	@Column(name = "name", nullable = false)
+	@Expose
+	@Column(name = "name", nullable = false, unique = true)
 	private String name;
 	
 	@ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
 	private List<Film> films;
 
-	public Category(String id, String name) {
-		super();
-		this.id = id;
+	public Category(String name) {
 		this.name = name;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Category {name:" + name + "}";
+	}
 }

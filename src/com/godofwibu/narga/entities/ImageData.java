@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,16 +24,22 @@ public class ImageData {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
+	@Expose
 	@Column(name = "url", nullable = false)
 	private String url;
 	
-	@Column(name = "local_file", nullable = true)
-	private String localFile;
+	@Column(name = "file_location", nullable = true)
+	private String fileLocation;
 
-	public ImageData(String url, String localFile) {
+	public ImageData(String url, String fileLocation) {
 		super();
 		this.url = url;
-		this.localFile = localFile;
+		this.fileLocation = fileLocation;
+	}
+
+	public ImageData(String url) {
+		super();
+		this.url = url;
 	}
 	
 	

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 
 @WebServlet(urlPatterns = "/file/*", initParams = {
-		@WebInitParam(name = "prefix", value = "files")
+		@WebInitParam(name = "prefix", value = "file")
 })
 public class FileResourceServlet extends ResourceServlet {
 	private static final long serialVersionUID = 1L;
@@ -23,10 +23,10 @@ public class FileResourceServlet extends ResourceServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		
-		String prefix = "files";
+		String prefix = "file";
 		
 		if (config.getInitParameter("prefix") != null) {
-			prefix = config.getInitParameter(prefix);
+			prefix = config.getInitParameter("prefix");
 		}
 		
 		directory = new File(prefix);
@@ -34,15 +34,12 @@ public class FileResourceServlet extends ResourceServlet {
 	
 	@Override
 	protected IResource resolveResource(HttpServletRequest req) {
-		String name = req.getPathInfo();
-
-		if (name == null || name.isEmpty() || "/".equals(name)) {
-			throw new IllegalArgumentException();
-		}
 		
-		name = name.substring(1);
 		
-		File file = new File(directory, name);
+		File file = new File(directory, resolveFilename(req));
+		
+		if (!file.exists())
+			return null;
 		
 		return new IResource() {
 			
@@ -61,6 +58,16 @@ public class FileResourceServlet extends ResourceServlet {
 				return file.length();
 			}
 		};
+	}
+	
+	private String resolveFilename(HttpServletRequest req) {
+		String name = req.getPathInfo();
+
+		if (name == null || name.isEmpty() || "/".equals(name)) {
+			throw new IllegalArgumentException();
+		}
+		
+		return name.substring(1);
 	}
 	
 }

@@ -63,6 +63,10 @@ a {
   color: dodgerblue;
 }
 
+.message {
+	color:  #e74c3c;
+}
+
 .signin {
   
   text-align: center;

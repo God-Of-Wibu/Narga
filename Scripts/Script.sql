@@ -1,0 +1,2 @@
+create database Narga
+go

@@ -6,32 +6,29 @@
 <link rel="stylesheet" type="text/css" href="../css/register.css" th:href="@{/static/css/register.css}">
 </head>
 <body>
-	<div class="register-page" style="background-image: url('../images/login-bg-2.jpeg')" th:style="|background-image: url(@{static/images/login-bg-2.jpeg})|">
+	<div class="register-page" style="background-image: url('../images/login-bg-2.jpeg')" th:style="|background-image: url(@{/static/images/login-bg-2.jpeg})|">
   <form class="form" method="post">
     <h1>Register</h1>
+    <span class="message" th:if="${message} neq null" th:text="${message}"></span>
     <p>Please fill in this form to create an account.</p>
     <hr>
     
-	<label for="name"><b>Name</b></label>
-    <input type="text" placeholder="Enter Your Fullname" name="userId" id="name" required>
+	<label for="name"><b>User Id</b></label>
+    <input type="text" placeholder="Enter User Id" name="userId" id="name" required>
     
-    <label for="phone"><b>Phone Number</b></label>
-    <input type="text" placeholder="Enter Phone Number" name="phoneNumber" id="phone" required>
+    <label for="phone"><b>Name</b></label>
+    <input type="text" placeholder="Enter Your Name" name="name" id="phone" required>
     
-    <label for="email"><b>Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" id="email" required>
-    
-    <label for="identification"><b>Identification Card</b></label>
-    <input type="text" placeholder="Enter Identification Card" name="personalId" id="Card" required>
+    <label for="personalId"><b>Personal Id</b></label>
+    <input type="text" placeholder="Enter Personal Id" name="personalId" id="Card" required>
 
     <label for="psw"><b>Password</b></label>
     <input type="password" placeholder="Enter Password" name="password" id="psw" required>
 
     <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+    <input type="password" placeholder="Repeat Password" name="confirmPassword" id="psw-repeat" required>
     <hr>
     
-
     <button type="submit" class="registerbtn">Register</button>
     <p>Already have an account? <a href="/login" th:href="@{/login}">Sign in</a>.</p>
   </form>

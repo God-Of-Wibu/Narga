@@ -9,12 +9,15 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.godofwibu.narga.entities.User;
 
 public class UserRepository implements IUserRepository {
 
 	private SessionFactory sessionFactory;
+	private final static Logger LOGGER = LoggerFactory.getLogger(UserRepository.class);
 
 	public UserRepository(SessionFactory sessionFactory) {
 		super();
@@ -49,8 +52,9 @@ public class UserRepository implements IUserRepository {
 			user = session.get(User.class, id);
 			transaction.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
+			LOGGER.error(e.getMessage());
+			if (transaction != null && transaction.isActive())
+				transaction.rollback();
 		}
 		return user;
 	}
@@ -65,8 +69,9 @@ public class UserRepository implements IUserRepository {
 			session.update(user);
 			transaction.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
+			LOGGER.error(e.getMessage());
+			if (transaction != null && transaction.isActive())
+				transaction.rollback();
 		}
 	}
 
@@ -80,8 +85,9 @@ public class UserRepository implements IUserRepository {
 			query.setParameter("user_id", id);
 			transaction.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
+			LOGGER.error(e.getMessage());
+			if (transaction != null && transaction.isActive())
+				transaction.rollback();
 		}
 	}
 
@@ -95,8 +101,9 @@ public class UserRepository implements IUserRepository {
 			userId = (String) session.save(user);
 			transaction.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
+			LOGGER.error(e.getMessage());
+			if (transaction != null && transaction.isActive())
+				transaction.rollback();
 		}
 		return userId;
 	}
@@ -110,9 +117,34 @@ public class UserRepository implements IUserRepository {
 			session.delete(entity);
 			transaction.commit();
 		} catch (Exception e) {
-			e.printStackTrace();
-			transaction.rollback();
+			LOGGER.error(e.getMessage());
+			if (transaction != null && transaction.isActive())
+				transaction.rollback();
 		}
+	}
+
+	@Override
+	public boolean hasUser(String userId) {
+		Transaction transaction = null;
+		boolean result = false;
+		try {
+			transaction = getSession().beginTransaction();
+			result = getSession()
+					.createQuery("SELECT u FROM User u WHERE u.id=:user_id")
+					.setParameter("user_id", userId)
+					.uniqueResult() != null;
+			transaction.commit();
+			return result;
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+			if (transaction != null && transaction.isActive())
+				transaction.rollback();
+			throw e;
+		}
+	}
+	
+	private Session getSession() {
+		return sessionFactory.getCurrentSession();
 	}
 
 }

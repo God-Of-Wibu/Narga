@@ -19,49 +19,10 @@ public class SecurityFilter implements Filter {
     public SecurityFilter() { }
 
 	
-	public void destroy() { }
-	
-	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		
-		HttpServletResponse _res = (HttpServletResponse) res;
-		HttpServletRequest _req = (HttpServletRequest) req;
-		String ctxPath = req.getServletContext().getContextPath();
-		String uri = _req.getRequestURI();
-		HttpSession session = _req.getSession(false);
-		String url = uri.substring(ctxPath.length());
-		
-		
-		if (needLogin(url)) {
-			if (isLogedIn(session)) {
-				if (isAllow(url, session))
-					chain.doFilter(_req, _res);
-				else 
-					_res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-			}
-			else 
-				_req.getRequestDispatcher("/login")
-				.forward(_req, res);
-		} else {
-			chain.doFilter(_req, _res);
-		}
-	}
-	
-
+    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
+			throws IOException, ServletException { chain.doFilter(req, res); }
+    
 	public void init(FilterConfig fConfig) throws ServletException { }
 	
-	private boolean needLogin(String url) {
-		//if (url.startsWith("/static") || url.startsWith("/login") || url.startsWith("/register"))
-			//return false;
-		//return true;
-		return false;
-	}
-	
-	private boolean isAllow(String url, HttpSession session) {
-		return true;
-	}
-	
-	private boolean isLogedIn(HttpSession session) {
-		return session != null && session.getAttribute("user") != null;
-	}
-
+	public void destroy() { }
 }

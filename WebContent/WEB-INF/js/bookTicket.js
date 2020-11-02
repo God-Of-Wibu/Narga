@@ -13,10 +13,6 @@ $("document").ready(function() {
 		$(".pay").css("display","flex");
 	})
 
-    $(".pay").click(function(){
-	    $(".pay").css("display","none");
-    })
-
     $(".button-cancel-order").click(function(){
 	    $(".pay").css("display","none");
     })
@@ -29,5 +25,7 @@ $("document").ready(function() {
     $(".orderSuccess").click(function(){
 	    $(".orderSuccess").css("display","none");
     })
+    
+    
 
 })

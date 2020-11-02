@@ -1,9 +1,8 @@
 @charset "ISO-8859-1";
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
 
 * {
-	box-sizing: border-box;
 	height: auto;
-	width: auto;
 }
 
 .info {
@@ -21,9 +20,11 @@
 }
 
 .header {
-	max-width: auto;
+	display: block;
+	position: relative;
 	background-color: #198798;
 	height: 200px;
+	width: 100%;
 }
 
 .text-book {
@@ -47,7 +48,7 @@
 	border-color: #ed9900;
 	position: relative;
 	display: block;
-	left: 25%;
+	margin: 0 auto;
 	max-width: 1000px;
 }
 
@@ -189,6 +190,7 @@ ol {
 }
 
 .infoPay {
+	z-index: 5;	
 	position: fixed;
 	background-color: #fdf7dc;
 	height: 500px;
@@ -212,6 +214,7 @@ ol {
 }
 
 .success{
+	z-index: 5;
 	position: fixed;
 	background-color: #fdf7dc;
 	height: 600px;
@@ -220,12 +223,69 @@ ol {
 	border-color: #ed9900;
 	border-radius: 5px;
 	justify-content: center;
+	text-align: center;
 }
 
 .imgSuccess{
-	position: absolute;
+	position:relative;
+	display: block;
 	width: 40%;
 	height: auto;
-	top: 50px;
 	left: 150px;
+	top: 40px;
+}
+
+.textSuccess{
+	position: absolute;
+	bottom: 150px;
+	left:130px;
+	margin: 0 auto;
+	font-family: 'Russo One', sans-serif;
+    color: #26c1a0;
+    font-size: 24px;
+}
+
+.ticketNotice{
+	display: block;
+	position: relative;
+	left: 8px;
+	margin-bottom: 10px;
+}
+
+.nope{
+	display: none;
+}
+
+.zone{
+	padding: 5px;
+}
+
+.zone-notice-trong{
+	display: inline-block;
+	padding: 4px 0;
+	background: #ffba3b;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
+}
+
+.zone-notice-checked{
+	display: inline-block;
+	padding: 4px 0;
+	background: #198798;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
+}
+
+.zone-notice-occupied{
+	display: inline-block;
+	padding: 4px 0;
+	background:  #dddddd;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
 }

@@ -26,7 +26,7 @@ import com.godofwibu.narga.services.IAccountService;
 import com.godofwibu.narga.services.UserCreationException;
 
 @WebServlet(name = "registerServlet", urlPatterns = { "/register" })
-public class RegisterServlet extends HttpServlet {
+public class RegisterServlet extends NargaServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServlet.class);
 
@@ -40,9 +40,8 @@ public class RegisterServlet extends HttpServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		ServletContext ctx = getServletContext();
-		templateEngine = (TemplateEngine) ctx.getAttribute(TemplateEngine.class.getName());
-		accountService = (IAccountService) ctx.getAttribute(IAccountService.class.getName());
+		templateEngine = getAttribute(TemplateEngine.class);
+		accountService = getAttribute(IAccountService.class);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)

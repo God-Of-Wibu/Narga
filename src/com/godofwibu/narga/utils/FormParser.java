@@ -11,15 +11,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Part;
 
-public class FormObjectBinder {
+public class FormParser {
 	private Map<Class<?>, IConverter<?>> converters;
 
-	public FormObjectBinder() {
+	public FormParser() {
 		converters = new HashMap<Class<?>, IConverter<?>>();
 	}
 	
 	public <T> T getFormObject(HttpServletRequest req, Class<T> type)
-			throws NoSuchConverterException, IOException, ServletException, RequiredFieldException {
+			throws NoSuchConverterException, IOException, ServletException, RequiredParameterException {
 		T formData;
 		Map<String, String[]> parameterMap = req.getParameterMap();
 		String parameterName = null;
@@ -36,8 +36,7 @@ public class FormObjectBinder {
 						throw new NoSuchConverterException(field.getType());
 					String[] reqParam = parameterMap.get(parameterName);
 					if (reqParam == null) {
-						if (isRequiredField(field))
-							throw new RequiredFieldException(parameterName + " is required!", parameterName);
+						throw new RequiredParameterException(parameterName + " is required!", parameterName);
 					} else {
 						field.set(formData, converter.convert(reqParam));
 					}
@@ -68,13 +67,9 @@ public class FormObjectBinder {
 		return defaultConstructor.newInstance();
 	}
 
-	public FormObjectBinder addConverter(Class<?> type, IConverter<?> converter) {
+	public FormParser addConverter(Class<?> type, IConverter<?> converter) {
 		converters.put(type, converter);
 		return this;
-	}
-
-	private boolean isRequiredField(Field field) {
-		return field.getAnnotation(Required.class) != null;
 	}
 
 	private String getParameterName(Field field) {

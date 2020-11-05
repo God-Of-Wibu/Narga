@@ -38,11 +38,23 @@ public class ApiServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String action = getAction(req);
 		IHandler handler = resolveHandlerForAction(action);
-		writeJson(res, handler.doStuff(req));
+		if (handler == null) {
+			res.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+		writeJson(res, handler.execute(req));
 	}
 	
 	private IHandler resolveHandlerForAction(String action) {
 		return handlerMap.get(action);
+	}
+	
+	protected <T> T getAttribute(Class<T> cls) {
+		return getAttribute(cls.getName(), cls);
+	}
+	
+	protected <T> T getAttribute(String name, Class<T> cls) {
+		return cls.cast(getServletContext().getAttribute(name));
 	}
 
 }

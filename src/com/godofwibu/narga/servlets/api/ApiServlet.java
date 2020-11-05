@@ -38,6 +38,10 @@ public class ApiServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String action = getAction(req);
 		IHandler handler = resolveHandlerForAction(action);
+		if (handler == null) {
+			res.sendError(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
 		writeJson(res, handler.execute(req));
 	}
 	

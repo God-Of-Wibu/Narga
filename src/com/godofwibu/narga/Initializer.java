@@ -8,9 +8,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -52,14 +50,14 @@ import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.IImageStorageService;
 import com.godofwibu.narga.services.ImageStorageService;
-import com.godofwibu.narga.utils.FormObjectBinder;
-import com.godofwibu.narga.utils.GenderConverter;
+import com.godofwibu.narga.utils.FormParser;
 import com.godofwibu.narga.utils.HibernateTransactionTemplate;
 import com.godofwibu.narga.utils.ITransactionTemplate;
-import com.godofwibu.narga.utils.IntegerArrayConverter;
-import com.godofwibu.narga.utils.IntegerConverter;
-import com.godofwibu.narga.utils.StringArrayConverter;
-import com.godofwibu.narga.utils.StringConverter;
+import com.godofwibu.narga.utils.converter.GenderConverter;
+import com.godofwibu.narga.utils.converter.IntegerArrayConverter;
+import com.godofwibu.narga.utils.converter.IntegerConverter;
+import com.godofwibu.narga.utils.converter.StringArrayConverter;
+import com.godofwibu.narga.utils.converter.StringConverter;
 
 @WebListener
 public class Initializer implements ServletContextListener {
@@ -87,7 +85,7 @@ public class Initializer implements ServletContextListener {
 	private ICountryService countryService;
 	private IActorService actorService;
 	private ITransactionTemplate transactionTemplate;
-	private FormObjectBinder formObjectBinder;
+	private FormParser formParser;
 	
 	
 
@@ -102,7 +100,7 @@ public class Initializer implements ServletContextListener {
 		ctx.setAttribute(ICategoryService.class.getName(), getCategoryService());
 		ctx.setAttribute(ICountryService.class.getName(), getCountryService());
 		ctx.setAttribute(IActorService.class.getName(), getActorService());
-		ctx.setAttribute(FormObjectBinder.class.getName(), getFormObjectBinder());
+		ctx.setAttribute(FormParser.class.getName(), getFormObjectBinder());
 		insertCategories();
 		insertCountries();
 		createIndexer();
@@ -311,17 +309,17 @@ public class Initializer implements ServletContextListener {
 		return transactionTemplate;
 	}
 	
-	private FormObjectBinder getFormObjectBinder() {
-		if (formObjectBinder == null) {
-			formObjectBinder = new FormObjectBinder();
-			formObjectBinder
+	private FormParser getFormObjectBinder() {
+		if (formParser == null) {
+			formParser = new FormParser();
+			formParser
 				.addConverter(String.class, new StringConverter())
 				.addConverter(Integer.class, new IntegerConverter())
 				.addConverter(Gender.class,	new GenderConverter())
 				.addConverter(String[].class, new StringArrayConverter())
 				.addConverter(Integer[].class, new IntegerArrayConverter());
 		}
-		return formObjectBinder;
+		return formParser;
 	}
 	
 	private String toStaticUrl(String path) {
@@ -330,5 +328,9 @@ public class Initializer implements ServletContextListener {
 	
 	private String toFileUrl(String path) {
 		return getContextPath() + FILE_RESOURCE_PREFIX + path;
+	}
+	
+	private void addAttribute(String name) {
+		
 	}
 }

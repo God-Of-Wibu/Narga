@@ -21,7 +21,7 @@ public class FilmApiServlet extends ApiServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		filmService = (IFilmService) getServletContext().getAttribute(IFilmService.class.getName());
+		filmService = getAttribute(IFilmService.class);
 		addAction("all", this::all);
 		addAction("search", this::search);
 	}

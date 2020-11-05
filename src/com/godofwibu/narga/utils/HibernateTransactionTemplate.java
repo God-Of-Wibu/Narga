@@ -26,10 +26,10 @@ public class HibernateTransactionTemplate implements ITransactionTemplate{
 			transaction = getSession().getTransaction();
 			if (!transaction.isActive()) {
 				transaction.begin();
-				result = operation.doStuff();
+				result = operation.execute();
 				transaction.commit();
 			} else {
-				result = operation.doStuff();
+				result = operation.execute();
 			}
 			return result;
 		} catch (ServiceLayerException e) {
@@ -48,10 +48,10 @@ public class HibernateTransactionTemplate implements ITransactionTemplate{
 			transaction = getSession().getTransaction();
 			if (!transaction.isActive()) {
 				transaction.begin();
-				operation.doStuff();
+				operation.execute();
 				transaction.commit();
 			} else {
-				operation.doStuff();
+				operation.execute();
 			}
 		} catch (ServiceLayerException e) {
 			rollback(transaction);

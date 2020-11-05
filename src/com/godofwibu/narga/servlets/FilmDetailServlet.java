@@ -19,7 +19,7 @@ public class FilmDetailServlet extends NargaServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		filmService = getDepenencyByClassName(IFilmService.class);
+		filmService = getAttribute(IFilmService.class);
 	}
 	
 	@Override

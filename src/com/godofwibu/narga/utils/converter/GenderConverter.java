@@ -1,6 +1,7 @@
-package com.godofwibu.narga.utils;
+package com.godofwibu.narga.utils.converter;
 
 import com.godofwibu.narga.entities.Gender;
+import com.godofwibu.narga.utils.IConverter;
 
 public class GenderConverter implements IConverter<Gender> {
 	@Override

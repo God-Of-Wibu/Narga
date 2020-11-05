@@ -27,7 +27,7 @@ import com.godofwibu.narga.services.CategoryService;
 import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.ServiceLayerException;
-import com.godofwibu.narga.utils.RequiredFieldException;
+import com.godofwibu.narga.utils.RequiredParameterException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -47,8 +47,8 @@ public class AddFilmServlet extends NargaServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		filmService = getDepenencyByClassName(IFilmService.class);
-		countryService = getDepenencyByClassName(ICountryService.class);
+		filmService = getAttribute(IFilmService.class);
+		countryService = getAttribute(ICountryService.class);
 	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -61,11 +61,11 @@ public class AddFilmServlet extends NargaServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		try {	
-			AddFilmFormData addFilmFormData = getFormObjectBinder().getFormObject(req, AddFilmFormData.class);
+			AddFilmFormData addFilmFormData = getFormParser().getFormObject(req, AddFilmFormData.class);
 			filmService.addNewFilm(addFilmFormData);
 			res.setContentType("text/plain");
 			res.getWriter().print("successfully!");
-		} catch (ServiceLayerException | RequiredFieldException e) {
+		} catch (ServiceLayerException | RequiredParameterException e) {
 			res.setContentType("text/plain");
 			res.getWriter().print(e.getMessage());
 		}

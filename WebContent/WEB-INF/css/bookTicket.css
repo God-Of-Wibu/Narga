@@ -9,6 +9,7 @@
 	border-bottom: 2px solid;
 	border-bottom-color: #ed9900;
 	overflow: auto;
+	padding: 20px;
 }
 
 .film-userpic {
@@ -143,10 +144,6 @@
 	left: 50%;
 	transform: translate(-50%, 0%);
 	border-radius: 3px;
-}
-
-.seat label:hover {
-	border-color: #ffba3b;
 }
 
 .seat label:hover {
@@ -289,3 +286,54 @@ ol {
 	height: 20px;
 	border: 1px solid;
 }
+
+.list-days ol li{
+	display: inline;
+}
+
+.list-days{
+	text-align: center;
+}
+
+.day{
+	display: inline;
+	font-size:24px;
+	border: 1px solid;
+	border-radius: 5px;
+}
+
+.list-times{
+	display: none;
+	text-align: center;
+}
+
+.list-times ol li{
+	display: inline;
+}
+
+.time{
+	display: inline;
+	padding: 0px 30px 0px 30px;
+	border: 1px solid;
+}
+
+.seat .vip {
+	background-color: #f94a4a;
+}
+
+.zone-notice-vip{
+	display: inline-block;
+	padding: 4px 0;
+	background: #f94a4a;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
+}
+
+.position-selector{
+	display: none;
+}
+
+
+

@@ -26,6 +26,15 @@ $("document").ready(function() {
 	    $(".orderSuccess").css("display","none");
     })
     
+     $(".day").click(function(){
+	    $(".list-times").css("display","block");
+    })
     
+     $(".time").click(function(){
+        $(".position-selector").slideDown("slow");
+    })
 
+     $(".button-cancel").click(function(){
+        $(".position-selector").slideUp("slow");
+    })
 })

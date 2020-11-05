@@ -30,8 +30,8 @@ public class AddDirectorServlet extends NargaServlet{
    @Override
    public void init() throws ServletException {
 	   super.init();
-		countryService = getDepenencyByClassName(ICountryService.class);
-		directorService = getDepenencyByClassName(IDirectorService.class);
+		countryService = getAttribute(ICountryService.class);
+		directorService = getAttribute(IDirectorService.class);
 
    }
 	
@@ -39,7 +39,7 @@ public class AddDirectorServlet extends NargaServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		WebContext context = new WebContext(req, res, getServletContext(), req.getLocale());
 		req.setCharacterEncoding("UTF-8");
-		AddDirectorFormData formData = getFormObjectBinder().getFormObject(req, AddDirectorFormData.class);
+		AddDirectorFormData formData = getFormParser().getFormObject(req, AddDirectorFormData.class);
 		directorService.addNewDirector(formData);
 		context.setVariable("status", formData.getName() + " was added to database");
 		context.setVariable("genderValues", Gender.values());

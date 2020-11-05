@@ -1,5 +1,6 @@
 package com.godofwibu.narga.entities;
 
+import java.sql.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -30,12 +31,8 @@ public class TicketType {
 	@JoinColumn(name = "film")
 	private Film film;
 	
-	
-	@Column(name = "price", nullable = false)
-	private Integer price;
-	
-	@Column(name = "availiable", nullable = false)
-	private Integer availiable;
+	@Column(name = "date")
+	private Date date;
 	
 	@OneToMany(mappedBy = "ticketType", fetch = FetchType.LAZY)
 	private List<Ticket> tickets;

@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Session;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
 import com.godofwibu.narga.entities.User;
-import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.services.IAccountService;
 
 @WebServlet(name = "loginServlet", urlPatterns = "/login")

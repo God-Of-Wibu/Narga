@@ -1,9 +1,9 @@
 package com.godofwibu.narga.services;
 
-import com.godofwibu.narga.dto.AddActorFormData;
+import com.godofwibu.narga.dto.AddDirectorFormData;
 
 public interface IDirectorService {
 
-	void addNewDirector(AddActorFormData formData) throws ServiceLayerException;
+	void addNewDirector(AddDirectorFormData formData) throws ServiceLayerException;
 
 }

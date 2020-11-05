@@ -29,10 +29,12 @@ import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.repositories.ActorRepository;
 import com.godofwibu.narga.repositories.CategoryRepository;
 import com.godofwibu.narga.repositories.CountryRepository;
+import com.godofwibu.narga.repositories.DirectorRepository;
 import com.godofwibu.narga.repositories.FilmRepository;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
+import com.godofwibu.narga.repositories.IDirectorRepository;
 import com.godofwibu.narga.repositories.IFilmRepository;
 import com.godofwibu.narga.repositories.IImageDataRepository;
 import com.godofwibu.narga.repositories.IUserRepository;
@@ -42,11 +44,13 @@ import com.godofwibu.narga.services.AccountService;
 import com.godofwibu.narga.services.ActorService;
 import com.godofwibu.narga.services.CategoryService;
 import com.godofwibu.narga.services.CountryService;
+import com.godofwibu.narga.services.DirectorService;
 import com.godofwibu.narga.services.FilmService;
 import com.godofwibu.narga.services.IAccountService;
 import com.godofwibu.narga.services.IActorService;
 import com.godofwibu.narga.services.ICategoryService;
 import com.godofwibu.narga.services.ICountryService;
+import com.godofwibu.narga.services.IDirectorService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.IImageStorageService;
 import com.godofwibu.narga.services.ImageStorageService;
@@ -85,6 +89,9 @@ public class Initializer implements ServletContextListener {
 	private ICountryService countryService;
 	private IActorService actorService;
 	private ITransactionTemplate transactionTemplate;
+	private IDirectorService directorService;
+	private IDirectorRepository directorRepository;
+
 	private FormParser formParser;
 	
 	
@@ -100,6 +107,7 @@ public class Initializer implements ServletContextListener {
 		ctx.setAttribute(ICategoryService.class.getName(), getCategoryService());
 		ctx.setAttribute(ICountryService.class.getName(), getCountryService());
 		ctx.setAttribute(IActorService.class.getName(), getActorService());
+		ctx.setAttribute(IDirectorService.class.getName(), getDirectorService());
 		ctx.setAttribute(FormParser.class.getName(), getFormObjectBinder());
 		insertCategories();
 		insertCountries();
@@ -320,6 +328,19 @@ public class Initializer implements ServletContextListener {
 				.addConverter(Integer[].class, new IntegerArrayConverter());
 		}
 		return formParser;
+	}
+	
+	private IDirectorService getDirectorService() {
+		if(directorService == null) {
+			directorService = new DirectorService(getImageStorageService(), getDirectorRepository(), getCountryRepository(), getTransactionTemplate());
+		}
+		return directorService;
+	}
+	private IDirectorRepository getDirectorRepository() {
+		if(directorRepository == null) {
+			directorRepository = new DirectorRepository(getSessionFactory());
+		}
+		return directorRepository;
 	}
 	
 	private String toStaticUrl(String path) {

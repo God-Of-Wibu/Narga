@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.servlet.http.Part;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,5 +83,12 @@ public class ImageStorageService implements IImageStorageService {
 				outputStream.write(buffer, 0, read);
 			}
 		}
+	}
+
+
+	@Override
+	public ImageData saveImage(Part part, String nameImage) throws ServiceLayerException, IOException {
+		return saveImage(part.getInputStream(), nameImage);
+	
 	}
 }

@@ -16,8 +16,8 @@ public class AddFilmFormData {
 	private String title;
 
 	@ParameterName("director")
-	private String directorName;
-
+	private Integer director;
+	
 	@ParameterName("categories")
 	private Integer[] categories;
 

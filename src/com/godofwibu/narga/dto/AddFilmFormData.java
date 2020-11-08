@@ -20,7 +20,7 @@ public class AddFilmFormData {
 	
 	@Required
 	@ParameterName("director")
-	private String directorName;
+	private Integer director;
 	
 	@Required
 	@ParameterName("categories")

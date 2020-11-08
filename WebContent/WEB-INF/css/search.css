@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+.search {
+	position: absolute;
+	width: 40%;
+	background-color: #fefefefe;
+	border-radius: 5px;
+	top: 50%;
+  	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+  	transform: translate(-50%, -50%);
+  	border: 1px solid #888a85;
+}
+
+.search .header {
+	min-height: 30px;
+	background-color: #729fcf;
+}
+
+.search .content {
+	padding: 5px;
+}
+
+.search input {
+	width: 100%;
+}
+
+.search .close-btn {
+	float: right;
+	width: 30px;
+	height: auto;
+}
+
+.search .result {
+	height: 300px;
+}

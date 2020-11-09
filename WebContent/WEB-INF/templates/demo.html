@@ -8,30 +8,35 @@
 <script type="text/javascript" src="../js/demo.js"></script>
 </head>
 <body>
+	<form>
+		<label for="choose-day">Birthday (date and time):</label> 
+		<input type="date" class="choose-day" name="choose-day">
+	</form>
 	<div>
 		<div class="calendar">
 			<div class="list-days">
 				<ol>
 					<li>
-						<div id="day" class="day day1">Thứ 2 , 2/11</div>
+						<label for="day1">Thứ 2 , 2/11</label>
+						<input type="checkbox" class="day1" name="day1" >
 					</li>
 					<li>
-						<div id="day"  class="day day2">Thứ 3 , 3/11</div>
+						<div id="day" class="day day2">Thứ 3 , 3/11</div>
 					</li>
 					<li>
-						<div id="day"  class="day day3">Thứ 4 , 4/11</div>
+						<div id="day" class="day day3">Thứ 4 , 4/11</div>
 					</li>
 					<li>
-						<div id="day"  class="day day4">Thứ 5 , 5/11</div>
+						<div id="day" class="day day4">Thứ 5 , 5/11</div>
 					</li>
 					<li>
-						<div id="day"  class="day day5">Thứ 6 , 6/11</div>
+						<div id="day" class="day day5">Thứ 6 , 6/11</div>
 					</li>
 					<li>
-						<div id="day"  class="day day6">Thứ 7 , 7/11</div>
+						<div id="day" class="day day6">Thứ 7 , 7/11</div>
 					</li>
 					<li>
-						<div id="day"  class="day day7">Thứ CN , 8/11</div>
+						<div id="day" class="day day7">Thứ CN , 8/11</div>
 					</li>
 				</ol>
 			</div>
@@ -60,8 +65,7 @@
 			</div>
 		</div>
 		<div>
-		<a class="nextBT"> Next</a>
-		<a class="preBT"> Previous</a>
+			<a class="nextBT"> Next</a> <a class="preBT"> Previous</a>
 		</div>
 	</div>
 </body>

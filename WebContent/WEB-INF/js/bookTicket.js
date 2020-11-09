@@ -10,6 +10,7 @@ $("document").ready(function() {
 	})
 	
 	$(".button-book").click(function(){
+		$(".pay").fadeIn(150);
 		$(".pay").css("display","flex");
 	})
 
@@ -27,6 +28,7 @@ $("document").ready(function() {
     })
     
      $(".day").click(function(){
+	    $(".list-times").slideDown();
 	    $(".list-times").css("display","block");
     })
     

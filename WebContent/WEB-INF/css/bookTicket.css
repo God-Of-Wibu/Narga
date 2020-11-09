@@ -1,5 +1,7 @@
 @charset "ISO-8859-1";
 @import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
 
 * {
 	height: auto;
@@ -41,6 +43,8 @@
 .text-book h1 {
 	max-height: 50px;
 	margin: 0px;
+	display: inline-block;
+	font-family: 'Roboto Slab', serif;
 }
 
 .main-page {
@@ -82,6 +86,9 @@
 	visibility: hidden;
 }
 
+.text-center h1{
+	margin-bottom: 10px;
+}
 .seats {
 	display: flex;
 	flex-direction: row;
@@ -289,6 +296,7 @@ ol {
 
 .list-days ol li{
 	display: inline;
+	font-family: 'Ubuntu', sans-serif;
 }
 
 .list-days{
@@ -296,10 +304,13 @@ ol {
 }
 
 .day{
-	display: inline;
+	display: inline-block;
 	font-size:24px;
 	border: 1px solid;
 	border-radius: 5px;
+	margin: 5px;
+	color: #4e4e4e;
+	padding: 5px;
 }
 
 .list-times{
@@ -309,12 +320,17 @@ ol {
 
 .list-times ol li{
 	display: inline;
+	font-family: 'Ubuntu', sans-serif;
 }
 
 .time{
-	display: inline;
+	display: inline-block;
 	padding: 0px 30px 0px 30px;
 	border: 1px solid;
+	border-radius: 5px;
+	margin: 5px;
+	color: #4e4e4e;
+	padding: 5px;
 }
 
 .seat .vip {

@@ -33,4 +33,10 @@ $("document").ready(function() {
 		}
 	}
 	
+	$(".choose-day").click(function(){
+		var x=$(".choose-day").value;
+		$("")
+	})
+	
+	
 	})

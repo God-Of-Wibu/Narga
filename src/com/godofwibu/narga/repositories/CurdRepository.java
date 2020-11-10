@@ -3,9 +3,6 @@ package com.godofwibu.narga.repositories;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.PersistenceException;
-
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 

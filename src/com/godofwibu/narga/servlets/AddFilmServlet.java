@@ -14,7 +14,7 @@ import com.godofwibu.narga.dto.AddFilmFormData;
 import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.ServiceLayerException;
-import com.godofwibu.narga.utils.RequiredParameterException;
+import com.godofwibu.narga.utils.NoSuchParameterException;
 
 @WebServlet(urlPatterns = { "/admin/add/film"})
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
@@ -45,7 +45,7 @@ public class AddFilmServlet extends NargaServlet {
 			filmService.addNewFilm(addFilmFormData);
 			res.setContentType("text/plain");
 			res.getWriter().print("successfully!");
-		} catch (ServiceLayerException | RequiredParameterException e) {
+		} catch (ServiceLayerException e) {
 			res.setContentType("text/plain");
 			res.getWriter().print(e.getMessage());
 		}

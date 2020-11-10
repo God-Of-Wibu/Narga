@@ -1,5 +1,6 @@
 package com.godofwibu.narga.utils;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -72,7 +73,12 @@ public class HibernateTransactionTemplate implements ITransactionTemplate{
 }
 
 class ExceptionConverter {
-	public DataAccessLayerException convert(Exception e) {
-		return new DataAccessLayerException(e);
+	public RuntimeException convert(Exception e) {
+		if (e instanceof HibernateException) {
+			return new DataAccessLayerException(e);
+		}
+		if (e instanceof ServiceLayerException)
+			return (RuntimeException)e;
+		return new ServiceLayerException(e);
 	}
 }

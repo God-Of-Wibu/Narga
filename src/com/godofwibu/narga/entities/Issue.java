@@ -1,6 +1,7 @@
 package com.godofwibu.narga.entities;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,21 +21,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "ticket_type")
-public class TicketType {
+@Table(name = "issue")
+public class Issue {
 	
 	@Id
 	@Column(name = "id")
 	private Integer id;
 	
 	@OneToOne
-	@JoinColumn(name = "film")
+	@JoinColumn
 	private Film film;
 	
-	@Column(name = "date")
+	@Column
+	private Time time;
+	
+	@Column
 	private Date date;
 	
-	@OneToMany(mappedBy = "ticketType", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "issue", fetch = FetchType.LAZY)
 	private List<Ticket> tickets;
 	
 }

@@ -23,8 +23,8 @@ public class Ticket {
 	String id;
 
 	@ManyToOne
-	@JoinColumn(name = "ticket_type_id", nullable = false)
-	TicketType ticketType;
+	@JoinColumn(name = "issue_id", nullable = false)
+	Issue issue;
 	
 	@OneToOne
 	@JoinColumn(name = "owner")

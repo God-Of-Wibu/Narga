@@ -19,7 +19,7 @@ public class FormParser {
 	}
 	
 	public <T> T getFormObject(HttpServletRequest req, Class<T> type)
-			throws NoSuchConverterException, IOException, ServletException, RequiredParameterException {
+			throws NoSuchConverterException, IOException, ServletException, NoSuchParameterException {
 		T formData;
 		Map<String, String[]> parameterMap = req.getParameterMap();
 		String parameterName = null;
@@ -29,14 +29,16 @@ public class FormParser {
 				parameterName = getParameterName(field);
 				field.setAccessible(true);
 				if (field.getType().equals(Part.class)) {
-					field.set(formData, req.getPart(parameterName));
+					Part part = req.getPart(parameterName);
+					if (part == null)
+						throw new NoSuchParameterException("no such parameter " + parameterName,  parameterName);
 				} else {
 					IConverter<?> converter = converters.get(field.getType());
 					if (converter == null)
 						throw new NoSuchConverterException(field.getType());
 					String[] reqParam = parameterMap.get(parameterName);
 					if (reqParam == null) {
-						throw new RequiredParameterException(parameterName + " is required!", parameterName);
+						throw new NoSuchParameterException("no such parameter " + parameterName, parameterName);
 					} else {
 						field.set(formData, converter.convert(reqParam));
 					}

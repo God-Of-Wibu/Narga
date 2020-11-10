@@ -147,4 +147,9 @@ public class UserRepository implements IUserRepository {
 		return sessionFactory.getCurrentSession();
 	}
 
+	@Override
+	public List<User> findFirst(int max) {
+		return null;
+	}
+
 }

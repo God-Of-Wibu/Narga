@@ -9,4 +9,5 @@ public interface ICurdRepository<TEntity, TId> {
 	void update(TEntity entity) ;
 	void deleteById(TId id) ;
 	void delete(TEntity entity) ;
+	List<TEntity> findFirst(int max);
 }

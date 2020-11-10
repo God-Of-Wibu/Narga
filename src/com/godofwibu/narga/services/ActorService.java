@@ -6,6 +6,7 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.godofwibu.narga.dto.ActorDetail;
 import com.godofwibu.narga.dto.AddActorFormData;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Country;
@@ -80,5 +81,12 @@ public class ActorService implements IActorService {
 	@Override
 	public String searchActorAsJson(String input, int maxResult) throws ServiceLayerException {
 		return transactionTemplate.execute(() -> gson.toJson(actorRepository.searchByName(input, maxResult)));
+	}
+
+	@Override
+	public ActorDetail getActorDetail(Integer id) throws ServiceLayerException {
+		return transactionTemplate.execute(()->{
+			return new ActorDetail(actorRepository.findById(id));
+	});
 	}
 }

@@ -53,4 +53,9 @@ public class CurdRepository<E, I extends Serializable> implements ICurdRepositor
 		return sessionFactory.getCurrentSession();
 	}
 
+	@Override
+	public List<E> findFirst(int max) {
+		return (List<E>) getSession().createQuery("FROM"+entityType.getName(), entityType).setMaxResults(max).getResultList();
+	}
+
 }

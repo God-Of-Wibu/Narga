@@ -12,12 +12,12 @@
 <script src="../js/bootstrap.min.js"
 	th:src="@{/static/js/bootstrap.min.js}"></script>
 <link rel="stylesheet" type="text/css" href="../css/actorDetail.css"
-	th:href="@{/static/css/infoActor.css}">
+	th:href="@{/static/css/actorDetail.css}">
 <title th:text="${actor.name}"></title>
 </head>
 <body>
 	<header class="header">
-		<img class="logo" src="../images/logo.png">
+		<img class="logo" src="../images/logo.png" th:src="@{/static/images/logo.png}">
 	</header>
 	<p class="text-center title-infoActor">Thông Tin Diễn Viên</p>
 	<div class="container-fluid">
@@ -46,7 +46,7 @@
 						</tr>
 						<tr>
 							<td>Quốc Gia:</td>
-							<td th:text="${actor.country}">Trung Quốc</td>
+							<td th:text="${actor.country.name}">Trung Quốc</td>
 						</tr>
 					</tbody>
 				</table>
@@ -70,7 +70,7 @@
 									chuyện một anh hùng Trung Quốc đã lấy lại được các bức tượng
 									đồng về 12 con giáp, những bảo vật đã bị quân đội Pháp và Anh
 									cướp từ Di Hòa Viên, Bắc Kinh năm 1860.</p>
-								<a href="#" class="btn btn-primary">Chi tiết</a>
+								<a href="#" class="btn btn-primary" th:href="@{'/detail/film/'+ ${film.id}}">Chi tiết</a>
 							</div>
 						</div>
 					</div>

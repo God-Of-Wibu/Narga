@@ -247,7 +247,7 @@ public class Initializer implements ServletContextListener {
 						FILE_RESOURCE_PREFIX,
 						getImageDataRepository(), 
 						getTransactionTemplate(),
-						true
+						false
 				);
 			} catch (IOException e) {
 				e.printStackTrace();

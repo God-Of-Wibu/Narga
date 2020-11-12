@@ -26,12 +26,15 @@ import org.hibernate.search.annotations.Store;
 import com.google.gson.annotations.Expose;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Indexed
 @NoArgsConstructor
-@Data
 @Entity
+@Setter
+@Getter
 @Table(name = "actor")
 public class Actor {
 
@@ -69,6 +72,6 @@ public class Actor {
 	@JoinColumn(name = "contry_id", referencedColumnName = "id")
 	private Country country;
 	
-	@ManyToMany
+	@ManyToMany(mappedBy = "casting")
 	private Set<Film> films;
 }

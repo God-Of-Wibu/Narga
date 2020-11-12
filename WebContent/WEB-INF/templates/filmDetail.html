@@ -45,7 +45,7 @@
 					<dt>Diễn viên:</dt>
 					<dd>
 						<a class="cast" href="#" th:each="actor : ${film.casting}"
-							th:text="${actor.name}" th:href="@{'/actor/'+${actor.id}}">Thịn</a>
+							th:text="${actor.name}" th:href="@{'/detail/actor/'+${actor.id}}">Thịn</a>
 					</dd>
 					<br>
 					<dt>Ngày khởi chiếu:</dt>

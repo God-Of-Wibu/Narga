@@ -32,6 +32,7 @@ public class FormParser {
 					Part part = req.getPart(parameterName);
 					if (part == null)
 						throw new NoSuchParameterException("no such parameter " + parameterName,  parameterName);
+					field.set(formData, part);
 				} else {
 					IConverter<?> converter = converters.get(field.getType());
 					if (converter == null)

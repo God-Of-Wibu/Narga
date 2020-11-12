@@ -51,8 +51,7 @@ public class ActorService implements IActorService {
 					String avatarExtension = extractFileExtensionFromPart(formData.getAvatarPart());
 					String fileName = "actor_avatar_" + actorId + "." + avatarExtension;
 
-					ImageData imageData = imageStorageService.saveImage(formData.getAvatarPart().getInputStream(),
-							fileName);
+					ImageData imageData = imageStorageService.saveImage(formData.getAvatarPart(), fileName);
 
 					actor.setAvatar(imageData);
 					actor.setId(actorId);
@@ -80,6 +79,7 @@ public class ActorService implements IActorService {
 
 	@Override
 	public String searchActorAsJson(String input, int maxResult) throws ServiceLayerException {
+		transactionTemplate.execute(() -> System.out.println(gson.toJson(actorRepository.searchByName(input, maxResult))));
 		return transactionTemplate.execute(() -> gson.toJson(actorRepository.searchByName(input, maxResult)));
 	}
 

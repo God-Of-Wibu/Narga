@@ -17,7 +17,7 @@
 	<div class="container">
 		<h1>New Actor</h1>
 		<span th:if="${status}" th:text="${status}">status</span>
-		<form action="/add-info/" th:action="@{/admin/add/actor}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+		<form action="/add-info/" th:action="@{/admin/add/actor}" method="post" enctype="multipart/form-data; charset=UTF8">
 			<div class="form-group">
 				<label for="name">Name:</label>
 				<input type="text" class="form-control" name="name" placeholder="Name" required="required">

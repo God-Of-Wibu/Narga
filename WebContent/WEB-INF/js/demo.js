@@ -34,11 +34,15 @@ $("document").ready(function() {
 		if (m == 8) { m = 7; }
 		if (m > i) {
 			$("#day" + m).prop('checked', true);
+			$("#day" + m).prop('disabled', false);
 			$("#day" + i).prop('checked', false);
+			$("#day" + i).prop('disabled', true);
 		}
 		else if (m < i) {
 			$("#day" + m).prop('checked', true);
+			$("#day" + m).prop('disabled', false);
 			$("#day" + i).prop('checked', false);
+			$("#day" + i).prop('disabled', true);
 		}
 		return i = m;
 	}
@@ -50,28 +54,26 @@ $("document").ready(function() {
 	function getTomorrow(today) {
 		return new Date(today.getTime() + 1000 * 60 * 60 * 24);
 	}
-
-	$(".day").on('change', function() {
-		$(".day").not(this).prop('checked', false);
-	});
+	
+    $('.day').on('change', function() {
+    $('.day').not(this).prop('checked', false);
+    })
 
 	$(".choose").click(function chooseDay() {
 		let date = new Date($(".choose-day").val());
-		$(".test").html(date);
-		console.log(date.getMonth());
-		let i = 1;
-		$(".list-days").show();
+		$(".list-days").css("display","block");
+		let k = 1;
 		do {
-			$(".day" + i).html(ouputDay(date));
+			$(".day" + k).html(ouputDay(date));
 			getIssue(date);
-			i++;
+			k++;
 			date = getTomorrow(date);
 		}
-		while (i <= 7)
+		while (k <= 7)
+		$("#day"+i).prop('disabled', false);
+		$("#day"+i).prop('checked', true);
 		$(".choose-time").slideDown("slow");
 	})
-	$('.day').not(this).prop('checked', false);
-	$("#day1").prop('checked', true);
 })
 
 

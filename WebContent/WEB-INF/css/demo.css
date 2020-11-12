@@ -43,11 +43,6 @@ input[type=checkbox]:disabled+ #day {
 	animation-fill-mode: both;
 }
 
-#day:hover {
-	cursor: pointer;
-	box-shadow: 0 0 0px 2px #198798;
-}
-
 .choose-time{
 	display: none;
 	border-color: #198798;
@@ -91,7 +86,7 @@ input[type=checkbox]:disabled+ #time {
 
 #time:hover {
 	cursor: pointer;
-	box-shadow: 0 0 0px 2px #198798;
+	box-shadow: 0 0 0px 1px grey;
 }
 
 #time{

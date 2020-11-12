@@ -1,0 +1,409 @@
+@charset "ISO-8859-1";
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu&display=swap');
+
+* {
+	height: auto;
+}
+
+.main{
+	margin-top: 30px;
+}
+
+.info {
+	border-bottom: 2px solid;
+	border-bottom-color: #ed9900;
+	overflow: auto;
+	padding: 20px;
+}
+
+.film-userpic {
+	position: absolute;
+	display: block;
+	left: 5px;
+	height: auto;
+	float: left;
+}
+
+.header {
+	display: block;
+	position: relative;
+	background-color: #198798;
+	height: 200px;
+	width: 100%;
+}
+
+.text-book {
+	height: auto;
+	width: auto;
+	background-color: #ffba3b;
+	border: solid;
+	border-width: 2px 0px 2px 0px;
+	border-color: #ed9900;
+	text-align: center;
+}
+
+.text-book h1 {
+	max-height: 50px;
+	margin: 0px;
+	display: inline-block;
+	font-family: 'Roboto Slab', serif;
+}
+
+.main-page {
+	border: solid;
+	border-width: 0px 2px 2px 2px;
+	border-color: #ed9900;
+	position: relative;
+	display: block;
+	margin: 0 auto;
+	max-width: 1000px;
+}
+
+.seat-seat-standard-active {
+	height: 25px;
+	width: 32px;
+	text-align: center;
+	background-color: #ffba3b;
+	border: 2px solid;
+	border-color: #ed9900;
+	display: inline-block;
+}
+
+.row {
+	padding: 10px;
+	text-align: center;
+}
+
+.screen {
+	text-align: center;
+	height: 55px;
+	background-image: url(../images/bg-screen.png);
+	background-repeat: no-repeat;
+	background-position: top center;
+	background-size: 60%;
+	margin: 20px;
+}
+
+.text-screen {
+	visibility: hidden;
+}
+
+.text-center h1{
+	margin-bottom: 10px;
+}
+.seats {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+}
+
+.seat {
+	display: flex;
+	flex: 0 0 10%;
+	position: relative;
+	justify-content: center;
+}
+
+.seat input[type=checkbox] {
+	position: absolute;
+	opacity: 0;
+}
+
+.seat input[type=checkbox]:checked+label {
+	background: #198798;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+.seat input[type=checkbox]:disabled+label {
+	background: #dddddd;
+	text-indent: -9999px;
+	overflow: hidden;
+}
+
+.seat input[type=checkbox]:disabled+label:hover {
+	box-shadow: none;
+	cursor: not-allowed;
+}
+
+.seat label {
+	display: block;
+	position: relative;
+	width: 50%;
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+	line-height: 1.5rem;
+	padding: 4px 0;
+	background: #ffba3b;
+	border-radius: 5px;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+.seat label:before {
+	content: "";
+	position: absolute;
+	width: 75%;
+	height: 75%;
+	top: 1px;
+	left: 50%;
+	transform: translate(-50%, 0%);
+	border-radius: 3px;
+}
+
+.seat label:hover {
+	cursor: pointer;
+	box-shadow: 0 0 0px 2px #198798;
+}
+
+ol {
+	padding: 0px 30px;
+	font-weight: bold;
+}
+
+.userbutton {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+.button {
+	background-color: #ffba3b;
+	color: #cf1717;
+	text-align: center;
+	font-size: 18px;
+	border: 2px solid #ed9900;
+	border-radius: 5px;
+	position: relative;
+	font-family: 'Roboto Slab', serif;
+	padding: 5px 30px 5px 30px;
+	user-select: none;
+}
+
+.pay {
+	position: absolute;
+	display: none;
+	z-index: 2;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+}
+
+.infoPay {
+	z-index: 5;	
+	position: fixed;
+	background-color: #fdf7dc;
+	height: 500px;
+	width: 500px;
+	border: 2px solid;
+	border-color: #ed9900;
+	border-radius: 5px;
+	justify-content: center;
+}
+
+.orderSuccess{
+	position: absolute;
+	display: none;
+	z-index: 2;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+    align-items: center;
+    background-color: rgba(0,0,0,0.5);
+    position: fixed;
+}
+
+.success{
+	z-index: 5;
+	position: fixed;
+	background-color: #fdf7dc;
+	height: 600px;
+	width: 500px;
+	border: 2px solid;
+	border-color: #ed9900;
+	border-radius: 5px;
+	justify-content: center;
+	text-align: center;
+}
+
+.imgSuccess{
+	position:relative;
+	display: block;
+	width: 40%;
+	height: auto;
+	left: 150px;
+	top: 40px;
+}
+
+.textSuccess{
+	position: absolute;
+	bottom: 150px;
+	left:130px;
+	margin: 0 auto;
+	font-family: 'Russo One', sans-serif;
+    color: #26c1a0;
+    font-size: 24px;
+}
+
+.ticketNotice{
+	display: block;
+	position: relative;
+	left: 8px;
+	margin-bottom: 10px;
+}
+
+.nope{
+	display: none;
+}
+
+.zone{
+	padding: 5px;
+}
+
+.zone-notice-trong{
+	display: inline-block;
+	padding: 4px 0;
+	background: #ffba3b;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
+}
+
+.zone-notice-checked{
+	display: inline-block;
+	padding: 4px 0;
+	background: #198798;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
+}
+
+.zone-notice-occupied{
+	display: inline-block;
+	padding: 4px 0;
+	background:  #dddddd;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
+}
+
+.list-days ol li{
+	display: inline;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.list-days{
+	text-align: center;
+}
+
+.day{
+	display: inline-block;
+	font-size:24px;
+	border: 1px solid;
+	border-radius: 5px;
+	margin: 5px;
+	color: #4e4e4e;
+	padding: 5px;
+}
+
+.list-times{
+	display: none;
+	text-align: center;
+}
+
+.list-times ol li{
+	display: inline;
+	font-family: 'Ubuntu', sans-serif;
+}
+
+.time{
+	display: inline-block;
+	padding: 0px 30px 0px 30px;
+	border: 1px solid;
+	border-radius: 5px;
+	margin: 5px;
+	color: #4e4e4e;
+	padding: 5px;
+}
+
+.seat .vip {
+	background-color: #f94a4a;
+}
+
+.zone-notice-vip{
+	display: inline-block;
+	padding: 4px 0;
+	background: #f94a4a;
+	border-radius: 5px;
+	width: 38px;
+	height: 20px;
+	border: 1px solid;
+}
+
+.position-selector{
+	display: none;
+}
+
+input[type=checkbox] {
+	position: absolute;
+	opacity: 0;
+}
+
+input[type=checkbox]:checked+ .day {
+	background: #bfbfbf;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+input[type=checkbox]:disabled+ .day {
+	background: #dddddd;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+.day:hover {
+	cursor: pointer;
+	box-shadow: 0 0 0px 1px #4e4e4e;
+}
+
+input[type=checkbox]:checked+ .time {
+	background: #bfbfbf;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+input[type=checkbox]:disabled+ .time {
+	background: #dddddd;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+.time:hover {
+	cursor: pointer;
+	box-shadow: 0 0 0px 1px #4e4e4e;
+}
+
+.poster{
+	height: 120px;
+	width: auto;
+	display: inline-block;
+}

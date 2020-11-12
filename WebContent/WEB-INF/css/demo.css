@@ -1,0 +1,112 @@
+@charset "ISO-8859-1";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&family=Yanone+Kaffeesatz:wght@300&display=swap');
+
+body{
+	font-family: 'Roboto', sans-serif;
+}
+
+.main-page{
+	border: 1px solid;
+	border-color: green;
+	border-radius: 5px;
+	margin: 0 auto;
+	height: auto;
+	max-width: 1000px;
+	min-width: 200px;
+}
+
+.list-days ol li{
+	display: inline;
+	font-family: 'Ubuntu', sans-serif;
+	position: relative;
+	padding: 0px;
+}
+
+input[type=checkbox] {
+	position: absolute;
+	opacity: 0;
+}
+
+input[type=checkbox]:checked+ #day {
+	background: #198798;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+input[type=checkbox]:disabled+ #day {
+	background: #dddddd;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+.choose-time{
+	display: none;
+	border-color: #198798;
+	padding: 10px;
+}
+
+.list-days{
+	display: none;
+}
+
+#day{
+	font-size:20px;
+	border: 1px solid;
+	border-radius: 5px;
+	border-color: grey;
+	background-color: #bfbfbf;
+}
+
+.list-time ol li{
+	display: inline;
+	font-family: 'Ubuntu', sans-serif;
+	position: relative;
+	font-size: 12px;
+}
+
+input[type=checkbox]:checked+ #time {
+	background: #198798;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+input[type=checkbox]:disabled+ #time {
+	background: #dddddd;
+	-webkit-animation-name: rubberBand;
+	animation-name: rubberBand;
+	animation-duration: 300ms;
+	animation-fill-mode: both;
+}
+
+#time:hover {
+	cursor: pointer;
+	box-shadow: 0 0 0px 1px grey;
+}
+
+#time{
+	background-color: #bfbfbf;
+	padding: 0px 5px;
+	border:1.5px solid;
+	border-color: grey;
+	border-radius: 10px;
+}
+
+a{
+	background-color: #00cc66;
+}
+
+.choose-day-page{
+	padding: 10px;
+}
+
+button{
+	margin: 10px 5px;
+}
+
+

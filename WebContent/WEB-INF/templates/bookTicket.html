@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="../js/jquery-3.5.1.min.js"
+	th:src="@{/static/js/jquery-3.5.1.min.js}"></script>
+<script type="text/javascript" src="../js/bookTicket.js"
+	th:src="@{/static/js/bookTicket.js}"></script>
+<link rel="stylesheet" type="text/css" href="../css/infoFilm.css"
+	th:href="@{/static/css/infoFilm.css}">
+<link rel="stylesheet" type="text/css" href="../css/bookTicket.css"
+	th:href="@{/static/css/bookTicket.css}">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="pay">
+		<div class="infoPay">
+			<div class="content">
+				<dt>Tên Phim:</dt>
+				<dd>tên phim</dd>
+				<br>
+				<dt>Time:</dt>
+				<dd>từ mấy giờ tới mấy giờ</dd>
+				<dt>Chỗ đã chọn:</dt>
+				<dd>in ra ghế đã chọn</dd>
+				<dt>Tiền:</dt>
+				<dd>80.000</dd>
+				<br>
+			</div>
+			<a class="button button-confirm">Xác nhận</a> <a
+				class="button button-cancel-order">Hủy</a>
+		</div>
+	</div>
+	<div class="orderSuccess">
+		<div class="success">
+			<img class="imgSuccess" alt="success" src="../images/success.png">
+			<div class="textSuccess">Đặt vé thành công</div>
+		</div>
+	</div>
+	<div class="header">
+		<img class="logo" src="../images/logo.png">
+	</div>
+	<div class="main">
+		<div class="main-page">
+			<div class="text-book">
+				<h1>Đặt Vé</h1>
+			</div>
+			<div class="info">
+				<div class="content">
+				<img class="poster" src="../images/film.jpg"
+					th:src="${film.poster.url}" alt="poster"> 
+					<dt>Tên Phim:</dt>
+					<dd>Avenger</dd>
+					<br>
+				</div>
+			</div>
+			<div class="calendar">
+				<div class="list-days">
+					<ol>
+						<li><input type="checkbox" class="day" id="day1" name="day1">
+							<label for="day1" class="day">Thứ 2 , 2/11</label></li>
+						<li><input type="checkbox" class="day" id="day2" name="day2">
+							<label for="day2" class="day">Thứ 3 , 3/11</label></li>
+						<li><input type="checkbox" class="day" id="day3" name="day3"><label
+							for="day3" class="day">Thứ 4 , 4/11</label></li>
+						<li><input type="checkbox" class="day" id="day4" name="day4"><label
+							for="day4" class="day">Thứ 5 , 5/11</label></li>
+						<li><input type="checkbox" class="day" id="day5" name="day5"><label
+							for="day5" class="day">Thứ 6 , 6/11</label></li>
+						<li><input type="checkbox" class="day" id="day6" name="day6"><label
+							for="day6" class="day">Thứ 7 , 7/11</label></li>
+						<li><input type="checkbox" class="day" id="day7" name="day7"><label
+							for="day7" class="day">Thứ CN , 8/11</label></li>
+					</ol>
+				</div>
+				<div class="list-times">
+					<ol>
+						<li><input type="checkbox" id="time1" class="time"
+							name="time1"><label class="time"  for="time1">8:00</label></li>
+						<li><input type="checkbox" id="time2" class="time"
+							name="time2"><label class="time" for="time2">9:30</label></li>
+						<li><input type="checkbox" id="time3" class="time"
+							name="time3"><label class="time" for="time3">12:00</label></li>
+						<li><input type="checkbox" id="time4" class="time"
+							name="time4"><label class="time" for="time4">14:00</label></li>
+						<li><input type="checkbox" id="time5" class="time"
+							name="time5"><label class="time" for="time5">17:00</label></li>
+						<li><input type="checkbox" id="time6" class="time"
+							name="time6"><label class="time" for="time6">19:00</label></li>
+						<li><input type="checkbox" id="time7" class="time"
+							name="time7"><label class="time" for="time7">21:00</label></li>
+					</ol>
+				</div>
+			</div>
+			<div class="position-selector">
+				<div class="ticket-box">
+					<div class="screen">
+						<span class="text-screen">screen</span>
+					</div>
+					<div class="cabin-seat">
+						<ol type="A" class="cabin fuselage">
+							<li class="row row--1">
+								<ol class="seats" type="A">
+									<li class="seat"><input type="checkbox" id="1A" /> <label
+										for="1A">1</label></li>
+									<li class="seat"><input type="checkbox" id="2A" /> <label
+										for="2A">2</label></li>
+									<li class="seat"><input type="checkbox" id="3A" /> <label
+										for="3A">3</label></li>
+									<li class="seat"><input type="checkbox" id="4A" /> <label
+										for="4A">4</label></li>
+									<li class="seat"><input type="checkbox" id="5A" /> <label
+										for="5A">5</label></li>
+									<li class="seat"><input type="checkbox" id="6A" /> <label
+										for="6A">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--2">
+								<ol class="seats" type="B">
+									<li class="seat"><input type="checkbox" id="1B" /> <label
+										for="1B">1</label></li>
+									<li class="seat"><input type="checkbox" id="2B" /> <label
+										for="2B">2</label></li>
+									<li class="seat"><input type="checkbox" id="3B" /> <label
+										for="3B">3</label></li>
+									<li class="seat"><input type="checkbox" id="4B" /> <label
+										for="4B">4</label></li>
+									<li class="seat"><input type="checkbox" id="5B" /> <label
+										for="5B">5</label></li>
+									<li class="seat"><input type="checkbox" id="6B" /> <label
+										for="6B">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--3">
+								<ol class="seats" type="C">
+									<li class="seat"><input type="checkbox" id="1C" /> <label
+										for="1C">1</label></li>
+									<li class="seat"><input type="checkbox" id="2C" /> <label
+										for="2C">2</label></li>
+									<li class="seat"><input type="checkbox" id="3C" /> <label
+										for="3C">3</label></li>
+									<li class="seat"><input type="checkbox" id="4C" /> <label
+										for="4C">4</label></li>
+									<li class="seat"><input type="checkbox" id="5C" /> <label
+										for="5C">5</label></li>
+									<li class="seat"><input type="checkbox" id="6C" /> <label
+										for="6C">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--4">
+								<ol class="seats" type="D">
+									<li class="seat"><input type="checkbox" id="1D" /> <label
+										for="1D">1</label></li>
+									<li class="seat"><input type="checkbox" id="2D" /> <label
+										for="2D">2</label></li>
+									<li class="seat"><input type="checkbox" id="3D" /> <label
+										for="3D">3</label></li>
+									<li class="seat"><input type="checkbox" id="4D" /> <label
+										for="4D">4</label></li>
+									<li class="seat"><input type="checkbox" id="5D" /> <label
+										for="5D">5</label></li>
+									<li class="seat"><input type="checkbox" id="6D" /> <label
+										for="6D">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--5">
+								<ol class="seats" type="E">
+									<li class="seat"><input type="checkbox" id="1E" /> <label
+										class="vip" for="1E">1</label></li>
+									<li class="seat"><input type="checkbox" id="2E" /> <label
+										class="vip" for="2E">2</label></li>
+									<li class="seat"><input type="checkbox" id="3E" /> <label
+										class="vip" for="3E">3</label></li>
+									<li class="seat"><input type="checkbox" id="4E" /> <label
+										class="vip" for="4E">4</label></li>
+									<li class="seat"><input type="checkbox" id="5E" /> <label
+										class="vip" for="5E">5</label></li>
+									<li class="seat"><input type="checkbox" id="6E" /> <label
+										class="vip" for="6E">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--6">
+								<ol class="seats" type="F">
+									<li class="seat"><input type="checkbox" id="1F" /> <label
+										class="vip" for="1F">1</label></li>
+									<li class="seat"><input type="checkbox" id="2F" /> <label
+										class="vip" for="2F">2</label></li>
+									<li class="seat"><input type="checkbox" id="3F" /> <label
+										class="vip" for="3F">3</label></li>
+									<li class="seat"><input type="checkbox" id="4F" /> <label
+										class="vip" for="4F">4</label></li>
+									<li class="seat"><input type="checkbox" id="5F" /> <label
+										class="vip" for="5F">5</label></li>
+									<li class="seat"><input type="checkbox" id="6F" /> <label
+										class="vip" for="6F">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--7">
+								<ol class="seats" type="G">
+									<li class="seat"><input type="checkbox" id="1G" /> <label
+										class="vip" for="1G">1</label></li>
+									<li class="seat"><input type="checkbox" id="2G" /> <label
+										class="vip" for="2G">2</label></li>
+									<li class="seat"><input type="checkbox" id="3G" /> <label
+										class="vip" for="3G">3</label></li>
+									<li class="seat"><input type="checkbox" id="4G" /> <label
+										class="vip" for="4G">4</label></li>
+									<li class="seat"><input type="checkbox" id="5G" /> <label
+										class="vip" for="5G">5</label></li>
+									<li class="seat"><input type="checkbox" id="6G" /> <label
+										class="vip" for="6G">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--8">
+								<ol class="seats" type="H">
+									<li class="seat"><input type="checkbox" id="1H" /> <label
+										class="vip" for="1H">1</label></li>
+									<li class="seat"><input type="checkbox" id="2H" /> <label
+										class="vip" for="2H">2</label></li>
+									<li class="seat"><input type="checkbox" id="3H" /> <label
+										class="vip" for="3H">3</label></li>
+									<li class="seat"><input type="checkbox" id="4H" /> <label
+										class="vip" for="4H">4</label></li>
+									<li class="seat"><input type="checkbox" id="5H" /> <label
+										class="vip" for="5H">5</label></li>
+									<li class="seat"><input type="checkbox" id="6H" /> <label
+										class="vip" for="6H">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--9">
+								<ol class="seats" type="I">
+									<li class="seat"><input type="checkbox" id="1I" /> <label
+										for="1I">1</label></li>
+									<li class="seat"><input type="checkbox" id="2I" /> <label
+										for="2I">2</label></li>
+									<li class="seat"><input type="checkbox" id="3I" /> <label
+										for="3I">3</label></li>
+									<li class="seat"><input type="checkbox" id="4I" /> <label
+										cfor="4I">4</label></li>
+									<li class="seat"><input type="checkbox" id="5I" /> <label
+										for="5I">5</label></li>
+									<li class="seat"><input type="checkbox" id="6I" /> <label
+										for="6I">6</label></li>
+								</ol>
+							</li>
+							<li class="row row--10">
+								<ol class="seats" type="J">
+									<li class="seat"><input type="checkbox" id="1J" /> <label
+										for="1J">1</label></li>
+									<li class="seat"><input type="checkbox" id="2J" /> <label
+										for="2J">2</label></li>
+									<li class="seat"><input type="checkbox" id="3J" /> <label
+										for="3J">3</label></li>
+									<li class="seat"><input type="checkbox" id="4J" /> <label
+										for="4J">4</label></li>
+									<li class="seat"><input type="checkbox" id="5J" /> <label
+										for="5J">5</label></li>
+									<li class="seat"><input type="checkbox" id="6J" /> <label
+										for="6J">6</label></li>
+								</ol>
+							</li>
+						</ol>
+					</div>
+				</div>
+				<div class="ticketNotice">
+					<div class="zone">
+						<div class="zone-notice-trong">
+							<a class="nope">trống</a>
+						</div>
+						<a class="noticeNope">Ghế trống</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-vip">
+							<a class="nope">vip</a>
+						</div>
+						<a class="noticeNope">Ghế Vip</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-checked">
+							<a class="nope">đang chọn</a>
+						</div>
+						<a class="noticeCheked">Ghế chọn</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-occupied">
+							<a class="nope">đã đặt</a>
+						</div>
+						<a class="noticeOccupied">Ghế đã được đặt</a>
+					</div>
+				</div>
+				<div class="userbutton">
+					<a class="button button-book">Đặt vé</a> <a
+						class="button button-cancel">Hủy</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

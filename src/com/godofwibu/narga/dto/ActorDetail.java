@@ -19,16 +19,16 @@ public class ActorDetail {
 	private Integer age;
 	private String avatar;
 	private Country country;
-	private Set<FilmMinimumDetail> films;
+	private Set<FilmResume> films;
 	public ActorDetail(Actor actor) {
 		this.name = actor.getName();
 		this.gender = actor.getGender() == Gender.MALE ? "Nam":"Nữ";
 		this.age = actor.getAge();
 		this.avatar = actor.getAvatar().getUrl();
 		this.country = actor.getCountry();
-		this.films = new HashSet<FilmMinimumDetail>();
+		this.films = new HashSet<FilmResume>();
 		for(Film film : actor.getFilms() ) {
-			films.add(new FilmMinimumDetail(film));
+			films.add(new FilmResume(film));
 		}
 	}
 

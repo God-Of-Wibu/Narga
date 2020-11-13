@@ -1,7 +1,9 @@
 package com.godofwibu.narga.services;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.Part;
@@ -14,7 +16,9 @@ import com.godofwibu.narga.entities.Category;
 import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.ImageData;
+import com.godofwibu.narga.entities.Issue;
 import com.godofwibu.narga.dto.AddFilmFormData;
+import com.godofwibu.narga.dto.FilmDTO;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
@@ -32,6 +36,7 @@ public class FilmService implements IFilmService {
 	private ICountryRepository countryRepository;
 	private ICategoryRepository categoryRepository;
 	private IActorRepository actorRepository;
+	private IIssueService issueService;
 	private Gson gson;
 	private ITransactionTemplate transactionTemplate;
 
@@ -120,6 +125,25 @@ public class FilmService implements IFilmService {
 	@Override
 	public Film getFilmDetail(int filmId) throws ServiceLayerException {
 		return transactionTemplate.execute(() -> filmRepository.findById(filmId));
+	}
+
+	@Override
+	public List<FilmDTO> getFilmInWeek() throws ServiceLayerException {
+		return transactionTemplate.execute(() -> {
+			List<FilmDTO> films = new ArrayList<FilmDTO>();
+			List<Issue> issues = issueService.getIssuesInThisWeek();
+			for (Issue issue : issues) {
+				Film film = issue.getFilm();
+				films.add(new FilmDTO(film.getId(),film.getPoster().getUrl()));
+			}
+			return films;
+		}) ;
+	}
+
+	@Override
+	public List<FilmDTO> getHotFilms() throws ServiceLayerException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

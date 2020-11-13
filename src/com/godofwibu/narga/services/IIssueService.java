@@ -1,5 +1,10 @@
 package com.godofwibu.narga.services;
 
-public class IIssueService {
+import java.util.List;
+
+import com.godofwibu.narga.entities.Issue;
+
+public interface IIssueService {
+		List<Issue> getIssuesInThisWeek() throws ServiceLayerException;
 	
 }

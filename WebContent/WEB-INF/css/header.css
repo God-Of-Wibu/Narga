@@ -1,0 +1,141 @@
+@charset "ISO-8859-1";
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600&display=swap');
+
+*{
+	font-family: 'Titillium Web', sans-serif;
+	font-size: 24px;
+}
+
+.navbar {
+    background-color: #198798 !important;
+}
+
+.login{
+	position: absolute;
+	right: 50px;
+	top: 20px;
+	color: #ffba3b !important;
+    text-shadow: 2px 0px 2px red;
+    font-size: 14px;
+}
+
+.login:before{
+	background-image: url("../images/icons/icon-user.png") ;
+	background-size: 20px;
+    display: inline-block;
+    width: 20px; 
+    height: 20px;
+    top: -20px;
+    content:"";
+    position: relative;
+    top: 5px;
+    right: 5px;;
+}
+
+.navbar li:hover{
+    border-bottom: 2px solid;
+    border-radius: 1px;
+    border-bottom-color: #ed9900;
+}
+
+.navbar li a {
+    color: #ffba3b !important;
+    text-shadow: 2px 0px 2px red;
+    text-transform: uppercase;
+    padding: 0px;
+}
+
+.navbar li a:hover {
+    padding: 5px;
+}
+
+#carouselExampleIndicators{
+   width:500px;
+   margin-left:500px;	
+}
+
+.carousel-caption {
+	position: absolute;
+	top: 50%;
+}
+
+.hotfilm img{
+	height:500px;
+	width:100%;
+}
+
+.hotfilm{
+	margin-top:30px;
+}
+
+#hot-film-text{
+	margin-left:550px;
+	font-family:'Bungee Inline';
+	font-size: 50px;
+}
+
+.btn-primary:hover {
+	background-color: rgb(62,44,100);
+	border: 1px solid white;
+}
+
+hr.light {
+	border-top: 1px solid #d5d5d5;
+	width: 75%;
+}
+.light-100 {
+	border-top: 1px solid #d5d5d5;
+	width: 100%;
+}
+
+.navbar-toggler{
+	background-color: #ffba3b;
+}
+
+/*Media Query*/
+@media (max-width: 992px){
+	.carousel-caption {
+		top: 20%;
+	}
+	.carousel-caption h1{
+		font-size: 250%;
+	}
+	.carousel-caption h3{		
+		font-size: 160%;		
+	}
+	.carousel-caption .btn{		
+		font-size: 120%;		
+	}
+}
+@media (max-width: 768px){	
+	.carousel-caption {
+		top: 20%;
+	}
+	.carousel-caption h1{
+		font-size: 220%;
+	}
+	.carousel-caption h3{		
+		font-size: 140%;
+		padding-bottom: 0.2rem;
+	}
+	.carousel-caption .btn{		
+		font-size: 95%;
+		padding: 8px 14px;
+	}
+}
+@media (max-width: 576px){
+	.carousel-caption {
+		top: 10%;
+	}
+	.carousel-caption h1{
+		font-size: 150%;
+	}
+	.carousel-caption h3{		
+		font-size: 110%;		
+	}
+	.carousel-caption .btn {		
+		font-size: 90%;
+		padding: 4px 8px;
+	}	
+}

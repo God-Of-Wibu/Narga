@@ -9,7 +9,28 @@ html, body {
 	font-size: 28px;
 	color: #222;
 }
-
+.hotfilm{
+   margin-bottom:5px;	
+}
+.poster-film {
+    margin-right: 6.6px;
+    text-align: center;
+    width: 240px;
+    position: relative !important;
+    float: none;
+}
+.card-link{
+	font-size:20px;
+	display:inline-block;
+}
+.feature_content_film{
+    display: none;
+    padding-bottom: 10px;
+    position: absolute;
+    top: 270px;
+    width: 100%;
+    z-index: 999;
+}
 .navbar {
 	background-color:blue !important;
 	background-image: url("https://image.shutterstock.com/z/stock-photo-vintage-scratch-background-with-film-frame-59888398.jpg");
@@ -26,7 +47,11 @@ html, body {
 }
 #carouselExampleIndicators{
    width:500px;
-   margin-left:500px;	
+   margin-left:400px;	
+   background-image: url("../css/images/bg-bottom-footer.jpg");
+   background-repeat: repeat-x;
+   
+   
 }
 .carousel-caption {
 	position: absolute;

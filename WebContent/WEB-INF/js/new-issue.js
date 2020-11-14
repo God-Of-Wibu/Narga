@@ -8,7 +8,7 @@ $("document").ready(function() {
 	
 	let issues = new Array(7);
 	let dayOfWeek = ['thứ hai', 'thứ ba', 'thứ tư', 'thứ năm', 'thứ sáu', 'thứ bảy', 'chủ nhật']
-	let time = ['8:00', '9:30', '12:00', '14:00', '17:00', '19:00', '21:00']
+	let time = ['8:00:00', '9:30:00', '12:00:00', '14:00:00', '17:00:00', '19:00:00', '21:00:00']
 	let onCurrentDayChanged = function() {
 		for (let i = 0; i <=7; ++i) {
 			$(`.list-time input:eq(${i})`).prop("checked", issues[currentDayIndex].times[i])
@@ -108,53 +108,35 @@ $("document").ready(function() {
 	
 	$("#submitBtn").click( function() {
 		
-		let data = new FormData();
-		let dateTimes = []
-		
-		
-		
-		issues.forEach( function(v) {
-			for(let i = 0; i < 7; ++i) {
-				if (v.times[i]) {
-					dateTimes.push({date: v.date, time: time[i]});
-				}
-			}
-		})
-		
-		if (dateTimes.length === 0) {
-			showErrorDialog("vui lòng chọn ít nhất một xuất chiếu");
-			return;
-		}
 		
 		if (film == null) {
 			showErrorDialog("vui lòng chọn bộ phim")
 			return;
 		}
 		
+		let data = {
+			filmId: film.id,
+			vipCost: $("#vipCostInp").val(),
+			basicCost: $("#basicCostInp").val(),
+			dateTimes: []
+		}
 		
-		
-		
-		dateTimes.forEach( function(v) {
-			data.append("dateTimes", JSON.stringify(v))
+		issues.forEach( function(v) {
+			for(let i = 0; i < 7; ++i) {
+				if (v.times[i]) {
+					data.dateTimes.push(JSON.stringify( {date: `${v.date.getFullYear()}-${v.date.getMonth()}-${v.date.getDate()}`, time: time[i]} ));
+				}
+			}
 		})
 		
-		data.append("vipCost", $("#vipCostInp").val())
-		data.append("basicCost", $("#basicCostInp").val())
-		data.append("filmId", film.id);
+		if (data.dateTimes.length === 0) {
+			showErrorDialog("vui lòng chọn ít nhất một xuất chiếu");
+			return;
+		}
 		
-		jQuery.ajax({
-			type: "POST",
-            url: location.href,
-            data: data,
-			enctype: 'application/x-www-form-urlencoded; charset=UTF-8',
-            processData: false,
-			contentType: false,
-            cache: false,
-            timeout: 600000,
-            success: showInfoDialog,
-            error: showErrorDialog
+		$.post(location.href, data)
+		
 		})
-	})
 
 })
 

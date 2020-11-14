@@ -17,6 +17,6 @@ public class NewIssueFormData {
 	@ParameterName("vipCost")
 	private Integer vipCost;
 	
-	@ParameterName("dateTimes")
+	@ParameterName("dateTimes[]")
 	private DateTime[] dateTimes;
 }

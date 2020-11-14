@@ -41,9 +41,6 @@ public class NewIssueServlet extends NargaServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
-		req.getParameterMap().forEach((k, v)->{
-			System.out.println("key:" +k + ", values:" + Arrays.toString(v));
-		});
-		//System.out.println(formParser.getFormObject(req, NewIssueFormData.class));
+		
 	}
 }

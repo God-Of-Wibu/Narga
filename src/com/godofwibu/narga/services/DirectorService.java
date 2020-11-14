@@ -6,8 +6,10 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
 
+import com.godofwibu.narga.dto.ActorDetail;
 import com.godofwibu.narga.dto.AddActorFormData;
 import com.godofwibu.narga.dto.AddDirectorFormData;
+import com.godofwibu.narga.dto.DirectorDetail;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.entities.Director;
@@ -75,4 +77,11 @@ public class DirectorService implements IDirectorService {
 
 	}
 
-}
+	@Override
+	public DirectorDetail getDirectorDetail(Integer Id) throws ServiceLayerException {
+		return transactionTemplate.execute(()->{
+			return new DirectorDetail(directorRepository.findById(Id));
+	});
+	}
+	}
+

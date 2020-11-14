@@ -20,14 +20,14 @@ public class NewIssueServlet extends NargaServlet {
 	private static final long serialVersionUID = 1L;
 
 	private TemplateEngine templateEngine;
-	private IIssueService issueServie;
+	private IIssueService issueService;
 	private FormParser formParser;
 	
 	@Override
 	public void init() throws ServletException {
 		super.init();
 		templateEngine = getAttribute(TemplateEngine.class);
-		issueServie = getAttribute(IIssueService.class);
+		issueService = getAttribute(IIssueService.class);
 		formParser = getAttribute(FormParser.class);
 	}
 	
@@ -41,6 +41,8 @@ public class NewIssueServlet extends NargaServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
+		NewIssueFormData formData = formParser.getFormObject(req, NewIssueFormData.class);
 		
+				
 	}
 }

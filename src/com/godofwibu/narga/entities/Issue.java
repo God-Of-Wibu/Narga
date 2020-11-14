@@ -28,7 +28,7 @@ public class Issue {
 	@Column(name = "id")
 	private Integer id;
 	
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn
 	private Film film;
 	

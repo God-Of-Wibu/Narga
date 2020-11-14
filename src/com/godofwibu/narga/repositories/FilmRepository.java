@@ -12,7 +12,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.godofwibu.narga.entities.Film;
 
-public class FilmRepository extends CurdRepository<Film, Integer> implements IFilmRepository {
+public class FilmRepository extends CrudRepository<Film, Integer> implements IFilmRepository {
 
 	public FilmRepository(SessionFactory sessionFactory) {
 		super(sessionFactory, Film.class);

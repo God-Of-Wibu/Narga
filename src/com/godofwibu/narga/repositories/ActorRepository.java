@@ -15,7 +15,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Director;
 
-public class ActorRepository extends CurdRepository<Actor, Integer> implements IActorRepository {
+public class ActorRepository extends CrudRepository<Actor, Integer> implements IActorRepository {
 	
 	public ActorRepository(SessionFactory sessionFactory) {
 		super(sessionFactory, Actor.class);

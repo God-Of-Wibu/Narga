@@ -11,7 +11,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.godofwibu.narga.entities.Director;
 
-public class DirectorRepository extends CurdRepository<Director, Integer> implements IDirectorRepository {
+public class DirectorRepository extends CrudRepository<Director, Integer> implements IDirectorRepository {
 	
 
 	public DirectorRepository(SessionFactory sessionFactory) {

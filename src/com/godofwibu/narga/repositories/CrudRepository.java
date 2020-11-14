@@ -6,12 +6,12 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-public class CurdRepository<E, I extends Serializable> implements ICurdRepository<E, I> {
+public class CrudRepository<E, I extends Serializable> implements ICurdRepository<E, I> {
 
 	private SessionFactory sessionFactory;
 	private Class<E> entityType;
 
-	public CurdRepository(SessionFactory sessionFactory, Class<E> entityType) {
+	public CrudRepository(SessionFactory sessionFactory, Class<E> entityType) {
 		super();
 		this.sessionFactory = sessionFactory;
 		this.entityType = entityType;

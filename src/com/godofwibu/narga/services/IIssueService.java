@@ -1,5 +1,5 @@
 package com.godofwibu.narga.services;
 
-public class IIssueService {
-	
+public interface IIssueService {
+	void newIssues() throws ServiceLayerException;
 }

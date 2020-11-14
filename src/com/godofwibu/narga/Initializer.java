@@ -54,9 +54,11 @@ import com.godofwibu.narga.services.IDirectorService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.IImageStorageService;
 import com.godofwibu.narga.services.ImageStorageService;
+import com.godofwibu.narga.utils.DateTime;
 import com.godofwibu.narga.utils.FormParser;
 import com.godofwibu.narga.utils.HibernateTransactionTemplate;
 import com.godofwibu.narga.utils.ITransactionTemplate;
+import com.godofwibu.narga.utils.converter.DateTimeArrayConverter;
 import com.godofwibu.narga.utils.converter.GenderConverter;
 import com.godofwibu.narga.utils.converter.IntegerArrayConverter;
 import com.godofwibu.narga.utils.converter.IntegerConverter;
@@ -325,7 +327,8 @@ public class Initializer implements ServletContextListener {
 				.addConverter(Integer.class, new IntegerConverter())
 				.addConverter(Gender.class,	new GenderConverter())
 				.addConverter(String[].class, new StringArrayConverter())
-				.addConverter(Integer[].class, new IntegerArrayConverter());
+				.addConverter(Integer[].class, new IntegerArrayConverter())
+				.addConverter(DateTime[].class, new DateTimeArrayConverter());
 		}
 		return formParser;
 	}

@@ -1,4 +1,4 @@
-package com.godofwibu.narga.repositories;
+	package com.godofwibu.narga.repositories;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +37,9 @@ public class FilmRepository extends CurdRepository<Film, Integer> implements IFi
 			searchResult = jpaQuery
 					.setMaxResults(maxResult)
 					.getResultList();
-			fullTextSession.close();
 			return searchResult;
 		} catch (EmptyQueryException e) {
 			return new ArrayList<Film>();
-		} finally {
-			fullTextSession.close();
 		}
 	}
 

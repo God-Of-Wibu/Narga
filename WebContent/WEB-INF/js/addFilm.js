@@ -1,4 +1,4 @@
-function showInfoDialog(msg) {
+	function showInfoDialog(msg) {
 	alert(msg)
 }
 
@@ -58,7 +58,7 @@ $("document").ready( function() {
 		title: 'select director',
 		placeholder: "enter director's name",
 		url: location.origin + "/Narga/api/actor/search",
-		onClick: function() {
+		onClose: function() {
 			$("#directorSelectorWrapper").hide()
 		},
 		onSelect: function(_, data) {
@@ -150,7 +150,7 @@ $("document").ready( function() {
 		title: 'select actor',
 		placeholder: "enter actor's name",
 		url: location.origin + "/Narga/api/actor/search",
-		onClick: function() {
+		onClose: function() {
 			$("#actorSelectorWrapper").hide()
 		},
 		onSelect: function(_, data) {

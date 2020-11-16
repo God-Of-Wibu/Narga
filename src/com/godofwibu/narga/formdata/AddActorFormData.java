@@ -1,13 +1,13 @@
-package com.godofwibu.narga.dto;
+package com.godofwibu.narga.formdata;
 
 import javax.servlet.http.Part;
 
 import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.utils.ParameterName;
 import lombok.Data;
-@Data
-public class AddDirectorFormData {
 
+@Data
+public class AddActorFormData {
 	String name;
 	
 	@ParameterName("age")

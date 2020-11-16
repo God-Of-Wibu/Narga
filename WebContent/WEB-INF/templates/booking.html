@@ -1,0 +1,503 @@
+	<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="../js/jquery-3.5.1.min.js"
+	th:src="@{/static/js/jquery-3.5.1.min.js}"></script>
+<script type="text/javascript" src="../js/booking.js"
+	th:src="@{/static/js/booking.js}"></script>
+<link rel="stylesheet" type="text/css" href="../css/infoFilm.css"
+	th:href="@{/static/css/infoFilm.css}">
+<link rel="stylesheet" type="text/css" href="../css/booking.css"
+	th:href="@{/static/css/booking.css}">
+<title>Insert title here</title>
+</head>
+<body>
+	<div class="pay">
+		<div class="infoPay">
+			<div class="content">
+				<dt>Tên Phim:</dt>
+				<dd>tên phim</dd>
+				<br>
+				<dt>Time:</dt>
+				<dd>từ mấy giờ tới mấy giờ</dd>
+				<dt>Chỗ đã chọn:</dt>
+				<dd>in ra ghế đã chọn</dd>
+				<dt>Tiền:</dt>
+				<dd>80.000</dd>
+				<br>
+			</div>
+			<a class="button button-confirm">Xác nhận</a> <a
+				class="button button-cancel-order">Hủy</a>
+		</div>
+	</div>
+	<div class="orderSuccess">
+		<div class="success">
+			<img class="imgSuccess" alt="success" src="../images/success.png">
+			<div class="textSuccess">Đặt vé thành công</div>
+		</div>
+	</div>
+	<div class="header">
+		<img class="logo" src="../images/logo.png">
+	</div>
+	<div class="main">
+		<div class="main-page">
+			<div class="text-book">
+				<h1>Đặt Vé</h1>
+			</div>
+			<div class="info">
+				<div class="content">
+				<img class="poster" src="../images/film.jpg"
+						th:src="${filmPoster}"
+					 alt="poster"> 
+					<dt>Tên Phim:</dt>
+					<dd th:text="${filmTitle}">Avenger</dd>
+					<br>
+				</div>
+			</div>
+			<div class="calendar">
+				<div class="list-days">
+					<ol>
+						<li class="day" th:each="day : ${dayList}" >
+							<a th:href="@{/api/issue/get(filmId=${filmId}, date=${#dates.format(day, 'yyyy-MM-dd')})}" 
+							th:text="${#dates.dayOfWeekName(day)} + ' ' + ${#dates.format(day, 'dd-MM')}"></a>
+						</li>
+					</ol>
+				</div>
+				<div class="list-times">
+					<ol>
+						
+					</ol>
+				</div>
+			</div>
+			<div class="position-selector">
+				<div class="ticket-box">
+					<div class="screen">
+						<span class="text-screen">screen</span>
+					</div>
+					<div class="cabin-seat">
+						<ol>
+							<li class="row">
+								
+								<span class="seat">
+								<input type="checkbox" id="A1" disabled>
+									<label for="A1">A1</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A2" disabled>
+									<label for="A2">A2</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A3" disabled>
+									<label for="A3">A3</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A4" disabled>
+									<label for="A4">A4</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A5" disabled>
+									<label for="A5">A5</label>
+									
+								</span> 
+								<span class="seat">
+								<input type="checkbox" id="A6" disabled>
+									<label for="A6">A6</label>
+									
+								</span> 	
+								
+							</li>
+							<li class="row">
+								
+								<span class="seat">
+									<label for="B1">B1</label>
+									<input type="checkbox" id="B1" disabled>
+								</span>
+								<span class="seat">
+									<label for="B2">B2</label>
+									<input type="checkbox" id="B2" disabled>
+								</span>
+								<span class="seat">
+									<label for="B3">B3</label>
+									<input type="checkbox" id="B3" disabled>
+								</span>
+								<span class="seat">
+									<label for="B4">B4</label>
+									<input type="checkbox" id="B4" disabled>
+								</span>
+								<span class="seat">
+									<label for="B5">B5</label>
+									<input type="checkbox" id="B5" disabled>
+								</span> 
+								<span class="seat">
+									<label for="B7">B6</label>
+									<input type="checkbox" id="B6" disabled>
+								</span> 	
+							</li>
+							<li class="row">
+								
+								<span class="seat">
+									<label for="C1">C1</label>
+									<input type="checkbox" id="C1" disabled>
+								</span>
+								<span class="seat">
+									<label for="C2">C2</label>
+									<input type="checkbox" id="C2" disabled>
+								</span>
+								<span class="seat">
+									<label for="C3">C3</label>
+									<input type="checkbox" id="C3" disabled>
+								</span>
+								<span class="seat">
+									<label for="C4">C4</label>
+									<input type="checkbox" id="C4" disabled>
+								</span>
+								<span class="seat">
+									<label for="C5">C5</label>
+									<input type="checkbox" id="C5" disabled>
+								</span> 
+								<span class="seat">
+									<label for="C6">C6</label>
+									<input type="checkbox" id="C6" disabled>
+								</span> 	
+								
+							</li>
+							<li class="row">
+								<span class="seat">				
+									<input type="checkbox" id="D1" >				
+									<label for="D1">D1</label>
+								</span>
+								<span class="seat">
+									<label for="D2">D2</label>
+									<input type="checkbox" id="D2" disabled>
+								</span>
+								<span class="seat">
+									<label for="D3">D3</label>
+									<input type="checkbox" id="D3" disabled>
+								</span>
+								<span class="seat">
+									<label for="D4">D4</label>
+									<input type="checkbox" id="D4" disabled>
+								</span>
+								<span class="seat">
+									<label for="D5">D5</label>
+									<input type="checkbox" id="D5" disabled>
+								</span> 
+								<span class="seat">
+									<label for="D6">D6</label>
+									<input type="checkbox" id="D6" disabled>
+								</span> 	
+								
+							</li>
+							<li class="row">
+								
+								<span class="seat">
+									<label for="E1">D1</label>
+									<input type="checkbox" id="E1" disabled>
+								</span>
+								<span class="seat">
+									<label for="E2">E2</label>
+									<input type="checkbox" id="E2" disabled>
+								</span>
+								<span class="seat">
+									<label for="E3">E3</label>
+									<input type="checkbox" id="E3" disabled>
+								</span>
+								<span class="seat">
+									<label for="E4">E4</label>
+									<input type="checkbox" id="E4" disabled>
+								</span>
+								<span class="seat">
+									<label for="E5">E5</label>
+									<input type="checkbox" id="E5" disabled>
+								</span> 
+								<span class="seat">
+									<label for="E6">E6</label>
+									<input type="checkbox" id="E6" disabled>
+								</span> 	
+								
+							</li>
+							<li class="row">
+							
+									<span class="seat">
+										<label for="F1">F1</label>
+										<input type="checkbox" id="F1" disabled>
+									</span>
+									<span class="seat">
+										<label for="F2">F2</label>
+										<input type="checkbox" id="F2" disabled>
+									</span>
+									<span class="seat">
+										<label for="F3">F3</label>
+										<input type="checkbox" id="F3" disabled>
+									</span>
+									<span class="seat">
+										<label for="F4">F4</label>
+										<input type="checkbox" id="F4" disabled>
+									</span>
+									<span class="seat">
+										<label for="F5">F5</label>
+										<input type="checkbox" id="F5" disabled>
+									</span> 
+									<span class="seat">
+										<label for="F6">F6</label>
+										<input type="checkbox" id="F6" disabled>
+									</span> 	
+								
+							</li>
+							
+							<li class="row">
+									<span class="seat">
+										<label for="G1">G1</label>
+										<input type="checkbox" id="G1" disabled>
+									</span>
+									<span class="seat">
+										<label for="G2">G2</label>
+										<input type="checkbox" id="G2" disabled>
+									</span>
+									<span class="seat">
+										<label for="G3">G3</label>
+										<input type="checkbox" id="G3" disabled>
+									</span>
+									<span class="seat">
+										<label for="G4">G4</label>
+										<input type="checkbox" id="G4" disabled>
+									</span>
+									<span class="seat">
+										<label for="G5">G5</label>
+										<input type="checkbox" id="G5" disabled>
+									</span> 
+									<span class="seat">
+										<label for="G6">G6</label>
+										<input type="checkbox" id="G6" disabled>
+									</span> 	
+							</li>
+							<li class="row">
+								<span class="seat">
+									<label for="H1">H1</label>
+									<input type="checkbox" id="H1" disabled>
+								</span>
+								<span class="seat">
+									<label for="H2">H2</label>
+									<input type="checkbox" id="H2" disabled>
+								</span>
+								<span class="seat">
+									<label for="H3">H3</label>
+									<input type="checkbox" id="H3" disabled>
+								</span>
+								<span class="seat">
+									<label for="H4">H4</label>
+									<input type="checkbox" id="H4" disabled>
+								</span>
+								<span class="seat">
+									<label for="H5">H5</label>
+									<input type="checkbox" id="H5" disabled>
+								</span> 
+								<span class="seat">
+									<label for="H7">H6</label>
+									<input type="checkbox" id="H6" disabled>
+								</span> 	
+							</li>
+							<li class="row">
+								<span class="seat">
+									<label for="I1">I1</label>
+									<input type="checkbox" id="I1" disabled>
+								</span>
+								<span class="seat">
+									<label for="I2">I2</label>
+									<input type="checkbox" id="I2" disabled>
+								</span>
+								<span class="seat">
+									<label for="I3">I3</label>
+									<input type="checkbox" id="I3" disabled>
+								</span>
+								<span class="seat">
+									<label for="I4">I4</label>
+									<input type="checkbox" id="I4" disabled>
+								</span>
+								<span class="seat">
+									<label for="I5">I5</label>
+									<input type="checkbox" id="I5" disabled>
+								</span> 
+								<span class="seat">
+									<label for="I6">I6</label>
+									<input type="checkbox" id="I6" disabled>
+								</span> 	
+							</li>
+							<li class="row">
+								<span class="seat">
+									<label for="J1">J1</label>
+									<input type="checkbox" id="J1" disabled>
+								</span>
+								<span class="seat">
+									<label for="J2">J2</label>
+									<input type="checkbox" id="J2" disabled>
+								</span>
+								<span class="seat">
+									<label for="J3">J3</label>
+									<input type="checkbox" id="J3" disabled>
+								</span>
+								<span class="seat">
+									<label for="J4">J4</label>
+									<input type="checkbox" id="J4" disabled>
+								</span>
+								<span class="seat">
+									<label for="J5">J5</label>
+									<input type="checkbox" id="J5" disabled>
+								</span> 
+								<span class="seat">
+									<label for="J6">J6</label>
+									<input type="checkbox" id="J6" disabled>
+								</span> 	
+							</li>
+						</ol>
+					</div>
+				</div>
+				<div class="ticketNotice">
+					<div class="zone">
+						<div class="zone-notice-trong">
+							<a class="nope">trống</a>
+						</div>
+						<a class="noticeNope">Ghế trống</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-vip">
+							<a class="nope">vip</a>
+						</div>
+						<a class="noticeNope">Ghế Vip</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-checked">
+							<a class="nope">đang chọn</a>
+						</div>
+						<a class="noticeCheked">Ghế chọn</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-occupied">
+							<a class="nope">đã đặt</a>
+						</div>
+						<a class="noticeOccupied">Ghế đã được đặt</a>
+					</div>
+				</div>
+				<div class="userbutton">
+					<a class="button button-book" id="bookBtn">Đặt vé</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$("document").ready(function() {
+
+		/*
+		$(".seat-seat-standard-active").click(function() {
+			$(".seat-seat-standard-active").css("background-color", " #ed9900");
+			$(".seat-seat-standard-active").css("color", "white");
+		})
+
+		$(".button-book").click(function() {
+			$(".pay").fadeIn(150);
+			$(".pay").css("display", "flex");
+		})
+
+		$(".button-cancel-order").click(function() {
+			$(".pay").css("display", "none");
+		})
+
+		$(".button-confirm").click(function() {
+			$(".orderSuccess").css("display", "flex");
+			$(".pay").css("display", "none");
+		})
+
+		$(".orderSuccess").click(function() {
+			$(".orderSuccess").css("display", "none");
+		})
+
+		$(".day").click(function() {
+			$(".list-times").slideDown();
+			$(".list-times").css("display", "block");
+		})
+
+		$(".time").click(function() {
+			$(".position-selector").slideDown("slow");
+		})
+
+		$(".button-cancel").click(function() {
+			$(".position-selector").slideUp("slow");
+		})
+
+		$(".day").on('change', function() {
+			$(".day").not(this).prop('checked', false);
+		})
+
+		$(".time").on('change', function() {
+			$(".time").not(this).prop('checked', false);
+		})
+		
+		*/
+		
+		function getSelectedTicketIds() {
+			let selectedPositions = []
+			$(".seat input").each( function(index, element) {
+				if (element.checked) {
+					selectedPositions.push(element.ticketId)
+				}
+			})
+			return selectedPositions;
+		}
+		
+		let selectedIssue = null;
+		
+		$("div.list-days a").click(function(event) {
+			event.preventDefault();
+			
+			let url = $(event.currentTarget).attr("href");
+			
+			$.get(url).done( function(issues) {
+				let listTimes = $(".list-times ol").empty();
+				$(".list-times").slideDown("slow");
+				issues.forEach( function(issue) {
+					listTimes.append(
+						$(`<li class="time">${issue.time}</li>`).click( function() {
+							let _url = /*[[@{/api/ticket/get-by-issue-id}]]*/ null;
+							
+							$.get(_url, {issueId: issue.id}).done( function(tickets) {
+								tickets.forEach( function(ticket) {
+									if (ticket.availiable) {
+										$(`#${ticket.position}`)
+											.removeAttr('disabled');
+										document.getElementById(`${ticket.position}`).ticketId = ticket.id;
+									}
+									
+									if (ticket.vip) {
+										
+									}
+								});
+							});
+							
+							$(".position-selector").slideDown("slow");
+						})
+					);
+				});
+			});
+		});
+		
+		$("#bookBtn").click( function() {
+		
+			
+			$.post(/*[[@{/book}]]*/ '/book', {
+				tickets: getSelectedTicketIds()
+			})
+		})
+		
+	})
+	/*]]>*/
+	</script>
+</body>
+</html>

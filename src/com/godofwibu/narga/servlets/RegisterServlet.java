@@ -16,6 +16,7 @@ import org.thymeleaf.context.WebContext;
 import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.services.IAccountService;
 import com.godofwibu.narga.services.UserCreationException;
+import com.godofwibu.narga.utils.FormParser;
 
 @WebServlet(name = "registerServlet", urlPatterns = { "/register" })
 public class RegisterServlet extends NargaServlet {
@@ -24,16 +25,14 @@ public class RegisterServlet extends NargaServlet {
 
 	private TemplateEngine templateEngine;
 	private IAccountService accountService;
-
-	public RegisterServlet() {
-		super();
-	}
+	private FormParser formParser;
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
 		templateEngine = getAttribute(TemplateEngine.class);
 		accountService = getAttribute(IAccountService.class);
+		formParser = getAttribute(FormParser.class);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,24 +44,5 @@ public class RegisterServlet extends NargaServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		
-		Map<String, String[]> params = req.getParameterMap();
-		String userId = params.get("userId")[0];
-		String password = params.get("password")[0];
-		String confirmPassword = params.get("confirmPassword")[0];
-		String personalId = params.get("personalId")[0];
-		String name = params.get("name")[0];
-		Role role = Role.MEMBER;
-		
-		try {
-			accountService.registerNewUser(userId, password, confirmPassword, role, name, personalId);
-			req.getSession().setAttribute("user", accountService.loadUserById(userId));
-			req.getRequestDispatcher("/index").forward(req, res);
-			LOGGER.error("registered new user: {}", userId);
-		} catch (UserCreationException e) {
-			LOGGER.error("Fail to register new user: {}", e.getMessage());
-			WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());
-			webContext.setVariable("message", e.getMessage());
-			templateEngine.process("register", webContext, res.getWriter());
-		}
 	}
 }

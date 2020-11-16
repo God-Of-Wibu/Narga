@@ -1,11 +1,10 @@
 package com.godofwibu.narga.dto;
 
-public class FilmDTO {
+public class Film_DTO_Home {
 	private int id;
 	private String poster;
 	
-	
-	public FilmDTO(int id, String poster) {
+	public Film_DTO_Home(int id, String poster) {
 		super();
 		this.id = id;
 		this.poster = poster;

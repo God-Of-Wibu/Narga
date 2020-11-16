@@ -26,10 +26,6 @@ public class Profile {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
 
 	@Column(name = "personal_id")
 	private String personalId;

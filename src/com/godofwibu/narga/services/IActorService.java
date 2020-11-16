@@ -1,11 +1,11 @@
 package com.godofwibu.narga.services;
 
-import com.godofwibu.narga.dto.ActorDetail;
-import com.godofwibu.narga.dto.AddActorFormData;
+import com.godofwibu.narga.dto.Actor_DTO_ActorDetail;
+import com.godofwibu.narga.formdata.AddActorFormData;
 
 public interface IActorService {
 	void addNewActor(AddActorFormData formData) throws ServiceLayerException;
 	String getAllActorsAsJson() throws ServiceLayerException;
 	String searchActorAsJson(String input, int maxResult) throws ServiceLayerException;
-	ActorDetail getActorDetail (Integer Id) throws ServiceLayerException;
+	Actor_DTO_ActorDetail getActorDetail (Integer Id) throws ServiceLayerException;
 }

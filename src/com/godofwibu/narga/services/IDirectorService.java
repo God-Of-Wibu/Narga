@@ -1,6 +1,6 @@
 package com.godofwibu.narga.services;
 
-import com.godofwibu.narga.dto.AddDirectorFormData;
+import com.godofwibu.narga.formdata.AddDirectorFormData;
 
 public interface IDirectorService {
 

@@ -37,23 +37,31 @@ import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.repositories.IDirectorRepository;
 import com.godofwibu.narga.repositories.IFilmRepository;
 import com.godofwibu.narga.repositories.IImageDataRepository;
+import com.godofwibu.narga.repositories.IIssueRepository;
+import com.godofwibu.narga.repositories.ITicketRepository;
 import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.repositories.ImageDataRepository;
+import com.godofwibu.narga.repositories.IssueRepository;
+import com.godofwibu.narga.repositories.TicketRepository;
 import com.godofwibu.narga.repositories.UserRepository;
 import com.godofwibu.narga.services.AccountService;
 import com.godofwibu.narga.services.ActorService;
+import com.godofwibu.narga.services.BookingService;
 import com.godofwibu.narga.services.CategoryService;
 import com.godofwibu.narga.services.CountryService;
 import com.godofwibu.narga.services.DirectorService;
 import com.godofwibu.narga.services.FilmService;
 import com.godofwibu.narga.services.IAccountService;
 import com.godofwibu.narga.services.IActorService;
+import com.godofwibu.narga.services.IBookingService;
 import com.godofwibu.narga.services.ICategoryService;
 import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IDirectorService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.IImageStorageService;
+import com.godofwibu.narga.services.IIssueService;
 import com.godofwibu.narga.services.ImageStorageService;
+import com.godofwibu.narga.services.IssueService;
 import com.godofwibu.narga.utils.DateTime;
 import com.godofwibu.narga.utils.FormParser;
 import com.godofwibu.narga.utils.HibernateTransactionTemplate;
@@ -74,6 +82,7 @@ public class Initializer implements ServletContextListener {
 	public final static String FILE_DIRECTORY = "file";
 	public final static String STATIC_RESOURCE_PREFIX = "/static";
 	public final static String FILE_RESOURCE_PREFIX = "/file";
+	public final static boolean CLEAR_FILE_DIRECTORY = false;
 	
 	private SessionFactory sessionFactory;
 	private TemplateEngine templateEngine;
@@ -93,8 +102,12 @@ public class Initializer implements ServletContextListener {
 	private ITransactionTemplate transactionTemplate;
 	private IDirectorService directorService;
 	private IDirectorRepository directorRepository;
+	private IIssueService issueService;
+	private IIssueRepository issueRepository;
 
 	private FormParser formParser;
+	private ITicketRepository ticketRepository;
+	private IBookingService bookingService;
 	
 	
 
@@ -110,7 +123,8 @@ public class Initializer implements ServletContextListener {
 		ctx.setAttribute(ICountryService.class.getName(), getCountryService());
 		ctx.setAttribute(IActorService.class.getName(), getActorService());
 		ctx.setAttribute(IDirectorService.class.getName(), getDirectorService());
-		ctx.setAttribute(FormParser.class.getName(), getFormObjectBinder());
+		ctx.setAttribute(FormParser.class.getName(), getFormParser());
+		ctx.setAttribute(IIssueService.class.getName(), getIssueService());
 		insertCategories();
 		insertCountries();
 		createIndexer();
@@ -249,7 +263,7 @@ public class Initializer implements ServletContextListener {
 						FILE_RESOURCE_PREFIX,
 						getImageDataRepository(), 
 						getTransactionTemplate(),
-						false
+						CLEAR_FILE_DIRECTORY
 				);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -319,7 +333,7 @@ public class Initializer implements ServletContextListener {
 		return transactionTemplate;
 	}
 	
-	private FormParser getFormObjectBinder() {
+	private FormParser getFormParser() {
 		if (formParser == null) {
 			formParser = new FormParser();
 			formParser
@@ -346,15 +360,35 @@ public class Initializer implements ServletContextListener {
 		return directorRepository;
 	}
 	
+	private IIssueService getIssueService() {
+		if (issueService == null) {
+			issueService = new IssueService(getTransactionTemplate(), getIssueRepository(), getFilmRepository(), getTicketRepository());
+		}
+		return issueService;
+	}
+	
+	private ITicketRepository getTicketRepository() {
+		if (ticketRepository == null) {
+			ticketRepository = new TicketRepository(getSessionFactory());
+		}
+		return ticketRepository;
+	}
+
+	private IIssueRepository getIssueRepository() {
+		if (issueRepository == null) {
+			issueRepository = new IssueRepository(getSessionFactory());
+		}
+		return issueRepository;
+	}
+	
+	private IBookingService getBookingService() {
+		if (bookingService == null) {
+			bookingService = new BookingService(getTransactionTemplate(), getTicketRepository());
+		}
+		return bookingService;
+	}
+
 	private String toStaticUrl(String path) {
 		return getContextPath() + STATIC_RESOURCE_PREFIX + path;
-	}
-	
-	private String toFileUrl(String path) {
-		return getContextPath() + FILE_RESOURCE_PREFIX + path;
-	}
-	
-	private void addAttribute(String name) {
-		
 	}
 }

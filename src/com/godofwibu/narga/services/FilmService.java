@@ -17,9 +17,10 @@ import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.entities.Issue;
-import com.godofwibu.narga.dto.AddFilmFormData;
-import com.godofwibu.narga.dto.FilmDTO;
+import com.godofwibu.narga.formdata.AddFilmFormData;
+import com.godofwibu.narga.dto.Film_DTO_Home;
 import com.godofwibu.narga.entities.Actor;
+import com.godofwibu.narga.repositories.DataAccessLayerException;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
@@ -128,22 +129,30 @@ public class FilmService implements IFilmService {
 	}
 
 	@Override
-	public List<FilmDTO> getFilmInWeek() throws ServiceLayerException {
+	public List<Film_DTO_Home> getFilmInWeek() throws ServiceLayerException {
 		return transactionTemplate.execute(() -> {
-			List<FilmDTO> films = new ArrayList<FilmDTO>();
+			List<Film_DTO_Home> films = new ArrayList<Film_DTO_Home>();
 			List<Issue> issues = issueService.getIssuesInThisWeek();
 			for (Issue issue : issues) {
 				Film film = issue.getFilm();
-				films.add(new FilmDTO(film.getId(),film.getPoster().getUrl()));
+				films.add(new Film_DTO_Home(film.getId(),film.getPoster().getUrl()));
 			}
 			return films;
 		}) ;
 	}
 
 	@Override
-	public List<FilmDTO> getHotFilms() throws ServiceLayerException {
-		// TODO Auto-generated method stub
+	public List<Film_DTO_Home> getHotFilms() throws ServiceLayerException {
 		return null;
+	}
+
+	@Override
+	public Film getFilm(int filmId) throws ServiceLayerException {
+		try {
+			return transactionTemplate.execute(() -> filmRepository.findById(filmId));
+		} catch (DataAccessLayerException e) {
+			throw new ServiceLayerException("execute operation failed", e);
+		}
 	}
 
 }

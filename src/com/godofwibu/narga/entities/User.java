@@ -33,7 +33,6 @@ public class User {
 	@Column(name = "role", nullable = false)
 	private Role role;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@Cascade(CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY)
 	private Profile profile;
 }

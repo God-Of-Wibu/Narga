@@ -74,6 +74,10 @@
 .row {
 	padding: 10px;
 	text-align: center;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;	
 }
 
 .screen {
@@ -93,12 +97,6 @@
 .text-center h1{
 	margin-bottom: 10px;
 }
-.seats {
-	display: flex;
-	flex-direction: row;
-	flex-wrap: nowrap;
-	justify-content: center;
-}
 
 .seat {
 	display: flex;
@@ -107,13 +105,15 @@
 	justify-content: center;
 }
 
+
+
 .seat input[type=checkbox] {
 	position: absolute;
 	opacity: 0;
 }
 
 .seat input[type=checkbox]:checked+label {
-	background: #198798;
+	background-color: #198798;
 	-webkit-animation-name: rubberBand;
 	animation-name: rubberBand;
 	animation-duration: 300ms;
@@ -121,7 +121,7 @@
 }
 
 .seat input[type=checkbox]:disabled+label {
-	background: #dddddd;
+	background-color: #dddddd;
 	text-indent: -9999px;
 	overflow: hidden;
 }
@@ -129,6 +129,10 @@
 .seat input[type=checkbox]:disabled+label:hover {
 	box-shadow: none;
 	cursor: not-allowed;
+}
+
+.seat input[type=checkbox]+label{
+	background-color:  #ffba3b;
 }
 
 .seat label {
@@ -161,7 +165,6 @@
 	cursor: pointer;
 	box-shadow: 0 0 0px 2px #198798;
 }
-
 ol {
 	padding: 0px 30px;
 	font-weight: bold;
@@ -298,13 +301,12 @@ ol {
 	border: 1px solid;
 }
 
-.list-days ol li{
-	display: inline;
-	font-family: 'Ubuntu', sans-serif;
-}
-
 .list-days{
 	text-align: center;
+}
+
+.list-days a {
+	text-decoration: none;	
 }
 
 .day{
@@ -320,11 +322,6 @@ ol {
 .list-times{
 	display: none;
 	text-align: center;
-}
-
-.list-times ol li{
-	display: inline;
-	font-family: 'Ubuntu', sans-serif;
 }
 
 .time{
@@ -406,4 +403,16 @@ input[type=checkbox]:disabled+ .time {
 	height: 120px;
 	width: auto;
 	display: inline-block;
+}
+
+.seat-availible {
+	background-color: #ffba3b;
+}
+
+.seat-unavailiable {
+	background-color: #d3d7cf;
+}
+
+.seat-checked {
+	background-color: #729fcf; 
 }

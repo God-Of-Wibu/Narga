@@ -1,0 +1,4 @@
+
+
+DROP DATABASE Narga
+go

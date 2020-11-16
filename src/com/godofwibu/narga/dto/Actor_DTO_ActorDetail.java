@@ -13,22 +13,22 @@ import lombok.Data;
 
 
 @Data
-public class ActorDetail {
+public class Actor_DTO_ActorDetail {
 	private String name;
 	private String gender;
 	private Integer age;
 	private String avatar;
 	private Country country;
-	private Set<FilmResume> films;
-	public ActorDetail(Actor actor) {
+	private Set<Film_DTO_ActorDetail> films;
+	public Actor_DTO_ActorDetail(Actor actor) {
 		this.name = actor.getName();
 		this.gender = actor.getGender() == Gender.MALE ? "Nam":"Nữ";
 		this.age = actor.getAge();
 		this.avatar = actor.getAvatar().getUrl();
 		this.country = actor.getCountry();
-		this.films = new HashSet<FilmResume>();
+		this.films = new HashSet<Film_DTO_ActorDetail>();
 		for(Film film : actor.getFilms() ) {
-			films.add(new FilmResume(film));
+			films.add(new Film_DTO_ActorDetail(film));
 		}
 	}
 

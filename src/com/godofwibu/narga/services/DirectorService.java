@@ -6,12 +6,12 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.godofwibu.narga.dto.AddActorFormData;
-import com.godofwibu.narga.dto.AddDirectorFormData;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.entities.Director;
 import com.godofwibu.narga.entities.ImageData;
+import com.godofwibu.narga.formdata.AddActorFormData;
+import com.godofwibu.narga.formdata.AddDirectorFormData;
 import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.repositories.IDirectorRepository;
 import com.godofwibu.narga.utils.ITransactionTemplate;

@@ -134,7 +134,9 @@ $("document").ready(function() {
 			return;
 		}
 		
-		$.post(location.href, data)
+		$.post(location.href, data).done(function(resposeBody) {
+			console.log(resposeBody)
+		})
 		
 		})
 

@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.thymeleaf.context.WebContext;
 
-import com.godofwibu.narga.dto.AddActorFormData;
 import com.godofwibu.narga.entities.Gender;
+import com.godofwibu.narga.formdata.AddActorFormData;
 import com.godofwibu.narga.services.IActorService;
 import com.godofwibu.narga.services.ICountryService;
 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 
 import com.godofwibu.narga.entities.Issue;
+import com.google.gson.JsonElement;
 
 public class IssueRepository extends CrudRepository<Issue, Integer> implements  IIssueRepository {
 
@@ -14,10 +15,18 @@ public class IssueRepository extends CrudRepository<Issue, Integer> implements  
 	}
 
 	@Override
-	public List<Issue> getIssueByDateBetween(Date begin, Date end) {
-		return getSession().createQuery("FROM Issue As _issue WHERE _issue.date BETWEEN :beginDate AND :endDate", Issue.class)
+	public List<Issue> findByDateBetween(Date begin, Date end) {
+		return getSession().createQuery("FROM Issue AS _issue WHERE _issue.date BETWEEN :beginDate AND :endDate", Issue.class)
 				.setParameter("beginDate", begin)
 				.setParameter("endDate", end)
+				.getResultList();
+	}
+
+	@Override
+	public List<Issue> findByFilmIdAndDate(int filmId, Date date) {
+		return getSession().createQuery("FROM Issue AS _issue WHERE _issue.date=:date AND _issue.film.id=:filmId", Issue.class)
+				.setParameter("date", date)
+				.setParameter("filmId", filmId)
 				.getResultList();
 	}
 

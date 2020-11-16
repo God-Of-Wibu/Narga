@@ -1,5 +1,6 @@
 package com.godofwibu.narga.entities;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -126,7 +127,7 @@ public class Film {
 	@DateBridge(resolution = Resolution.YEAR)
 	@Expose
 	@Column(name = "release_date")
-	private java.util.Date releaseDate;
+	private Date releaseDate;
 	
 	@Expose
 	@IndexedEmbedded

@@ -1,4 +1,4 @@
-package com.godofwibu.narga.dto;
+package com.godofwibu.narga.formdata;
 
 import com.godofwibu.narga.utils.DateTime;
 import com.godofwibu.narga.utils.ParameterName;

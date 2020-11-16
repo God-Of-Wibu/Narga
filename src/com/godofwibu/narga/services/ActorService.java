@@ -6,11 +6,11 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.io.FilenameUtils;
 
-import com.godofwibu.narga.dto.ActorDetail;
-import com.godofwibu.narga.dto.AddActorFormData;
+import com.godofwibu.narga.dto.Actor_DTO_ActorDetail;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.entities.Country;
 import com.godofwibu.narga.entities.ImageData;
+import com.godofwibu.narga.formdata.AddActorFormData;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.utils.ITransactionTemplate;
@@ -84,9 +84,9 @@ public class ActorService implements IActorService {
 	}
 
 	@Override
-	public ActorDetail getActorDetail(Integer id) throws ServiceLayerException {
+	public Actor_DTO_ActorDetail getActorDetail(Integer id) throws ServiceLayerException {
 		return transactionTemplate.execute(()->{
-			return new ActorDetail(actorRepository.findById(id));
+			return new Actor_DTO_ActorDetail(actorRepository.findById(id));
 	});
 	}
 }

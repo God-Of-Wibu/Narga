@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.thymeleaf.context.WebContext;
 
-import com.godofwibu.narga.dto.AddFilmFormData;
+import com.godofwibu.narga.formdata.AddFilmFormData;
 import com.godofwibu.narga.services.ICountryService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.services.ServiceLayerException;

@@ -42,7 +42,7 @@ public class AddActor extends NargaServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		WebContext context = new WebContext(req, res, getServletContext(), req.getLocale());
 		req.setCharacterEncoding("UTF-8");
-		AddActorFormData formData = formParser.getFormObject(req, AddActorFormData.class);
+		AddActorFormData formData = formParser.parse(req, AddActorFormData.class);
 		actorService.addNewActor(formData);
 		context.setVariable("status", formData.getName() + " was added to database");
 		context.setVariable("genderValues", Gender.values());

@@ -1,5 +1,9 @@
 package com.godofwibu.narga.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.godofwibu.narga.dto.TicketData;
 import com.godofwibu.narga.entities.Ticket;
 import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.formdata.BookingFormData;
@@ -14,7 +18,6 @@ public class BookingService implements IBookingService{
 	private ITicketRepository ticketRepository;
 	
 	public BookingService(ITransactionTemplate transactionTemplate, ITicketRepository ticketRepository) {
-		super();
 		this.transactionTemplate = transactionTemplate;
 		this.ticketRepository = ticketRepository;
 	}
@@ -25,13 +28,33 @@ public class BookingService implements IBookingService{
 			transactionTemplate.execute(() -> {
 				for (Integer ticketId : formData.getTicketIds()) {
 					Ticket ticket = ticketRepository.findById(ticketId);
-					if (ticket.getOwner() != null)
-						throw new ServiceLayerException("ticket");
+					
 					ticket.setOwner(user);
 				}
 			});
 		} catch (DataAccessLayerException ex) {
 			throw new ServiceLayerException("failed to execute operation", ex);
+		}
+	}
+
+	@Override
+	public List<TicketData> getAllBookedTickets(User user) throws ServiceLayerException {
+		try {
+			return transactionTemplate.execute(() -> {
+				List<TicketData> ticketDatas = new ArrayList<>();
+				ticketRepository.findByUserId(user.getId()).forEach(ticket -> {
+					TicketData ticketData = new TicketData();
+					ticketData.setPosition(ticket.getPosition());
+					ticketData.setCost(ticket.getCost());
+					ticketData.setFilmTitle(ticket.getIssue().getFilm().getTitle());
+					ticketData.setDate(ticket.getIssue().getDate());
+					ticketData.setStartingTime(ticket.getIssue().getTime());
+					ticketDatas.add(ticketData);
+				});
+				return ticketDatas;
+			});
+		} catch (DataAccessLayerException e) {
+			throw new ServiceLayerException("query fail", e);
 		}
 	}
 }

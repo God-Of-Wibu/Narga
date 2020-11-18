@@ -19,5 +19,13 @@ public class TicketRepository extends CrudRepository<Ticket, Integer> implements
 				.setParameter("issueId", issueId)
 				.getResultList();
 	}
+
+	@Override
+	public List<Ticket> findByUserId(String userId) {
+		return getSession()
+				.createQuery("FORM Ticket ticket_ WHERE ticket.owner.id=:userId", Ticket.class)
+				.setParameter("userId", userId)
+				.getResultList();
+	}
 	
 }

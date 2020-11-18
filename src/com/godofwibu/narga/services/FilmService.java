@@ -22,7 +22,7 @@ import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.entities.Issue;
 import com.godofwibu.narga.formdata.AddFilmFormData;
-import com.godofwibu.narga.dto.Film_DTO_Home;
+import com.godofwibu.narga.dto.FilmResumeHome;
 import com.godofwibu.narga.entities.Actor;
 import com.godofwibu.narga.repositories.DataAccessLayerException;
 import com.godofwibu.narga.repositories.IActorRepository;
@@ -141,9 +141,9 @@ public class FilmService implements IFilmService {
 	}
 
 	@Override
-	public List<Film_DTO_Home> getFilmInThisWeek() throws ServiceLayerException {
+	public List<FilmResumeHome> getFilmInThisWeek() throws ServiceLayerException {
 		return transactionTemplate.execute(() -> {
-			List<Film_DTO_Home> film_DTO_Homes = new ArrayList<>();
+			List<FilmResumeHome> filmResumeHomes = new ArrayList<>();
 			
 			SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
 			String d1 = format.format(getFirstDaysOfCurrentWeek());
@@ -152,13 +152,13 @@ public class FilmService implements IFilmService {
 			List<Film> films = filmRepository.findHasIssueBetween(getFirstDaysOfCurrentWeek(), getLastDayOfThisWeek());
 			
 			filmRepository.findHasIssueBetween(getFirstDaysOfCurrentWeek(), getLastDayOfThisWeek())
-				.forEach(film -> film_DTO_Homes.add(new Film_DTO_Home(film.getTitle(), film.getId(), film.getPoster().getUrl())));
-			return film_DTO_Homes;
+				.forEach(film -> filmResumeHomes.add(new FilmResumeHome(film.getTitle(), film.getId(), film.getPoster().getUrl())));
+			return filmResumeHomes;
 		}) ;
 	}
 
 	@Override
-	public List<Film_DTO_Home> getHotFilms() throws ServiceLayerException {
+	public List<FilmResumeHome> getHotFilms() throws ServiceLayerException {
 		return null;
 	}
 

@@ -1,7 +1,6 @@
 package com.godofwibu.narga.servlets;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,16 +17,14 @@ import org.thymeleaf.context.WebContext;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.formdata.BookingFormData;
-import com.godofwibu.narga.services.BookingService;
-import com.godofwibu.narga.services.FilmService;
 import com.godofwibu.narga.services.IBookingService;
 import com.godofwibu.narga.services.IFilmService;
 import com.godofwibu.narga.utils.FormParser;
 
-// /book/{filmid}
 @WebServlet("/book")
 public class BookingServlet extends NargaServlet {
 	
+	private static final long serialVersionUID = 4721880048245339947L;
 	private TemplateEngine templateEngine;
 	private IFilmService filmService;
 	private IBookingService bookingService;
@@ -60,6 +57,8 @@ public class BookingServlet extends NargaServlet {
 		
 		if (film == null) {
 			res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			// TODO: hiển thị trang thông báo lỗi
+			
 			return;
 		}
 		
@@ -71,10 +70,7 @@ public class BookingServlet extends NargaServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
-		req.getParameterMap().forEach((k, v) -> System.out.println("{ key: " + k + ", value: " + v +" }"));
-		
-		bookingService.book(formParser.getFormObject(req, BookingFormData.class), (User)req.getSession().getAttribute("user"));
+		bookingService.book(formParser.parse(req, BookingFormData.class), (User)req.getSession().getAttribute("user"));
 		res.getWriter().println("Dat ve thanh cong");
 	}
 	

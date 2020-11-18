@@ -49,7 +49,7 @@ public class AddFilmServlet extends NargaServlet {
 			throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		try {	
-			AddFilmFormData addFilmFormData = formParser.getFormObject(req, AddFilmFormData.class);
+			AddFilmFormData addFilmFormData = formParser.parse(req, AddFilmFormData.class);
 			filmService.addNewFilm(addFilmFormData);
 			res.setContentType("text/plain");
 			res.getWriter().print("successfully!");

@@ -19,16 +19,16 @@ public class DirectorDetail {
 	private Country country;
 	
 	
-	private Set<Film_DTO_ActorDetail> films;
+	private Set<FilmResume> films;
 	public DirectorDetail(Director director) {
 		this.name = director.getName();
 		this.gender = director.getGender() == Gender.MALE ? "Nam":"Nữ";
 		this.age = director.getAge();
 		this.avatar = director.getAvatar().getUrl();
 		this.country = director.getCountry();
-		this.films = new HashSet<Film_DTO_ActorDetail>();
+		this.films = new HashSet<FilmResume>();
 		for(Film film : director.getFilms() ) {
-			films.add(new Film_DTO_ActorDetail(film));
+			films.add(new FilmResume(film));
 		}
 }
 }

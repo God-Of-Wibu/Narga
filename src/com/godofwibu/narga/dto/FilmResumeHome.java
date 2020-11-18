@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Film_DTO_Home {
+public class FilmResumeHome {
 	private String title;
 	private int id;
 	private String poster;

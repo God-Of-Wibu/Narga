@@ -45,7 +45,7 @@ public class RegisterServlet extends NargaServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		try {
-			User user = accountService.registerNewUser(formParser.getFormObject(req, RegisterFormData.class));
+			User user = accountService.registerNewUser(formParser.parse(req, RegisterFormData.class));
 			req.getSession().setAttribute("user", user);
 			String returnPage = req.getRequestURI().substring(req.getContextPath().length());
 			returnPage = returnPage.equals("/register") ? "/index" : returnPage;

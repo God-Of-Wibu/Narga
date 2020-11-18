@@ -5,12 +5,12 @@ import com.godofwibu.narga.entities.Film;
 import lombok.Data;
 
 @Data
-public class Film_DTO_ActorDetail {
+public class FilmResume {
 	private int id;
 	private String title;
 	private String description;
 	private String poster;
-	public Film_DTO_ActorDetail(Film film) {
+	public FilmResume(Film film) {
 		this.id = film.getId(); 
 		this.title = film.getTitle();
 		this.description = film.getDescription();

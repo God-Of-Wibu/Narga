@@ -18,7 +18,7 @@ public class FormParser {
 		converters = new HashMap<Class<?>, IConverter<?>>();
 	}
 	
-	public <T> T getFormObject(HttpServletRequest req, Class<T> type)
+	public <T> T parse(HttpServletRequest req, Class<T> type)
 			throws NoSuchConverterException, IOException, ServletException, NoSuchParameterException {
 		T formData;
 		Map<String, String[]> parameterMap = req.getParameterMap();

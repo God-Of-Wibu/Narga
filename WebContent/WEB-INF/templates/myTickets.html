@@ -79,7 +79,7 @@ h1 {
 .card {
 	display: table-row;
 	width: 49%;
-	background-color: rgba(0,135,152,0.05);
+	background-color: rgba(34, 49, 17, 0.7);
 	color: #989898;
 	margin-bottom: 10px;
 	font-family: 'Oswald', sans-serif;
@@ -222,47 +222,25 @@ h1 {
 	<section class="container">
 		<h1>Vé Của Bạn</h1>
 		<div class="row">
-			<article class="card fl-left">
+			<article  th:each="ticket : ${tickets}" class="card fl-left">
 				<section class="date">
 					<time datetime="23th feb">
-						<span>23</span><span>feb</span>
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
 					</time>
 				</section>
 				<section class="card-cont">
 					<small>RẠP PHIM WIBU LORD</small>
-					<h3>Mắt Chột</h3>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
 					<div class="even-date">
 						<i class="fa fa-calendar"></i>
 						<time>
-							<span>wednesday 28 december 2014</span> <span>08:55pm to
-								12:00 am</span>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
 						</time>
 					</div>
 					<div class="even-info">
 						<i class="fa fa-map-marker"></i>
-						<p>80.000Đ</p>
-					</div>
-				</section>
-			</article>
-			<article class="card fl-left">
-				<section class="date">
-					<time datetime="23th feb">
-						<span>23</span><span>feb</span>
-					</time>
-				</section>
-				<section class="card-cont">
-					<small>RẠP PHIM WIBU LORD</small>
-					<h3>Mắt Chột</h3>
-					<div class="even-date">
-						<i class="fa fa-calendar"></i>
-						<time>
-							<span>wednesday 28 december 2014</span> <span>08:55pm to
-								12:00 am</span>
-						</time>
-					</div>
-					<div class="even-info">
-						<i class="fa fa-map-marker"></i>
-						<p>80.000Đ</p>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
 					</div>
 				</section>
 			</article>

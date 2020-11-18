@@ -44,7 +44,7 @@ public class SecurityFilter implements Filter {
     					res.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     			}
     		}
-    	} else  if (url.startsWith("/book")){
+    	} else  if (url.startsWith("/book") || url.startsWith("/my-tickets")){
     		if (session == null) {
     			req.getRequestDispatcher("/login").forward(req, res);
     		} else {

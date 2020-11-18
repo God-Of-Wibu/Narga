@@ -23,7 +23,7 @@ public class TicketRepository extends CrudRepository<Ticket, Integer> implements
 	@Override
 	public List<Ticket> findByUserId(String userId) {
 		return getSession()
-				.createQuery("FORM Ticket ticket_ WHERE ticket.owner.id=:userId", Ticket.class)
+				.createQuery("FROM Ticket ticket_ WHERE ticket_.owner.id=:userId", Ticket.class)
 				.setParameter("userId", userId)
 				.getResultList();
 	}

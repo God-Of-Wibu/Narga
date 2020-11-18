@@ -33,7 +33,7 @@ public class Profile {
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
-	@Column(name = "email", unique = true)
+	@Column(name = "email")
 	private String email;
 	
 	@Column(name = "name")

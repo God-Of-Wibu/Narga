@@ -1,5 +1,7 @@
 package com.godofwibu.narga.utils;
 
+import javax.persistence.PersistenceException;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -74,7 +76,7 @@ public class HibernateTransactionTemplate implements ITransactionTemplate{
 
 class ExceptionConverter {
 	public RuntimeException convert(Exception e) {
-		if (e instanceof HibernateException) {
+		if (e instanceof HibernateException || e instanceof PersistenceException) {
 			return new DataAccessLayerException(e);
 		}
 		if (e instanceof ServiceLayerException)

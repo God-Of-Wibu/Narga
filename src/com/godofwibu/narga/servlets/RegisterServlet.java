@@ -45,11 +45,11 @@ public class RegisterServlet extends NargaServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
 		try {
+			req.setCharacterEncoding("UTF-8");
 			User user = accountService.registerNewUser(formParser.parse(req, RegisterFormData.class));
 			req.getSession().setAttribute("user", user);
-			String returnPage = req.getRequestURI().substring(req.getContextPath().length());
-			returnPage = returnPage.equals("/register") ? "/index" : returnPage;
-			req.getRequestDispatcher(returnPage).forward(req, res);
+			String returnPage = "/home";
+			res.sendRedirect(req.getContextPath() + returnPage);
 			
 		} catch (ServiceLayerException ex) {
 			WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());

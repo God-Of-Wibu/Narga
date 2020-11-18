@@ -13,7 +13,7 @@ import org.thymeleaf.context.WebContext;
 
 import com.godofwibu.narga.formdata.NewIssueFormData;
 import com.godofwibu.narga.services.IIssueService;
-import com.godofwibu.narga.services.ServiceLayerException;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.FormParser;
 
 @WebServlet("/admin/new-issue")
@@ -28,9 +28,9 @@ public class NewIssueServlet extends NargaServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		templateEngine = getAttribute(TemplateEngine.class);
-		issueService = getAttribute(IIssueService.class);
-		formParser = getAttribute(FormParser.class);
+		templateEngine = getAttributeByClassName(TemplateEngine.class);
+		issueService = getAttributeByClassName(IIssueService.class);
+		formParser = getAttributeByClassName(FormParser.class);
 	}
 	
 	@Override
@@ -45,11 +45,11 @@ public class NewIssueServlet extends NargaServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		req.setCharacterEncoding("UTF-8");
 		NewIssueFormData formData = formParser.getFormObject(req, NewIssueFormData.class);
-		
 		res.setCharacterEncoding("UTF-8");	
 		try {
-		issueService.newIssues(formData);
-		res.getWriter().write("dữ liệu đã được ghi");} catch (ServiceLayerException e) {
+			issueService.newIssues(formData);
+			res.getWriter().write("dữ liệu đã được ghi");
+		} catch (ServiceLayerException e) {
 			LOOGER.error("Error", e);
 			res.getWriter().write("error: " + e.getMessage());
 		}

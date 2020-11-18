@@ -8,6 +8,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -26,6 +27,9 @@ import com.godofwibu.narga.entities.Director;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.entities.ImageData;
+import com.godofwibu.narga.entities.Profile;
+import com.godofwibu.narga.entities.Role;
+import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.repositories.ActorRepository;
 import com.godofwibu.narga.repositories.CategoryRepository;
 import com.godofwibu.narga.repositories.CountryRepository;
@@ -78,12 +82,12 @@ public class Initializer implements ServletContextListener {
 
 	private static final String HIBERNATE_CFG_PATH = "hibernate.cfg.xml";
 	private final static Logger LOGGER = Logger.getLogger(Initializer.class);
-	
+
 	public final static String FILE_DIRECTORY = "file";
 	public final static String STATIC_RESOURCE_PREFIX = "/static";
 	public final static String FILE_RESOURCE_PREFIX = "/file";
 	public final static boolean CLEAR_FILE_DIRECTORY = false;
-	
+
 	private SessionFactory sessionFactory;
 	private TemplateEngine templateEngine;
 	private IUserRepository userRepository;
@@ -108,10 +112,9 @@ public class Initializer implements ServletContextListener {
 	private FormParser formParser;
 	private ITicketRepository ticketRepository;
 	private IBookingService bookingService;
-	
-	
 
-	public Initializer() { }
+	public Initializer() {
+	}
 
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext ctx = sce.getServletContext();
@@ -125,20 +128,27 @@ public class Initializer implements ServletContextListener {
 		ctx.setAttribute(IDirectorService.class.getName(), getDirectorService());
 		ctx.setAttribute(FormParser.class.getName(), getFormParser());
 		ctx.setAttribute(IIssueService.class.getName(), getIssueService());
+		ctx.setAttribute(IBookingService.class.getName(), getBookingService());
 		insertCategories();
 		insertCountries();
 		createIndexer();
+		createAdminUser();
+	}
+
+	private void createAdminUser() {
+		try {
+			getTransactionTemplate().execute(() -> {
+				getUserRepository().save(
+						new User("ADMIN", "12345678", Role.ADMIN, new Profile("241813141", "ADMIN", Gender.MALE)));
+			});
+		} catch (Exception ignored) {
+		}
 	}
 
 	private void createIndexer() {
 		FullTextSession fullTextSession = Search.getFullTextSession(getSessionFactory().getCurrentSession());
 		try {
-			fullTextSession.createIndexer(
-				Film.class, 
-				Actor.class, 
-				Director.class, 
-				Country.class
-			).startAndWait();
+			fullTextSession.createIndexer(Film.class, Actor.class, Director.class, Country.class).startAndWait();
 			fullTextSession.close();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
@@ -154,8 +164,7 @@ public class Initializer implements ServletContextListener {
 
 	private SessionFactory getSessionFactory() {
 		if (sessionFactory == null) {
-			StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-					.configure(HIBERNATE_CFG_PATH)
+			StandardServiceRegistry registry = new StandardServiceRegistryBuilder().configure(HIBERNATE_CFG_PATH)
 					.build();
 			MetadataSources metadataSources = new MetadataSources(registry);
 
@@ -170,7 +179,7 @@ public class Initializer implements ServletContextListener {
 		templateResolver.setPrefix("/WEB-INF/templates/");
 		templateResolver.setSuffix(".html");
 		templateResolver.setCharacterEncoding("UTF-8");
-		
+
 		templateResolver.setCacheTTLMs(Long.valueOf(3600000L));
 		templateResolver.setCacheable(true);
 		return templateResolver;
@@ -183,73 +192,73 @@ public class Initializer implements ServletContextListener {
 		}
 		return templateEngine;
 	}
-	
+
 	private IUserRepository getUserRepository() {
 		if (userRepository == null) {
 			userRepository = new UserRepository(getSessionFactory());
 		}
 		return userRepository;
 	}
-	
+
 	private IActorRepository getActorRepository() {
 		if (actorRepository == null) {
 			actorRepository = new ActorRepository(getSessionFactory());
 		}
 		return actorRepository;
 	}
-	
+
 	private void insertCategories() {
 		ICategoryRepository repo = getCategoryRepository();
 		try {
 			getTransactionTemplate().execute(() -> {
-				repo.insert(new Category("comedy"));
-				repo.insert(new Category("romantic"));
-				repo.insert(new Category("action"));
-				repo.insert(new Category("sic-fi"));
+				repo.save(new Category("comedy"));
+				repo.save(new Category("romantic"));
+				repo.save(new Category("action"));
+				repo.save(new Category("sic-fi"));
+				repo.save(new Category("drama"));
+				repo.save(new Category("adventure"));
+				repo.save(new Category("honor"));
 			});
-		}catch (Exception e) {
-			// TODO: handle exception
+		} catch (Exception ignored) {
+
 		}
 	}
-	
+
 	private void insertCountries() {
 		ICountryRepository repo = getCountryRepository();
 		try {
 			getTransactionTemplate().execute(() -> {
-				repo.insert(new Country("vi", "Viet Nam", 
-						new ImageData(toStaticUrl("/images/flags/vietnam.png"))));
-				repo.insert(new Country("usa", "United States of America",
+				repo.save(new Country("vi", "Viet Nam", new ImageData(toStaticUrl("/images/flags/vietnam.png"))));
+				repo.save(new Country("usa", "United States of America",
 						new ImageData(toStaticUrl("/images/flags/united-states-of-america.png"))));
-				repo.insert(new Country("uk", "United Kingdom",
+				repo.save(new Country("uk", "United Kingdom",
 						new ImageData(toStaticUrl("/images/flags/united-kingdom.png"))));
-				repo.insert(new Country("ca", "China",
-						new ImageData(toStaticUrl("/images/flags/china.png"))));
-				repo.insert(new Country("jap", "Japan",
-						new ImageData(toStaticUrl("/images/flags/japan.png"))));
+				repo.save(new Country("ca", "China", new ImageData(toStaticUrl("/images/flags/china.png"))));
+				repo.save(new Country("jap", "Japan", new ImageData(toStaticUrl("/images/flags/japan.png"))));
 			});
-		}catch (Exception e) {
-			LOGGER.error("insert countries fail", e);
+		} catch (Exception ignored) {
+
 		}
 	}
-	
+
 	private ICategoryRepository getCategoryRepository() {
 		if (categoryRepository == null) {
 			categoryRepository = new CategoryRepository(getSessionFactory());
 		}
 		return categoryRepository;
 	}
-	
+
 	private ICountryRepository getCountryRepository() {
 		if (countryRepository == null) {
 			countryRepository = new CountryRepository(getSessionFactory());
 		}
 		return countryRepository;
 	}
-	
+
 	private IAccountService getAccountService() {
 		if (accountService == null) {
-			accountService = new AccountService(getImageStorageService(), 
-					getUserRepository(), getTransactionTemplate());
+			accountService = new AccountService(getImageStorageService(), getUserRepository(),
+					getTransactionTemplate());
 		}
 		return accountService;
 	}
@@ -257,14 +266,8 @@ public class Initializer implements ServletContextListener {
 	private IImageStorageService getImageStorageService() {
 		if (imageStorageService == null) {
 			try {
-				imageStorageService = new ImageStorageService(
-						getContextPath(), 
-						FILE_DIRECTORY,
-						FILE_RESOURCE_PREFIX,
-						getImageDataRepository(), 
-						getTransactionTemplate(),
-						CLEAR_FILE_DIRECTORY
-				);
+				imageStorageService = new ImageStorageService(getContextPath(), FILE_DIRECTORY, FILE_RESOURCE_PREFIX,
+						getImageDataRepository(), getTransactionTemplate(), CLEAR_FILE_DIRECTORY);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -278,21 +281,15 @@ public class Initializer implements ServletContextListener {
 		}
 		return imageDataRepository;
 	}
-	
+
 	private String getContextPath() {
 		return contextPath;
 	}
 
 	public IFilmService getFilmService() {
 		if (filmService == null) {
-			filmService = new FilmService(
-					getFilmRepository(), 
-					getImageStorageService(), 
-					getCountryRepository(), 
-					getCategoryRepository(),
-					getActorRepository(),
-					getTransactionTemplate()
-			);
+			filmService = new FilmService(getFilmRepository(), getImageStorageService(), getCountryRepository(),
+					getCategoryRepository(), getActorRepository(), getTransactionTemplate(), getDirectorRepository());
 		}
 		return filmService;
 	}
@@ -303,70 +300,72 @@ public class Initializer implements ServletContextListener {
 		}
 		return filmRepository;
 	}
-	
+
 	private ICategoryService getCategoryService() {
 		if (categoryService == null) {
 			categoryService = new CategoryService(getCategoryRepository(), getTransactionTemplate());
 		}
 		return categoryService;
 	}
-	
-	
+
 	private ICountryService getCountryService() {
 		if (countryService == null) {
 			countryService = new CountryService(getCountryRepository(), getTransactionTemplate());
 		}
 		return countryService;
 	}
-	
+
 	private IActorService getActorService() {
 		if (actorService == null) {
-			actorService = new ActorService(getImageStorageService(), getActorRepository(), getCountryRepository(), getTransactionTemplate());
+			actorService = new ActorService(getImageStorageService(), getActorRepository(), getCountryRepository(),
+					getTransactionTemplate());
 		}
 		return actorService;
 	}
-	
+
 	private ITransactionTemplate getTransactionTemplate() {
 		if (transactionTemplate == null) {
 			transactionTemplate = new HibernateTransactionTemplate(getSessionFactory());
 		}
 		return transactionTemplate;
 	}
-	
+
 	private FormParser getFormParser() {
 		if (formParser == null) {
 			formParser = new FormParser();
-			formParser
-				.addConverter(String.class, new StringConverter())
-				.addConverter(Integer.class, new IntegerConverter())
-				.addConverter(Gender.class,	new GenderConverter())
-				.addConverter(String[].class, new StringArrayConverter())
-				.addConverter(Integer[].class, new IntegerArrayConverter())
-				.addConverter(DateTime[].class, new DateTimeArrayConverter());
+			formParser.addConverter(String.class, new StringConverter())
+					.addConverter(Integer.class, new IntegerConverter())
+					.addConverter(Gender.class, new GenderConverter())
+					.addConverter(String[].class, new StringArrayConverter())
+					.addConverter(Integer[].class, new IntegerArrayConverter())
+					.addConverter(DateTime[].class, new DateTimeArrayConverter());
 		}
 		return formParser;
 	}
-	
+
 	private IDirectorService getDirectorService() {
-		if(directorService == null) {
-			directorService = new DirectorService(getImageStorageService(), getDirectorRepository(), getCountryRepository(), getTransactionTemplate());
+		if (directorService == null) {
+			directorService = new DirectorService(getImageStorageService(), getDirectorRepository(),
+					getCountryRepository(), getTransactionTemplate());
 		}
 		return directorService;
 	}
+
 	private IDirectorRepository getDirectorRepository() {
-		if(directorRepository == null) {
+		if (directorRepository == null) {
 			directorRepository = new DirectorRepository(getSessionFactory());
 		}
 		return directorRepository;
 	}
-	
+
 	private IIssueService getIssueService() {
 		if (issueService == null) {
-			issueService = new IssueService(getTransactionTemplate(), getIssueRepository(), getFilmRepository(), getTicketRepository());
+			issueService = new IssueService(getTransactionTemplate(), getIssueRepository(), getFilmRepository(),
+					getTicketRepository());
 		}
 		return issueService;
 	}
-	
+
 	private ITicketRepository getTicketRepository() {
 		if (ticketRepository == null) {
 			ticketRepository = new TicketRepository(getSessionFactory());
@@ -380,7 +379,7 @@ public class Initializer implements ServletContextListener {
 		}
 		return issueRepository;
 	}
-	
+
 	private IBookingService getBookingService() {
 		if (bookingService == null) {
 			bookingService = new BookingService(getTransactionTemplate(), getTicketRepository());

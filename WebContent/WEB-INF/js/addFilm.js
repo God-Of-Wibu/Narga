@@ -1,4 +1,4 @@
-	function showInfoDialog(msg) {
+function showInfoDialog(msg) {
 	alert(msg)
 }
 
@@ -185,7 +185,12 @@ $("document").ready( function() {
 			formData.append( "categories", item.id )
 		})
 		
-		formData.append("director", director.id)
+		formData.append("director", null);
+		
+		if (!formElement.files || !formElement.files[0]) {
+				alert('vui lòng chọn poster')
+				return;
+			}
 		
 		
 		jQuery.ajax({

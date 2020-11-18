@@ -1,7 +1,10 @@
 package com.godofwibu.narga.services;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.godofwibu.narga.entities.Category;
 import com.godofwibu.narga.entities.Country;
+import com.godofwibu.narga.entities.Director;
 import com.godofwibu.narga.entities.Film;
 import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.entities.Issue;
@@ -24,7 +28,9 @@ import com.godofwibu.narga.repositories.DataAccessLayerException;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICategoryRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
+import com.godofwibu.narga.repositories.IDirectorRepository;
 import com.godofwibu.narga.repositories.IFilmRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,12 +43,12 @@ public class FilmService implements IFilmService {
 	private ICountryRepository countryRepository;
 	private ICategoryRepository categoryRepository;
 	private IActorRepository actorRepository;
-	private IIssueService issueService;
 	private Gson gson;
 	private ITransactionTemplate transactionTemplate;
+	private IDirectorRepository directorRepository;
 
 	public FilmService(IFilmRepository filmRepository, IImageStorageService imageStorageService,
-			ICountryRepository countryRepository, ICategoryRepository categoryRepository, IActorRepository actorRepository, ITransactionTemplate transactionTemplate) {
+			ICountryRepository countryRepository, ICategoryRepository categoryRepository, IActorRepository actorRepository, ITransactionTemplate transactionTemplate, IDirectorRepository directorRepository) {
 		super();
 		this.filmRepository = filmRepository;
 		this.imageStorageService = imageStorageService;
@@ -50,6 +56,7 @@ public class FilmService implements IFilmService {
 		this.categoryRepository = categoryRepository;
 		this.transactionTemplate = transactionTemplate;
 		this.actorRepository = actorRepository;
+		this.directorRepository = directorRepository;
 		
 		gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
@@ -68,7 +75,7 @@ public class FilmService implements IFilmService {
 				film.setTitle(formData.getTitle());
 				film.setCountry(country);
 				film.setRunningTime(formData.getRunningTime());
-				film.setDirector(null);
+				film.setDirector(formData.getDirector() != null ? directorRepository.findById(formData.getDirector()) : null);
 				film.setDescription(formData.getDescription());
 	
 				Set<Category> categories = new HashSet<Category>();
@@ -89,7 +96,7 @@ public class FilmService implements IFilmService {
 				}
 				film.setCasting(casting);
 				
-				Integer filmId = filmRepository.insert(film);
+				Integer filmId = filmRepository.save(film);
 	
 				String fileName = "film_poster_" + filmId + "." + extension;
 				ImageData posterImageData = imageStorageService.saveImage(formData.getPosterPart().getInputStream(), fileName);
@@ -125,19 +132,28 @@ public class FilmService implements IFilmService {
 
 	@Override
 	public Film getFilmDetail(int filmId) throws ServiceLayerException {
+		transactionTemplate.execute(() -> {
+			Film f = filmRepository.findById(filmId);
+			
+			Director dir =f.getDirector();
+		});
 		return transactionTemplate.execute(() -> filmRepository.findById(filmId));
 	}
 
 	@Override
-	public List<Film_DTO_Home> getFilmInWeek() throws ServiceLayerException {
+	public List<Film_DTO_Home> getFilmInThisWeek() throws ServiceLayerException {
 		return transactionTemplate.execute(() -> {
-			List<Film_DTO_Home> films = new ArrayList<Film_DTO_Home>();
-			List<Issue> issues = issueService.getIssuesInThisWeek();
-			for (Issue issue : issues) {
-				Film film = issue.getFilm();
-				films.add(new Film_DTO_Home(film.getId(),film.getPoster().getUrl()));
-			}
-			return films;
+			List<Film_DTO_Home> film_DTO_Homes = new ArrayList<>();
+			
+			SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM-dd");
+			String d1 = format.format(getFirstDaysOfCurrentWeek());
+			String d2 = format.format(getLastDayOfThisWeek());
+			
+			List<Film> films = filmRepository.findHasIssueBetween(getFirstDaysOfCurrentWeek(), getLastDayOfThisWeek());
+			
+			filmRepository.findHasIssueBetween(getFirstDaysOfCurrentWeek(), getLastDayOfThisWeek())
+				.forEach(film -> film_DTO_Homes.add(new Film_DTO_Home(film.getTitle(), film.getId(), film.getPoster().getUrl())));
+			return film_DTO_Homes;
 		}) ;
 	}
 
@@ -154,5 +170,42 @@ public class FilmService implements IFilmService {
 			throw new ServiceLayerException("execute operation failed", e);
 		}
 	}
+	
+	private java.sql.Date getFirstDaysOfCurrentWeek() {
+
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+		cal.clear(Calendar.MINUTE);
+		cal.clear(Calendar.SECOND);
+		cal.clear(Calendar.MILLISECOND);
+
+		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+		return utilDateToSqlDate(cal.getTime());
+	}
+	
+	private java.sql.Date getLastDayOfThisWeek() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+		cal.clear(Calendar.MINUTE);
+		cal.clear(Calendar.SECOND);
+		cal.clear(Calendar.MILLISECOND);
+
+		cal.set(Calendar.DAY_OF_WEEK, cal.getFirstDayOfWeek());
+		cal.add(Calendar.DAY_OF_WEEK, 6);
+		
+		
+		
+		return utilDateToSqlDate(cal.getTime());
+	}
+	
+	private java.sql.Date utilDateToSqlDate(java.util.Date date) {
+		return new java.sql.Date(date.getTime());
+	}
+	
+	
+	
+	
+	
+	
 
 }

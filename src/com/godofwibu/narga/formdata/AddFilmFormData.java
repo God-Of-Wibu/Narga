@@ -2,6 +2,7 @@ package com.godofwibu.narga.formdata;
 
 import javax.servlet.http.Part;
 
+import com.godofwibu.narga.utils.OptionalParameter;
 import com.godofwibu.narga.utils.ParameterName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,12 +17,15 @@ public class AddFilmFormData {
 	private String title;
 
 	@ParameterName("director")
+	@OptionalParameter(defaultValue = "null")
 	private Integer director;
 	
 	@ParameterName("categories")
+	@OptionalParameter
 	private Integer[] categories;
 
 	@ParameterName("casting")
+	@OptionalParameter
 	private Integer[] casting;
 
 	@ParameterName("poster")

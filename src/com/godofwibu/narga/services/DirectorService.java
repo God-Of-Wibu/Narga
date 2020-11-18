@@ -12,8 +12,10 @@ import com.godofwibu.narga.entities.Director;
 import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.formdata.AddActorFormData;
 import com.godofwibu.narga.formdata.AddDirectorFormData;
+import com.godofwibu.narga.repositories.DataAccessLayerException;
 import com.godofwibu.narga.repositories.ICountryRepository;
 import com.godofwibu.narga.repositories.IDirectorRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -46,8 +48,8 @@ public class DirectorService implements IDirectorService {
 
 	@Override
 	public void addNewDirector(AddDirectorFormData formData) throws ServiceLayerException {
-		transactionTemplate.execute(() -> {
-			try {
+		try {
+			transactionTemplate.execute(() -> {
 				Country country = countryRepository.findById(formData.getCountryId());
 				Director director = new Director();
 				director.setAge(formData.getAge());
@@ -55,7 +57,7 @@ public class DirectorService implements IDirectorService {
 				director.setGender(formData.getGender());
 				director.setName(formData.getName());
 
-				Integer directorId = directorRepository.insert(director);
+				Integer directorId = directorRepository.save(director);
 
 				if (formData.getAvatarPart() != null) {
 					String avatarExtension = extractFileExtensionFromPart(formData.getAvatarPart());
@@ -67,12 +69,16 @@ public class DirectorService implements IDirectorService {
 					director.setId(directorId);
 					directorRepository.update(director);
 				}
-			} catch (IOException e) {
-				throw new ServiceLayerException(e);
-			}
+			});
+		} catch (DataAccessLayerException e) {
+			throw new ServiceLayerException("save director data to database fail", e);
+		}
 
-		});
+	}
 
+	@Override
+	public String search(String input) throws ServiceLayerException {
+		return transactionTemplate.execute(() -> gson.toJson(directorRepository.search(input)));
 	}
 
 }

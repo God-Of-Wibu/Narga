@@ -41,6 +41,7 @@ public class Director {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
+	@Expose
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	@Analyzer(definition = "customAnalayzer")
 	@Column(name = "name", unique = true)

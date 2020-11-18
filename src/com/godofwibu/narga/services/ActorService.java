@@ -13,6 +13,7 @@ import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.formdata.AddActorFormData;
 import com.godofwibu.narga.repositories.IActorRepository;
 import com.godofwibu.narga.repositories.ICountryRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -36,30 +37,27 @@ public class ActorService implements IActorService {
 	}
 
 	@Override
-	public void addNewActor(AddActorFormData formData) throws ServiceLayerException {
+	public void addNewActor(AddActorFormData data) throws ServiceLayerException {
 		transactionTemplate.execute(() -> {
-			try {
-				Country country = countryRepository.findById(formData.getCountryId());
+				Country country = countryRepository.findById(data.getCountryId());
 				Actor actor = new Actor();
-				actor.setName(formData.getName());
-				actor.setAge(formData.getAge());
+				actor.setName(data.getName());
+				actor.setAge(data.getAge());
 				actor.setCountry(country);
+				actor.setGender(data.getGender());
 
-				Integer actorId = actorRepository.insert(actor);
+				Integer actorId = actorRepository.save(actor);
 
-				if (formData.getAvatarPart() != null) {
-					String avatarExtension = extractFileExtensionFromPart(formData.getAvatarPart());
+				if (data.getAvatarPart() != null) {
+					String avatarExtension = extractFileExtensionFromPart(data.getAvatarPart());
 					String fileName = "actor_avatar_" + actorId + "." + avatarExtension;
 
-					ImageData imageData = imageStorageService.saveImage(formData.getAvatarPart(), fileName);
+					ImageData imageData = imageStorageService.saveImage(data.getAvatarPart(), fileName);
 
 					actor.setAvatar(imageData);
 					actor.setId(actorId);
 					actorRepository.update(actor);
 				}
-			} catch (IOException e) {
-				throw new ServiceLayerException("Failed to save film data" ,e);
-			}
 		});
 	}
 

@@ -1,4 +1,4 @@
-package com.godofwibu.narga.services;
+package com.godofwibu.narga.services.exception;
 
 public class ServiceLayerException extends RuntimeException {
 

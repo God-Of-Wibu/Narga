@@ -5,15 +5,13 @@ import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.formdata.BookingFormData;
 import com.godofwibu.narga.repositories.DataAccessLayerException;
 import com.godofwibu.narga.repositories.ITicketRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 
 public class BookingService implements IBookingService{
 
 	private ITransactionTemplate transactionTemplate;
 	private ITicketRepository ticketRepository;
-	
-	
-	
 	
 	public BookingService(ITransactionTemplate transactionTemplate, ITicketRepository ticketRepository) {
 		super();

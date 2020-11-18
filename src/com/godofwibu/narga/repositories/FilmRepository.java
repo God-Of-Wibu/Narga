@@ -1,6 +1,8 @@
 	package com.godofwibu.narga.repositories;
 
+
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.lucene.search.Query;
@@ -41,6 +43,14 @@ public class FilmRepository extends CrudRepository<Film, Integer> implements IFi
 		} catch (EmptyQueryException e) {
 			return new ArrayList<Film>();
 		}
+	}
+
+	@Override
+	public List<Film> findHasIssueBetween(Date begin, Date end) {
+		return getSession().createQuery("SELECT DISTINCT film_ FROM Issue AS issue_ INNER JOIN issue_.film as film_ WHERE issue_.date BETWEEN :begin AND :end", Film.class)
+				.setParameter("begin", begin)
+				.setParameter("end", end)
+				.getResultList();
 	}
 
 }

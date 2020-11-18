@@ -19,7 +19,7 @@ public class ActorApiServlet extends ApiServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		actorService = getAttribute(IActorService.class);
+		actorService = getAttributeByClassName(IActorService.class);
 		addAction("all", this::all);
 		addAction("search", this::search);
 	}

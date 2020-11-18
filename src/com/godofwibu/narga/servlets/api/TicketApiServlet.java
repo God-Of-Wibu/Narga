@@ -14,11 +14,11 @@ public class TicketApiServlet extends ApiServlet {
 	public void init() throws ServletException {
 		// TODO Auto-generated method stub
 		super.init();
-		issueService = getAttribute(IIssueService.class);
+		issueService = getAttributeByClassName(IIssueService.class);
 		addAction("get-by-issue-id", this::getByIssue);
 	}
 
 	private String getByIssue(HttpServletRequest req) {
-		return issueService.getAllTicketOfGivenIssueAsJson(Integer.parseInt( req.getParameter("issueId")) );
+		return issueService.getAllTicketsOfGivenIssueAsJsonArray(Integer.parseInt( req.getParameter("issueId")) );
 	}
 }

@@ -13,9 +13,10 @@ import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import com.godofwibu.narga.entities.Role;
+import com.godofwibu.narga.entities.User;
+import com.godofwibu.narga.formdata.RegisterFormData;
 import com.godofwibu.narga.services.IAccountService;
-import com.godofwibu.narga.services.UserCreationException;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.FormParser;
 
 @WebServlet(name = "registerServlet", urlPatterns = { "/register" })
@@ -30,9 +31,9 @@ public class RegisterServlet extends NargaServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		templateEngine = getAttribute(TemplateEngine.class);
-		accountService = getAttribute(IAccountService.class);
-		formParser = getAttribute(FormParser.class);
+		templateEngine = getAttributeByClassName(TemplateEngine.class);
+		accountService = getAttributeByClassName(IAccountService.class);
+		formParser = getAttributeByClassName(FormParser.class);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -43,6 +44,19 @@ public class RegisterServlet extends NargaServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
+		try {
+			User user = accountService.registerNewUser(formParser.getFormObject(req, RegisterFormData.class));
+			req.getSession().setAttribute("user", user);
+			String returnPage = req.getRequestURI().substring(req.getContextPath().length());
+			returnPage = returnPage.equals("/register") ? "/index" : returnPage;
+			req.getRequestDispatcher(returnPage).forward(req, res);
+			
+		} catch (ServiceLayerException ex) {
+			WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());
+			webContext.setVariable("status", ex.getMessage());
+			templateEngine.process("register", webContext, res.getWriter());
+		}
+		
 		
 	}
 }

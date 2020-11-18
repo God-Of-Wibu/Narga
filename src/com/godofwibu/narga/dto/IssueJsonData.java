@@ -5,9 +5,10 @@ import java.sql.Time;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+
 @Data
 @AllArgsConstructor
-public class Issue_DTO_API_Get {
-	private int id;
-	private Time time;
+public class IssueJsonData {
+	int id;
+	Time time;
 }

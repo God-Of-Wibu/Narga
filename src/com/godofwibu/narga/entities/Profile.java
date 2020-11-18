@@ -27,13 +27,13 @@ public class Profile {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 
-	@Column(name = "personal_id")
+	@Column(name = "personal_id", unique = true)
 	private String personalId;
 
 	@Column(name = "phone_number")
 	private String phoneNumber;
 	
-	@Column(name = "email")
+	@Column(name = "email", unique = true)
 	private String email;
 	
 	@Column(name = "name")

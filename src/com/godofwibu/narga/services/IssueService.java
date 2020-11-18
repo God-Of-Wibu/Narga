@@ -1,6 +1,7 @@
 package com.godofwibu.narga.services;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +14,23 @@ import com.godofwibu.narga.repositories.DataAccessLayerException;
 import com.godofwibu.narga.repositories.IFilmRepository;
 import com.godofwibu.narga.repositories.IIssueRepository;
 import com.godofwibu.narga.repositories.ITicketRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.DateTime;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 public class IssueService implements IIssueService {
-	
+
 	private ITransactionTemplate transactionTemplate;
 	private IIssueRepository issueRepository;
 	private IFilmRepository filmRepository;
 	private ITicketRepository ticketRepository;
 	private Gson gson;
-	
+
 	public IssueService(ITransactionTemplate transactionTemplate, IIssueRepository issueRepository,
 			IFilmRepository filmRepository, ITicketRepository ticketRepository) {
 		super();
@@ -37,16 +41,15 @@ public class IssueService implements IIssueService {
 		this.gson = new GsonBuilder().create();
 	}
 
-	private final static boolean[] IS_VIP_ROW = {
-		false, // A
-		false, // B
-		false, // C
-		true,  // D
-		true,  // E
-		false, // F
-		true,  // G
-		false, // I
-		false, // J
+	private final static boolean[] IS_VIP_ROW = { false, // A
+			false, // B
+			false, // C
+			true, // D
+			true, // E
+			false, // F
+			true, // G
+			false, // I
+			false, // J
 	};
 
 	@Override
@@ -55,23 +58,22 @@ public class IssueService implements IIssueService {
 			transactionTemplate.execute(() -> {
 				Film film = (filmRepository.findById(formData.getFilmId()));
 				Issue issue = null;
-				for (DateTime dateTime: formData.getDateTimes()) {
+				for (DateTime dateTime : formData.getDateTimes()) {
 					issue = new Issue();
 					issue.setFilm(film);
 					issue.setDate(dateTime.getDate());
 					issue.setTime(dateTime.getTime());
-					issueRepository.insert(issue);
-					List<Ticket> tickets = new ArrayList<>();
+					issueRepository.save(issue);
 					for (char row = 'A'; row < 'J'; ++row) {
-						for (int col = 1; col <=6; ++col) {
+						for (int col = 1; col <= 6; ++col) {
 							Ticket ticket = new Ticket();
 							ticket.setPosition("" + row + col);
 							ticket.setIssue(issue);
 							ticket.setCost(IS_VIP_ROW[row - 'A'] ? formData.getVipCost() : formData.getBasicCost());
-							ticketRepository.insert(ticket);
+							ticketRepository.save(ticket);
 						}
 					}
-					
+
 				}
 			});
 		} catch (DataAccessLayerException e) {
@@ -80,35 +82,24 @@ public class IssueService implements IIssueService {
 	}
 
 	@Override
-	public List<Issue> getIssuesInThisWeek() throws ServiceLayerException {
-		return null;
-	}
-	
-	
-
-	@Override
-	public String getAllIssuesByGivenFilmIdAndDateAsJson(int filmId, Date date) throws ServiceLayerException {
+	public String getAllIssuesByGivenFilmIdAndDateAsJsonArray(int filmId, Date date) throws ServiceLayerException {
 		return transactionTemplate.execute(() -> {
-			List<Issue_DTO_API_Get> issues = new ArrayList<>();
-			issueRepository.findByFilmIdAndDate(filmId, date).forEach(
-					(eFilm) -> issues.add(new Issue_DTO_API_Get(eFilm.getId(), eFilm.getTime())));
-			return gson.toJson(issues);
+			List<IssueJsonData> issueJsonDataArray = new ArrayList<>();
+			issueRepository.findByFilmIdAndDate(filmId, date)
+					.forEach(issue -> issueJsonDataArray.add(new IssueJsonData(issue.getId(), issue.getTime())));
+			return gson.toJson(issueJsonDataArray);
 		});
 	}
 
 	@Override
-	public String getAllTicketOfGivenIssueAsJson(Integer issueId) {
-		try {
-			return transactionTemplate.execute(() -> {
-				List<Ticket_DTO_API_GetByIssue> tickets = new ArrayList<>();
-				ticketRepository.findByIssueIdOrderByPositionDesc(issueId).forEach((eTicket) -> {
-					tickets.add(new Ticket_DTO_API_GetByIssue(eTicket.getId(), eTicket.getPosition(), eTicket.getOwner() == null, eTicket.getCost()));
-				});
-				return gson.toJson(tickets);
-			});
-		}catch (DataAccessLayerException e) {
-			throw new ServiceLayerException("execute operation fail", e);
-		}
+	public String getAllTicketsOfGivenIssueAsJsonArray(Integer issueId) {
+		return transactionTemplate.execute(() -> {
+			List<TicketJsonData> ticketJsonDataArray = new ArrayList<>();
+			ticketRepository.findByIssueIdOrderByPositionDesc(issueId)
+					.forEach(ticket -> ticketJsonDataArray.add(new TicketJsonData(ticket.getId(), ticket.getPosition(),
+							ticket.getOwner() == null, ticket.getCost())));
+			return gson.toJson(ticketJsonDataArray);
+		});
 	}
 
 }

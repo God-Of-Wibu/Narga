@@ -39,7 +39,10 @@ public class FormParser {
 						throw new NoSuchConverterException(field.getType());
 					String[] reqParam = parameterMap.get(parameterName);
 					if (reqParam == null) {
-						throw new NoSuchParameterException("no such parameter " + parameterName, parameterName);
+						if (isOptional(field)) 
+							field.set(formData, converter.convert(field.getAnnotation(OptionalParameter.class).defaultValue()));
+						else 
+							throw new NoSuchParameterException("no such parameter " + parameterName, parameterName);
 					} else {
 						field.set(formData, converter.convert(reqParam));
 					}
@@ -78,5 +81,9 @@ public class FormParser {
 	private String getParameterName(Field field) {
 		ParameterName parameterNameAnotation = field.getAnnotation(ParameterName.class);
 		return parameterNameAnotation != null ? parameterNameAnotation.value() : field.getName();
+	}
+	
+	private boolean isOptional(Field field) {
+		return field.getAnnotation(OptionalParameter.class) != null;
 	}
 }

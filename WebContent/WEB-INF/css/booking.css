@@ -416,3 +416,31 @@ input[type=checkbox]:disabled+ .time {
 .seat-checked {
 	background-color: #729fcf; 
 }
+
+.day a{
+	color: #888888;
+}
+
+.day:hover{
+	background-color: yellow;
+}
+
+.day:active {
+	background-color: orange;
+}
+
+.day-selected {
+	background-color: #729fcf;
+}
+
+.list-times #emptyMsg{
+	display: none;
+}
+
+.list-times #loadingMsg {
+	display: none;
+}
+
+.time-selected {
+	background-color: #ad7fa8;
+}

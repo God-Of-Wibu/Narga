@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 
 import com.godofwibu.narga.entities.Issue;
-import com.google.gson.JsonElement;
 
 public class IssueRepository extends CrudRepository<Issue, Integer> implements  IIssueRepository {
 

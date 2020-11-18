@@ -38,12 +38,9 @@ public class DirectorRepository extends CrudRepository<Director, Integer> implem
 			searhResult = hibernateQuery
 					.setMaxResults(10)
 					.getResultList();
-			fullTextSession.close();
 			return searhResult;
 		}catch (EmptyQueryException e) {
 			return new ArrayList<Director>();
-		} finally {
-			fullTextSession.close();
 		}
 	}	
 }

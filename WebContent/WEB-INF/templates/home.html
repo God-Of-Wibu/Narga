@@ -1,179 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>HOME WIBU LORD</title>
-	<!-- Import Boostrap css, js, font awesome here -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">       
-    <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css" rel="stylesheet">    
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js">
-    </script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../css/home.css"
-	th:href="@{/static/css/login.css}">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HOME WIBU LORD</title>
+<!-- Import Boostrap css, js, font awesome here -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
+	rel="stylesheet">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+	
+</script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js">
+	
+</script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/home.css"
+	th:href="@{/static/css/home.css}">
 </head>
 <body>
-<!-- Navigation -->
-<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-	<div class="container-fluid">
-		<a class="navbar-branch" href="#">
-			<img src="https://i.pinimg.com/564x/cc/d9/1a/ccd91a2e685324cda95247fb16f7c34d.jpg" height="70">
+	<!-- Navigation -->
+	<div></div>
+	<!-- Film Slider -->
+
+	<div id="carouselExampleIndicators" class="carousel slide w-50"
+		data-ride="carousel">
+		<ol class="carousel-indicators">
+			<li data-target="#carouselExampleIndicators" data-slide-to="0"
+				class="active"></li>
+			<li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+			<li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+		</ol>
+		<div class="carousel-inner">
+			<div class="carousel-item active">
+				<img
+					src="https://www.cgv.vn/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980wx448h_5.jpg"
+					class="d-block w-100 imgSlider" alt="...">
+			</div>
+
+			<div class="carousel-item">
+				<img
+					src="https://www.cgv.vn/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980-x-448_8.jpg"
+					class="d-block w-100 imgSlider" alt="...">
+			</div>
+			<div class="carousel-item">
+				<img
+					src="https://www.cgv.vn/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980x448_ttqv.jpg"
+					class="d-block w-100 imgSlider" alt="...">
+			</div>
+		</div>
+		<a class="carousel-control-prev" href="#carouselExampleIndicators"
+			role="button" data-slide="prev"> <span
+			class="carousel-control-prev-icon" aria-hidden="true"></span> <span
+			class="sr-only">Previous</span>
+		</a> <a class="carousel-control-next" href="#carouselExampleIndicators"
+			role="button" data-slide="next"> <span
+			class="carousel-control-next-icon" aria-hidden="true"></span> <span
+			class="sr-only">Next</span>
 		</a>
-
-		<button class="navbar-toggler" type="button" data-toggle="collapse" 
-			data-target="#navbarResponsive">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="navbarResponsive">
-			<ul class="navbar-nav ml-auto">
-				<li class="nav-item">
-					<a class="nav-link active" href="#">Trang Chủ</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Lịch chiếu phim</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Tìm Kiếm Phim</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Team</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">Đăng Nhập/Đăng Kí</a>
-				</li>
-			</ul>
-		</div>
+		<hr>
 	</div>
-</nav>
-<!-- Film Slider --> 
-
-<div id="carouselExampleIndicators" class="carousel slide w-50" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="https://www.cgv.vn/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980wx448h_5.jpg"  class="d-block w-100 imgSlider" alt="...">
-    </div>
-
-    <div class="carousel-item">
-      <img src="https://www.cgv.vn/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980-x-448_8.jpg"  class="d-block w-100 imgSlider" alt="...">
-    </div>
-    <div class="carousel-item">
-      <img src="https://www.cgv.vn/media/banner/cache/1/b58515f018eb873dafa430b6f9ae0c1e/9/8/980x448_ttqv.jpg"  class="d-block w-100 imgSlider" alt="...">
-    </div>
-  </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-  <hr>
-</div>
-<!--phim hot--> 
- <div class= "container-fluid">
-         <div class= "row">
-            <!-- Gallery Item 1 -->
-            <div class ="col-6 col-sm-4 col-md-3 p-2">
-               <div class="card" >
-               <img class="card-img-top" src="https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/t/t/ttm_main-poster_2__1.jpg"/>
-               <div class="card-body">
-               <h5 class="card-title">Tiệc Trăng Máu</h5>      
-               <a href="#" class="card-link">Chi tiết</a>
-               <a href="#" class="card-link">Đặt vé</a>
-              </div>
-             </div>
-            </div>
-            <!-- Item 2 -->
-           <div class ="col-6 col-sm-4 col-md-3 p-2">
-               <div class="card" >
-               <img class="card-img-top" src="https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/t/t/ttm_main-poster_2__1.jpg"/>
-               <div class="card-body">
-               <h5 class="card-title">Tiệc Trăng Máu</h5>      
-               <a href="#" class="card-link">Chi tiết</a>
-               <a href="#" class="card-link">Đặt vé</a>
-              </div>
-             </div>
-            </div>
-            <!-- Item 3 -->
-            <div class ="col-6 col-sm-4 col-md-3 p-2">
-               <div class="card" >
-               <img class="card-img-top" src="https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/t/t/ttm_main-poster_2__1.jpg"/>
-               <div class="card-body">
-               <h5 class="card-title">Tiệc Trăng Máu</h5>      
-               <a href="#" class="card-link">Chi tiết</a>
-               <a href="#" class="card-link">Đặt vé</a>
-              </div>
-             </div>
-            </div>
-            <!-- Item 4 -->
-            <div class ="col-6 col-sm-4 col-md-3 p-2">
-               <div class="card" >
-               <img class="card-img-top" src="https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/t/t/ttm_main-poster_2__1.jpg"/>
-               <div class="card-body">
-               <h5 class="card-title">Tiệc Trăng Máu</h5>      
-               <a href="#" class="card-link">Chi Tiết</a>
-               <a href="#" class="card-link">Đặt vé</a>
-              </div>
-             </div>
-            </div>
-            </div>
-      </div>      
-  
-<div class="container-fluid padding">	
-	<div class="row text-center padding">
-		<div class="col-12">			
-		</div>
-		<div class="col-12 social padding">
-			<a href="#"><i class="fab fa-facebook"></i></a>
-			<a href="#"><i class="fab fa-twitter"></i></a>
-			<a href="#"><i class="fab fa-google-plus-g"></i></a>
-			<a href="#"><i class="fab fa-instagram"></i></a>
-			<a href="#"><i class="fab fa-youtube"></i></a>
-		</div>
-	</div>
-</div>	
-<footer>
-	<div class="container-fluid padding">	
-		<div class="row text-center">
-			<div class="col-md-4">
-				<hr class="light">
-				<p>111-222-3333</p>
-				<p>trungvdde140087@fpt.edu.vn</p>
-				<p>FPT Uni - FPT City - DANA</p>
-			</div>
-			<div class="col-md-4">				
-				<hr class="light">
-				<h5>Working hours</h5>
-				<hr class="light">
-				<p>Monday-Friday: 8am - 5pm</p>
-				<p>Weekend: 8am - 12am</p>
-			</div>
-			<div class="col-md-4">				
-				<hr class="light">
-				<h5>Services</h5>
-				<hr class="light">
-				<p>tau hai</p>
-				<p>wibu chua</p>
-				<p>Wibu Lord</p>
-			</div>
-			<div class="col-12">
-				<hr class="light-100">
-				<h5>&copy; From FPT With Luv</h5>
+	<!--phim hot-->
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Gallery Item 1 -->
+			<div class="col-6 col-sm-4 col-md-3 p-2" th:each="film : ${films}">
+				<div class="card">
+					<img class="card-img-top"
+						src="https://www.cgv.vn/media/catalog/product/cache/1/small_image/240x388/dd828b13b1cb77667d034d5f59a82eb6/t/t/ttm_main-poster_2__1.jpg" th:src="${film.poster}"/>
+					<div class="card-body">
+						<h5 class="card-title" th:text="${film.title}">Tiệc Trăng Máu</h5>
+						<a href="#" class="card-link" th:href="@{/detail/film/{id}(id=${film.id})}">Chi tiết</a> <a href="#" th:href="@{/book(filmId=${film.id})}"
+							class="card-link">Đặt vé</a>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</footer>
+
+	<div class="container-fluid padding">
+		<div class="row text-center padding">
+			<div class="col-12"></div>
+			<div class="col-12 social padding">
+				<a href="#"><i class="fab fa-facebook"></i></a> <a href="#"><i
+					class="fab fa-twitter"></i></a> <a href="#"><i
+					class="fab fa-google-plus-g"></i></a> <a href="#"><i
+					class="fab fa-instagram"></i></a> <a href="#"><i
+					class="fab fa-youtube"></i></a>
+			</div>
+		</div>
+	</div>
+	<footer>
+		<div class="container-fluid padding">
+			<div class="row text-center">
+				<div class="col-md-4">
+					<hr class="light">
+					<p>111-222-3333</p>
+					<p>trungvdde140087@fpt.edu.vn</p>
+					<p>FPT Uni - FPT City - DANA</p>
+				</div>
+				<div class="col-md-4">
+					<hr class="light">
+					<h5>Working hours</h5>
+					<hr class="light">
+					<p>Monday-Friday: 8am - 5pm</p>
+					<p>Weekend: 8am - 12am</p>
+				</div>
+				<div class="col-md-4">
+					<hr class="light">
+					<h5>Services</h5>
+					<hr class="light">
+					<p>tau hai</p>
+					<p>wibu chua</p>
+					<p>Wibu Lord</p>
+				</div>
+				<div class="col-12">
+					<hr class="light-100">
+					<h5>&copy; From FPT With Luv</h5>
+				</div>
+			</div>
+		</div>
+	</footer>
 </body>
-</html>	
+</html>
 
 
 

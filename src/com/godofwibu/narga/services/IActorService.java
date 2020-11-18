@@ -2,6 +2,7 @@ package com.godofwibu.narga.services;
 
 import com.godofwibu.narga.dto.Actor_DTO_ActorDetail;
 import com.godofwibu.narga.formdata.AddActorFormData;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 
 public interface IActorService {
 	void addNewActor(AddActorFormData formData) throws ServiceLayerException;

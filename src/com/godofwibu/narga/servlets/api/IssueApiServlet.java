@@ -16,19 +16,13 @@ public class IssueApiServlet extends ApiServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		issueService = getAttribute(IIssueService.class);
+		issueService = getAttributeByClassName(IIssueService.class);
 		addAction("get", this::get);
 	}
 
 	private String get(HttpServletRequest req) {
 		int filmId = Integer.parseInt(req.getParameter("filmId"));
-		
-		
-		String[] din = req.getParameter("date").split("-");
-		
-		String dout = din[0] + "-" + (Integer.parseInt(din[1]) - 1)+ "-" + din[2];
-		Date date = Date.valueOf(dout);
-		
-		return issueService.getAllIssuesByGivenFilmIdAndDateAsJson(filmId, date);
+		Date date = Date.valueOf(req.getParameter("date"));
+		return issueService.getAllIssuesByGivenFilmIdAndDateAsJsonArray(filmId, date);
 	}
 }

@@ -19,7 +19,7 @@ public class CategoryApiServlet extends ApiServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		categoryService = getAttribute(ICategoryService.class);
+		categoryService = getAttributeByClassName(ICategoryService.class);
 		addAction("all", this::all);
 	}
 

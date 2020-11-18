@@ -7,19 +7,23 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
 import com.godofwibu.narga.services.IFilmService;
 
 @WebServlet(name = "filmDetailServlet", urlPatterns = "/detail/film/*")
 public class FilmDetailServlet extends NargaServlet {
+	private static final long serialVersionUID = 5692077327278092262L;
 	
 	private IFilmService filmService;
+	private TemplateEngine templateEngine;
 	
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		filmService = getAttribute(IFilmService.class);
+		filmService = getAttributeByClassName(IFilmService.class);
+		templateEngine = getAttributeByClassName(TemplateEngine.class);
 	}
 	
 	@Override
@@ -31,6 +35,6 @@ public class FilmDetailServlet extends NargaServlet {
 		webContext.setVariable("film", filmService.getFilmDetail(filmId));
 		res.setContentType("text/html; charset=UTF-8");
 		res.setCharacterEncoding("UTF-8");
-		getTemplateEngine().process("filmDetail", webContext, res.getWriter());
+		templateEngine.process("filmDetail", webContext, res.getWriter());
 	}
 }

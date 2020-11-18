@@ -31,12 +31,4 @@ public class Actor_DTO_ActorDetail {
 			films.add(new Film_DTO_ActorDetail(film));
 		}
 	}
-
-
-	
-	
-	
-	
-	
-
 }

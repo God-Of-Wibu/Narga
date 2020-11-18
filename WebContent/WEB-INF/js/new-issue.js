@@ -124,7 +124,7 @@ $("document").ready(function() {
 		issues.forEach( function(v) {
 			for(let i = 0; i < 7; ++i) {
 				if (v.times[i]) {
-					data.dateTimes.push(JSON.stringify( {date: `${v.date.getFullYear()}-${v.date.getMonth()}-${v.date.getDate()}`, time: time[i]} ));
+					data.dateTimes.push(JSON.stringify( {date: `${v.date.getFullYear()}-${v.date.getMonth() + 1}-${v.date.getDate()}`, time: time[i]} ));
 				}
 			}
 		})
@@ -135,10 +135,10 @@ $("document").ready(function() {
 		}
 		
 		$.post(location.href, data).done(function(resposeBody) {
-			console.log(resposeBody)
+			alert(resposeBody)
 		})
 		
-		})
+	})
 
 })
 

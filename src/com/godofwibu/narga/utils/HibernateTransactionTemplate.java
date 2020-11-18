@@ -6,7 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.godofwibu.narga.repositories.DataAccessLayerException;
-import com.godofwibu.narga.services.ServiceLayerException;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 
 public class HibernateTransactionTemplate implements ITransactionTemplate{
 

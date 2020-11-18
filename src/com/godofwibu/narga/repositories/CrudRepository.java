@@ -29,7 +29,7 @@ public class CrudRepository<E, I extends Serializable> implements ICurdRepositor
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public I insert(E entity) {
+	public I save(E entity) {
 		return (I) getSession().save(entity);
 	}
 

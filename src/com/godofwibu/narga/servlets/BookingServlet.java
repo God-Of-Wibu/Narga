@@ -16,7 +16,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
 import com.godofwibu.narga.entities.Film;
+import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.formdata.BookingFormData;
+import com.godofwibu.narga.services.BookingService;
 import com.godofwibu.narga.services.FilmService;
 import com.godofwibu.narga.services.IBookingService;
 import com.godofwibu.narga.services.IFilmService;
@@ -35,9 +37,10 @@ public class BookingServlet extends NargaServlet {
 	public void init() throws ServletException {
 		super.init();
 		
-		templateEngine = getAttribute(TemplateEngine.class);
-		filmService = getAttribute(IFilmService.class);
-		formParser = getAttribute(FormParser.class);
+		templateEngine = getAttributeByClassName(TemplateEngine.class);
+		filmService = getAttributeByClassName(IFilmService.class);
+		formParser = getAttributeByClassName(FormParser.class);
+		bookingService =getAttributeByClassName(IBookingService.class);
 	}
 	
 	@Override
@@ -68,7 +71,10 @@ public class BookingServlet extends NargaServlet {
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		bookingService.book(formParser.getFormObject(req, BookingFormData.class), null);
+		
+		req.getParameterMap().forEach((k, v) -> System.out.println("{ key: " + k + ", value: " + v +" }"));
+		
+		bookingService.book(formParser.getFormObject(req, BookingFormData.class), (User)req.getSession().getAttribute("user"));
 		res.getWriter().println("Dat ve thanh cong");
 	}
 	

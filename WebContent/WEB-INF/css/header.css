@@ -9,10 +9,10 @@
 
 .navbar {
     background-color: #198798 !important;
-}
+    min-width: 250px;
+    }
 
 .login{
-	position: absolute;
 	right: 50px;
 	top: 20px;
 	color: #ffba3b !important;
@@ -22,6 +22,27 @@
 
 .login:before{
 	background-image: url("../images/icons/icon-user.png") ;
+	background-size: 20px;
+    display: inline-block;
+    width: 20px; 
+    height: 20px;
+    top: -20px;
+    content:"";
+    position: relative;
+    top: 5px;
+    right: 5px;;
+}
+
+.ticket{
+	right: 50px;
+	top: 20px;
+	color: #ffba3b !important;
+    text-shadow: 2px 0px 2px red;
+    font-size: 14px;
+}
+
+.ticket:before{
+	background-image: url("../images/ticket.png") ;
 	background-size: 20px;
     display: inline-block;
     width: 20px; 
@@ -44,10 +65,6 @@
     text-shadow: 2px 0px 2px red;
     text-transform: uppercase;
     padding: 0px;
-}
-
-.navbar li a:hover {
-    padding: 5px;
 }
 
 #carouselExampleIndicators{
@@ -92,6 +109,15 @@ hr.light {
 .navbar-toggler{
 	background-color: #ffba3b;
 }
+
+.nav-bar-r2{
+	display: flex;
+}
+
+.nav-bar-r1 a{
+	margin: 5px;
+}
+
 
 /*Media Query*/
 @media (max-width: 992px){

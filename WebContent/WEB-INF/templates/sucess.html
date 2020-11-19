@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8">
+<th:block th:insert="~{fragments/my-template :: link}"></th:block>
+<th:block th:insert="~{fragments/my-template :: head/script}"></th:block>
+<link rel="stylesheet" type="text/css" href="../css/success.css"
+	th:href="@{/static/css/success.css}">
+<title>Insert title here</title>
+</head>
+<body>
+	<div th:replace="fragments/header :: header"></div>
+	<div>
+		<div class="success">
+			<img class="imgSuccess" alt="success" src="../images/success.png">
+			<div class="textSuccess">Đặt vé thành công</div>
+		</div>
+	</div>
+</body>
+</html>

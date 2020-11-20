@@ -19,6 +19,19 @@ html, body {
     position: relative !important;
     float: none;
 }
+
+.fa-user-circle::before{
+    margin: 5px;
+}
+
+.fa-home::before{
+	margin: 5px;
+}
+
+.fa-address-card::before{
+	margin: 5px;
+}
+
 .card-link{
 	font-size:20px;
 	display:inline-block;
@@ -49,9 +62,6 @@ html, body {
 	color:white;
 }
 
-.navbar li a:hover {
-    color: black !important;
-}
 #carouselExampleIndicators{
    width:500px;
    margin:auto;

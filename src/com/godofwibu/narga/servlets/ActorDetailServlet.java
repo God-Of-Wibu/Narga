@@ -16,12 +16,15 @@ import com.godofwibu.narga.services.IActorService;
 @WebServlet(name = "actorDetailServlet", urlPatterns = "/detail/actor/*")
 public class ActorDetailServlet extends NargaServlet {
 	private static final long serialVersionUID = 1L;
-	private TemplateEngine templateEngine;
 	private IActorService actorService;
+	private TemplateEngine templateEngine;
+	
+	
 	@Override
  	public void init() throws ServletException {
-		templateEngine = getDepenencyByClassName(TemplateEngine.class);
-		actorService = getDepenencyByClassName(IActorService.class);
+		super.init();
+		actorService = getAttributeByClassName(IActorService.class);
+		templateEngine = getAttributeByClassName(TemplateEngine.class);
 	}
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -31,7 +34,7 @@ public class ActorDetailServlet extends NargaServlet {
 		context.setVariable("actor", actorService.getActorDetail(actorId));
 		res.setContentType("text/html; charset=UTF-8");
 		res.setCharacterEncoding("UTF-8");
-		getTemplateEngine().process("actorDetail", context, res.getWriter());
+		templateEngine.process("actorDetail", context, res.getWriter());
 	}
 
 }

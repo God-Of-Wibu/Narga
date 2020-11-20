@@ -1,11 +1,14 @@
 package com.godofwibu.narga.utils;
 
+import javax.persistence.PersistenceException;
+
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import com.godofwibu.narga.repositories.DataAccessLayerException;
-import com.godofwibu.narga.services.ServiceLayerException;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 
 public class HibernateTransactionTemplate implements ITransactionTemplate{
 
@@ -26,10 +29,10 @@ public class HibernateTransactionTemplate implements ITransactionTemplate{
 			transaction = getSession().getTransaction();
 			if (!transaction.isActive()) {
 				transaction.begin();
-				result = operation.doStuff();
+				result = operation.execute();
 				transaction.commit();
 			} else {
-				result = operation.doStuff();
+				result = operation.execute();
 			}
 			return result;
 		} catch (ServiceLayerException e) {
@@ -48,10 +51,10 @@ public class HibernateTransactionTemplate implements ITransactionTemplate{
 			transaction = getSession().getTransaction();
 			if (!transaction.isActive()) {
 				transaction.begin();
-				operation.doStuff();
+				operation.execute();
 				transaction.commit();
 			} else {
-				operation.doStuff();
+				operation.execute();
 			}
 		} catch (ServiceLayerException e) {
 			rollback(transaction);
@@ -72,7 +75,12 @@ public class HibernateTransactionTemplate implements ITransactionTemplate{
 }
 
 class ExceptionConverter {
-	public DataAccessLayerException convert(Exception e) {
-		return new DataAccessLayerException(e);
+	public RuntimeException convert(Exception e) {
+		if (e instanceof HibernateException || e instanceof PersistenceException) {
+			return new DataAccessLayerException(e);
+		}
+		if (e instanceof ServiceLayerException)
+			return (RuntimeException)e;
+		return new ServiceLayerException(e);
 	}
 }

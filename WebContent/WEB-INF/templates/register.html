@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div class="register-page" style="background-image: url('../images/login-bg-2.jpeg')" th:style="|background-image: url(@{/static/images/login-bg-2.jpeg})|">
-  <form class="form" method="post">
+  <form class="form" method="post" th:action="@{/register}">
     <h1>Register</h1>
     <span class="message" th:if="${message} neq null" th:text="${message}"></span>
     <p>Please fill in this form to create an account.</p>
@@ -26,7 +26,7 @@
     <input type="password" placeholder="Enter Password" name="password" id="psw" required>
 
     <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="confirmPassword" id="psw-repeat" required>
+    <input type="password" placeholder="Repeat Password" name="repeatPassword" id="psw-repeat" required>
     <hr>
     
     <button type="submit" class="registerbtn">Register</button>

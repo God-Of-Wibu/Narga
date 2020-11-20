@@ -11,7 +11,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.godofwibu.narga.entities.Director;
 
-public class DirectorRepository extends CurdRepository<Director, Integer> implements IDirectorRepository {
+public class DirectorRepository extends CrudRepository<Director, Integer> implements IDirectorRepository {
 	
 
 	public DirectorRepository(SessionFactory sessionFactory) {
@@ -38,12 +38,9 @@ public class DirectorRepository extends CurdRepository<Director, Integer> implem
 			searhResult = hibernateQuery
 					.setMaxResults(10)
 					.getResultList();
-			fullTextSession.close();
 			return searhResult;
 		}catch (EmptyQueryException e) {
 			return new ArrayList<Director>();
-		} finally {
-			fullTextSession.close();
 		}
 	}	
 }

@@ -43,6 +43,6 @@
         <mapping class="com.godofwibu.narga.entities.Film"/>
         <mapping class="com.godofwibu.narga.entities.ImageData"/>
         <mapping class="com.godofwibu.narga.entities.Ticket"/>
-        <mapping class="com.godofwibu.narga.entities.TicketType"/>
+        <mapping class="com.godofwibu.narga.entities.Issue"/>
     </session-factory>
 </hibernate-configuration>

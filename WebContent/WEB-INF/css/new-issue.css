@@ -1,0 +1,71 @@
+@charset "ISO-8859-1";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&family=Yanone+Kaffeesatz:wght@300&display=swap');
+
+body{
+	font-family: 'Roboto', sans-serif;
+}
+
+.day{
+	margin-left: 10px;
+	background-color: #d3d7cf;
+	padding: 2px;
+	cursor: pointer;
+}
+
+.checked {
+	background-color: #729fcf;
+}
+
+.list-time ol {
+	list-style-type: none;
+}
+
+.list-time input[type=checkbox] {
+	display: none;
+}
+
+.list-time input[type=checkbox]:checked + label {
+	background-color: #729fcf;
+}
+
+.list-time input[type=checkbox]:unchecked + label {
+	background-color: #d3d7cf;
+}
+
+.list-time li {
+	display: inline-block;
+}
+
+#date-list {
+	padding: 10px;
+	margin: 10px 0px 10px 0px; 
+}
+
+.time-selector {
+	display: none;
+}
+
+.list-time {
+	padding: 10px;
+	margin: 10px 0px 10px 0px; 
+}
+
+.selector-wrapper {
+	position: fixed;
+    display:none;
+	height: 100%;
+	width: 100%;
+	opacity: 1;
+	margin: 0px;
+	padding: 0px;
+}
+
+.film-container {
+	border: 1px dotted;
+	padding: 10px 5px 10px 5px;
+}
+
+.film {
+	height: 200px;
+}
+

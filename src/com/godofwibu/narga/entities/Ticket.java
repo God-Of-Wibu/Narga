@@ -12,9 +12,7 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,14 +22,20 @@ import lombok.Setter;
 public class Ticket {
 	@Id
 	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	Integer id;
+	
+	@Column(name = "position", nullable = false)
+	private String position;
 
 	@ManyToOne
-	@JoinColumn(name = "ticket_type_id", nullable = false)
-	TicketType ticketType;
+	@JoinColumn(name = "issue_id", nullable = false)
+	Issue issue;
 	
 	@OneToOne
 	@JoinColumn(name = "owner")
 	private User owner;
+	
+	@Column(name = "cost")
+	private Integer cost;
 }

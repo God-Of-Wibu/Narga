@@ -17,14 +17,14 @@
 	<div class="container">
 		<h1>New Actor</h1>
 		<span th:if="${status}" th:text="${status}">status</span>
-		<form action="/add-info/" th:action="@{/admin/add/actor}" method="post" enctype="multipart/form-data" accept-charset="utf-8">
+		<form action="/add-info/" th:action="@{/admin/add/actor}" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="name">Name:</label>
 				<input type="text" class="form-control" name="name" placeholder="Name" required="required">
 			</div>
 			<div class="form-group">
 				<label for="age">Age:</label>
-				<input type="number" class="form-control" name="age" placeholder="Age" required="required">
+				<input type="number" class="form-control" name="age" placeholder="Age">
 			</div>
 			<div class="form-group">
 				<label for="gender">Gender:</label>
@@ -38,7 +38,7 @@
 					<span class="input-group-text">Avatar</span>
 				</div>
 				<div class="custom-file">
-					<input type="file" class="custom-file-input" name="avatar" accept="image/jpeg, image/png, image/jpg">
+					<input type="file" class="custom-file-input" name="avatar" accept="image/jpeg, image/png, image/jpg" required="required">
 					<label class="custom-file-label" id="poster-lb" >Chose avatar</label>
 				</div>
 			</div>
@@ -52,5 +52,8 @@
 			<button class="btn btn-primary">Submit</button>
 		</form>
 	</div>
+	<script type="text/javascript">
+		
+	</script>
 </body>
 </html>

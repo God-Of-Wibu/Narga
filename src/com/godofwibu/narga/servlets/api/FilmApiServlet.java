@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.godofwibu.narga.services.IFilmService;
-import com.godofwibu.narga.services.ServiceLayerException;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 
 @WebServlet(name = "filmApi", urlPatterns = "/api/film/*")
 public class FilmApiServlet extends ApiServlet {
@@ -21,7 +21,7 @@ public class FilmApiServlet extends ApiServlet {
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		filmService = (IFilmService) getServletContext().getAttribute(IFilmService.class.getName());
+		filmService = getAttributeByClassName(IFilmService.class);
 		addAction("all", this::all);
 		addAction("search", this::search);
 	}

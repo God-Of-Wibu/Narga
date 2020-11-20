@@ -1,9 +1,12 @@
 package com.godofwibu.narga.services;
 
+import com.godofwibu.narga.entities.Gender;
 import com.godofwibu.narga.entities.Profile;
 import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
+import com.godofwibu.narga.formdata.RegisterFormData;
 import com.godofwibu.narga.repositories.IUserRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 
 public class AccountService implements IAccountService {
@@ -12,76 +15,49 @@ public class AccountService implements IAccountService {
 	private ITransactionTemplate transactionTemplate;
 
 	public AccountService(IImageStorageService imageStorageService, IUserRepository userRepository,
-			ITransactionTemplate executonWrapper) {
+			ITransactionTemplate transactionTemplate) {
 		super();
 		this.userRepository = userRepository;
-		this.transactionTemplate = executonWrapper;
+		this.transactionTemplate = transactionTemplate;
 	}
 
 	@Override
-	public User loadUserById(String userId) {
-		return userRepository.findById(userId);
+	public User getUser(String userId) {
+		return transactionTemplate.execute(() -> userRepository.findById(userId) );
 	}
 
 	@Override
-	public User registerNewUser(String userId, String password, String confirmPassword, Role role, String name,
-			String personalId) throws UserCreationException {
+	public User registerNewUser(RegisterFormData data) throws ServiceLayerException {
 		return transactionTemplate.execute(() -> {
-			if (isUserAlreadyExist(userId))
-				throw new UserCreationException("user already exist: " + userId, userId);
-			if (!password.equals(confirmPassword))
-				throw new UserCreationException("password does not match confirm password", userId);
-
-			Profile profile = new Profile();
-			profile.setPersonalId(personalId);
-			profile.setName(name);
-
 			User user = new User();
-			user.setId(userId);
-			user.setPassword(password);
-			user.setRole(role);
+			user.setRole(Role.MEMBER);
+			user.setId(data.getUserId());
+			
+			Profile profile = new Profile();
+			profile.setGender(Gender.MALE);
+			profile.setName(data.getName());
+			
 			user.setProfile(profile);
-
-			String createdUserId = userRepository.insert(user);
-			return userRepository.findById(createdUserId);
+			
+			if (!data.getPassword().equals(data.getRePassword()))
+				throw new ServiceLayerException("password does not match with re-password");
+			
+			if (data.getPassword().length() < 4) {
+				throw new ServiceLayerException("password must be at least 4 characters");
+			}
+			
+			if (userRepository.hasUser(data.getUserId())) {
+				throw new ServiceLayerException("user id "+ data.getUserId() + "are already used");
+			}
+			
+			user.setPassword(data.getPassword());
+			userRepository.save(user);
+			
+			return userRepository.findById(data.getUserId());
 		});
 	}
 
-	@Override
-	public void changeUserPassword(String userId, String oldPassword, String newPassword, String confirmNewPassword)
-			throws ServiceLayerException {
 
-	}
-
-	@Override
-	public boolean checkPassword(String userId, String password) throws ServiceLayerException {
-		return false;
-	}
-
-	@Override
-	public boolean isUserAlreadyExist(String userId) throws ServiceLayerException {
-		return userRepository.hasUser(userId);
-	}
-
-	@Override
-	public boolean isStrongPassword(String password) throws ServiceLayerException {
-		return false;
-	}
-
-	@Override
-	public void updateUserProfile(String userId, Profile profile) throws ServiceLayerException {
-
-	}
-
-	@Override
-	public Profile getProfileForUser(String userId) throws ServiceLayerException {
-		return null;
-	}
-
-	@Override
-	public boolean isPersonalIdInUsed(String personalId) throws ServiceLayerException {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	
 
 }

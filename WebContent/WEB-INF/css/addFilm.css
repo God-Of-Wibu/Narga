@@ -58,7 +58,7 @@ div.info{
 	display: inline-block;
 	padding: 5px 10px 5px 10px;
 	text-align: center;
-	margin: 0px 5px 0px 5px
+	margin: 5px;
 }
 .selector {
 	position: absolute;

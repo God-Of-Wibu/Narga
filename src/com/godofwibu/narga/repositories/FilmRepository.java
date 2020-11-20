@@ -1,6 +1,8 @@
-package com.godofwibu.narga.repositories;
+	package com.godofwibu.narga.repositories;
+
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.List;
 
 import org.apache.lucene.search.Query;
@@ -12,7 +14,7 @@ import org.hibernate.search.query.dsl.QueryBuilder;
 
 import com.godofwibu.narga.entities.Film;
 
-public class FilmRepository extends CurdRepository<Film, Integer> implements IFilmRepository {
+public class FilmRepository extends CrudRepository<Film, Integer> implements IFilmRepository {
 
 	public FilmRepository(SessionFactory sessionFactory) {
 		super(sessionFactory, Film.class);
@@ -37,13 +39,18 @@ public class FilmRepository extends CurdRepository<Film, Integer> implements IFi
 			searchResult = jpaQuery
 					.setMaxResults(maxResult)
 					.getResultList();
-			fullTextSession.close();
 			return searchResult;
 		} catch (EmptyQueryException e) {
 			return new ArrayList<Film>();
-		} finally {
-			fullTextSession.close();
 		}
+	}
+
+	@Override
+	public List<Film> findHasIssueBetween(Date begin, Date end) {
+		return getSession().createQuery("SELECT DISTINCT film_ FROM Issue AS issue_ INNER JOIN issue_.film as film_ WHERE issue_.date BETWEEN :begin AND :end", Film.class)
+				.setParameter("begin", begin)
+				.setParameter("end", end)
+				.getResultList();
 	}
 
 }

@@ -58,7 +58,7 @@ $("document").ready( function() {
 		title: 'select director',
 		placeholder: "enter director's name",
 		url: location.origin + "/Narga/api/actor/search",
-		onClick: function() {
+		onClose: function() {
 			$("#directorSelectorWrapper").hide()
 		},
 		onSelect: function(_, data) {
@@ -150,7 +150,7 @@ $("document").ready( function() {
 		title: 'select actor',
 		placeholder: "enter actor's name",
 		url: location.origin + "/Narga/api/actor/search",
-		onClick: function() {
+		onClose: function() {
 			$("#actorSelectorWrapper").hide()
 		},
 		onSelect: function(_, data) {
@@ -185,7 +185,12 @@ $("document").ready( function() {
 			formData.append( "categories", item.id )
 		})
 		
-		formData.append("director", director.id)
+		formData.append("director", null);
+		
+		if (!formElement.files || !formElement.files[0]) {
+				alert('vui lòng chọn poster')
+				return;
+			}
 		
 		
 		jQuery.ajax({

@@ -1,6 +1,7 @@
 package com.godofwibu.narga.services;
 
 import com.godofwibu.narga.repositories.ICategoryRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

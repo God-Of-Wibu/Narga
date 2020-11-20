@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- CSS -->
+<link rel="stylesheet" href="../css/new-issue.css" th:href="@{/static/css/new-issue.css}">
+<link rel="stylesheet" href="../css/bootstrap.min.css" th:href="@{/static/css/bootstrap.min.css}">
+<link rel="stylesheet" href="../css/search.css" th:href="@{/static/css/search.css}"> 
+<!-- JS -->
+<script type="text/javascript" src="../js/lodash.js"
+	th:src="@{/static/js/lodash.js}"></script>
+<script type="text/javascript" src="../js/jquery-3.5.1.min.js" 
+	th:src="@{/static/js/jquery-3.5.1.min.js}"></script>
+<script type="text/javascript" src="../js/jquery-ui.js"
+	th:src="@{/static/js/jquery-ui.js}"></script>
+<script type="text/javascript" src="../js/popper.min.js" 
+	th:src=@{/static/js/popper.min.js}></script>
+<script type="text/javascript" src="../js/bootstrap.min.js" 
+	th:src=@{/static/js/bootstrap.min.js}></script>
+<script type="text/javascript" src="../js/new-issue.js" 
+	th:src="@{/static/js/new-issue.js}"></script>
+<script type="text/javascript" src="../js/search.js"
+	th:src="@{/static/js/search.js}"></script>
+</head>
+<body>
+	<div id="filmSelectorWrapper" class="selector-wrapper">
+		<div id="filmSelector"></div>
+	</div>
+	<div class="container">
+	<h1>Nhập giờ chiếu</h1>
+		<h3>Chọn film:</h3>
+		<div class="film-container">
+				<div class="film">
+					click để chọn phim
+				</div>
+			</div>
+		<h3>Chọn ngày bắt đầu chiếu</h3>
+	    <div class="date-selector">
+	    	<input type="date" class="date-input">
+	    </div>
+		
+		<div class="time-selector">
+			<div id="date-list"></div>
+			<p>Chọn giờ:</p>
+			<div class="list-time">
+				<ol>
+					<li><input type="checkbox" id="time1" class="time" name="time1"><label
+						for="time1">8:00</label></li>
+					<li><input type="checkbox" id="time2" class="time" name="time2"><label
+						for="time2">9:30</label></li>
+					<li><input type="checkbox" id="time3" class="time" name="time3"><label
+						for="time3">12:00</label></li>
+					<li><input type="checkbox" id="time4" class="time" name="time4"><label
+						for="time4">14:00</label></li>
+					<li><input type="checkbox" id="time5" class="time" name="time5"><label
+						for="time5">17:00</label></li>
+					<li><input type="checkbox" id="time6" class="time" name="time6"><label
+						for="time6">19:00</label></li>
+					<li><input type="checkbox" id="time7" class="time" name="time7"><label
+						for="time7">21:00</label></li>
+				</ol>
+			</div>
+			<div>
+				<input id="vipCostInp" type="number" placeholder="nhập giá ghế vip" required="required">
+				<input id="basicCostInp" type="number" placeholder="nhập giá ghế thường" required="required">
+			</div>
+			
+			<button id="submitBtn">Submmit</button>
+			</div>
+			<form action="" enctype="application/x-www-form-urlencoded; "></form>
+	</div>
+</body>
+</html>

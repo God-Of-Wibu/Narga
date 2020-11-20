@@ -4,7 +4,7 @@ import org.hibernate.SessionFactory;
 
 import com.godofwibu.narga.entities.Country;
 
-public class CountryRepository extends CurdRepository<Country, String> implements ICountryRepository {
+public class CountryRepository extends CrudRepository<Country, String> implements ICountryRepository {
 
 	public CountryRepository(SessionFactory sessionFactory) {
 		super(sessionFactory, Country.class);

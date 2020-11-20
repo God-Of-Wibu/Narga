@@ -26,7 +26,7 @@ $.widget( "narga.search", {
 			.attr("src", "/Narga/static/images/icons/close-icon.png")
 			.addClass("close-btn")
 			.click( function() {
-				self._trigger("onClick", null, null);
+				self._trigger("onClose", null, null);
 			})
 			.appendTo(self.header)
 		/* end of header*/

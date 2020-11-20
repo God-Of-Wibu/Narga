@@ -1,0 +1,711 @@
+	<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<script src="../js/jquery-3.5.1.min.js"
+	th:src="@{/static/js/jquery-3.5.1.min.js}"></script>
+<script type="text/javascript" src="../js/booking.js"
+	th:src="@{/static/js/booking.js}"></script>
+<link rel="stylesheet" type="text/css" href="../css/infoFilm.css"
+	th:href="@{/static/css/infoFilm.css}">
+<link rel="stylesheet" type="text/css" href="../css/booking.css"
+	th:href="@{/static/css/booking.css}">
+	<meta th:replace="~{fragments/header :: meta}">
+<script th:replace="~{fragment/header :: script}"></script>
+<link th:replace="~{fragments/header :: link}">
+<title th:text="'Đặt vé: ' + ${filmTitle}"></title>
+</head>
+<body>
+	<script type="text/javascript">
+	;(function ($) {
+		  'use strict';
+
+		  //Defaults configuration
+		  var defaults = {
+		    url: null,
+		    values: null,
+		    method: "POST",
+		    target: null,
+		    traditional: false,
+		    redirectTop: false
+		  };
+
+		  /**
+		  * jQuery Redirect
+		  * @param {string} url - Url of the redirection
+		  * @param {Object} values - (optional) An object with the data to send. If not present will look for values as QueryString in the target url.
+		  * @param {string} method - (optional) The HTTP verb can be GET or POST (defaults to POST)
+		  * @param {string} target - (optional) The target of the form. "_blank" will open the url in a new window.
+		  * @param {boolean} traditional - (optional) This provides the same function as jquery's ajax function. The brackets are omitted on the field name if its an array.  This allows arrays to work with MVC.net among others.
+		  * @param {boolean} redirectTop - (optional) If its called from a iframe, force to navigate the top window. 
+		  *//**
+		  * jQuery Redirect
+		  * @param {string} opts - Options object
+		  * @param {string} opts.url - Url of the redirection
+		  * @param {Object} opts.values - (optional) An object with the data to send. If not present will look for values as QueryString in the target url.
+		  * @param {string} opts.method - (optional) The HTTP verb can be GET or POST (defaults to POST)
+		  * @param {string} opts.target - (optional) The target of the form. "_blank" will open the url in a new window.
+		  * @param {boolean} opts.traditional - (optional) This provides the same function as jquery's ajax function. The brackets are omitted on the field name if its an array.  This allows arrays to work with MVC.net among others.
+		  * @param {boolean} opts.redirectTop - (optional) If its called from a iframe, force to navigate the top window. 
+		  */
+		  $.redirect = function (url, values, method, target, traditional, redirectTop) {
+		    var opts = url;
+		    if (typeof url !== "object") {
+		      var opts = {
+		        url: url,
+		        values: values,
+		        method: method,
+		        target: target,
+		        traditional: traditional,
+		        redirectTop: redirectTop
+		      };
+		    }
+
+		    var config = $.extend({}, defaults, opts);
+		    var generatedForm = $.redirect.getForm(config.url, config.values, config.method, config.target, config.traditional);
+		    $('body', config.redirectTop ? window.top.document : undefined).append(generatedForm.form);
+		    generatedForm.submit();
+		    generatedForm.form.remove();
+		  };
+
+		  $.redirect.getForm = function (url, values, method, target, traditional) {
+		    method = (method && ["GET", "POST", "PUT", "DELETE"].indexOf(method.toUpperCase()) !== -1) ? method.toUpperCase() : 'POST';
+
+		    url = url.split("#");
+		    var hash = url[1] ? ("#" + url[1]) : "";
+		    url = url[0];
+
+		    if (!values) {
+		      var obj = $.parseUrl(url);
+		      url = obj.url;
+		      values = obj.params;
+		    }
+
+		    values = removeNulls(values);
+
+		    var form = $('<form>')
+		      .attr("method", method)
+		      .attr("action", url + hash);
+
+
+		    if (target) {
+		      form.attr("target", target);
+		    }
+
+		    var submit = form[0].submit;
+		    iterateValues(values, [], form, null, traditional);
+
+		    return { form: form, submit: function () { submit.call(form[0]); } };
+		  }
+
+		  //Utility Functions
+			/**
+			 * Url and QueryString Parser.
+			 * @param {string} url - a Url to parse.
+			 * @returns {object} an object with the parsed url with the following structure {url: URL, params:{ KEY: VALUE }}
+			 */
+		  $.parseUrl = function (url) {
+
+		    if (url.indexOf('?') === -1) {
+		      return {
+		        url: url,
+		        params: {}
+		      };
+		    }
+		    var parts = url.split('?'),
+		      query_string = parts[1],
+		      elems = query_string.split('&');
+		    url = parts[0];
+
+		    var i, pair, obj = {};
+		    for (i = 0; i < elems.length; i += 1) {
+		      pair = elems[i].split('=');
+		      obj[pair[0]] = pair[1];
+		    }
+
+		    return {
+		      url: url,
+		      params: obj
+		    };
+		  };
+
+		  //Private Functions
+		  var getInput = function (name, value, parent, array, traditional) {
+		    var parentString;
+		    if (parent.length > 0) {
+		      parentString = parent[0];
+		      var i;
+		      for (i = 1; i < parent.length; i += 1) {
+		        parentString += "[" + parent[i] + "]";
+		      }
+
+		      if (array) {
+		        if (traditional)
+		          name = parentString;
+		        else
+		          name = parentString + "[" + name + "]";
+		      } else {
+		        name = parentString + "[" + name + "]";
+		      }
+		    }
+
+		    return $("<input>").attr("type", "hidden")
+		      .attr("name", name)
+		      .attr("value", value);
+		  };
+
+		  var iterateValues = function (values, parent, form, isArray, traditional) {
+		    var i, iterateParent = [];
+		    Object.keys(values).forEach(function (i) {
+		      if (typeof values[i] === "object") {
+		        iterateParent = parent.slice();
+		        iterateParent.push(i);
+		        iterateValues(values[i], iterateParent, form, Array.isArray(values[i]), traditional);
+		      } else {
+		        form.append(getInput(i, values[i], parent, isArray, traditional));
+		      }
+		    });
+		  };
+
+		  var removeNulls = function (values) {
+		    var propNames = Object.getOwnPropertyNames(values);
+		    for (var i = 0; i < propNames.length; i++) {
+		      var propName = propNames[i];
+		      if (values[propName] === null || values[propName] === undefined) {
+		        delete values[propName];
+		      } else if (typeof values[propName] === 'object') {
+		        values[propName] = removeNulls(values[propName]);
+		      } else if (values[propName].length < 1) {
+		        delete values[propName];
+		      }
+		    }
+		    return values;
+		  };
+		}(window.jQuery || window.Zepto || window.jqlite));
+	</script>
+	
+	<div class="pay">
+		<div class="infoPay">
+			<div class="content">
+				<dt>Tên Phim:</dt>
+				<dd>tên phim</dd>
+				<br>
+				<dt>Time:</dt>
+				<dd>từ mấy giờ tới mấy giờ</dd>
+				<dt>Chỗ đã chọn:</dt>
+				<dd>in ra ghế đã chọn</dd>
+				<dt>Tiền:</dt>
+				<dd>80.000</dd>
+				<br>
+			</div>
+			<a class="button button-confirm">Xác nhận</a> <a
+				class="button button-cancel-order">Hủy</a>
+		</div>
+	</div>
+	<div class="orderSuccess">
+		<div class="success">
+			<img class="imgSuccess" alt="success" src="../images/success.png">
+			<div class="textSuccess">Đặt vé thành công</div>
+		</div>
+	</div>
+	<div th:replace="~{fragments/header :: header}"></div>
+	<div class="main">
+		<div class="main-page">
+			<div class="text-book">
+				<h1>Đặt Vé</h1>
+			</div>
+			<div class="info">
+				<div class="content">
+				<img class="poster" src="../images/film.jpg"
+						th:src="${filmPoster}"
+					 alt="poster"> 
+					<dt>Tên Phim:</dt>
+					<dd th:text="${filmTitle}">Avenger</dd>
+					<br>
+				</div>
+			</div>
+			<div class="calendar">
+				<div class="list-days">
+					<ol>
+						<li class="day" th:each="day : ${dayList}" >
+						
+							<a th:href="@{/api/issue/get(filmId=${filmId}, date=${#dates.format(day, 'yyyy-MM-dd')})}" 
+							th:text="${#dates.dayOfWeekName(day)} + ' ' + ${#dates.format(day, 'dd-MM')}"></a>
+						</li>
+					</ol>
+				</div>
+				<div class="list-times">
+					<div id="emptyMsg">Ngày đã chọn không có xuất chiếu</div>
+					<div id="loadingMsg">Đang tải dữ liệu</div>
+					<ol></ol>
+				</div>
+				
+			</div>
+			<div class="position-selector">
+				<div class="ticket-box">
+					<div class="screen">
+						<span class="text-screen">screen</span>
+					</div>
+					<div class="cabin-seat">
+						<ol>
+							<li class="row">
+								
+								<span class="seat">
+								<input type="checkbox" id="A1" disabled>
+									<label for="A1">A1</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A2" disabled>
+									<label for="A2">A2</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A3" disabled>
+									<label for="A3">A3</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A4" disabled>
+									<label for="A4">A4</label>
+									
+								</span>
+								<span class="seat">
+								<input type="checkbox" id="A5" disabled>
+									<label for="A5">A5</label>
+									
+								</span> 
+								<span class="seat">
+								<input type="checkbox" id="A6" disabled>
+									<label for="A6">A6</label>
+									
+								</span> 	
+								
+							</li>
+							<li class="row">
+								
+								<span class="seat">
+									
+									<input type="checkbox" id="B1" disabled>
+									<label for="B1">B1</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="B2" disabled>
+									<label for="B2">B2</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="B3" disabled>
+									<label for="B3">B3</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="B4" disabled>
+									<label for="B4">B4</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="B5" disabled>
+									<label for="B5">B5</label>
+								</span> 
+								<span class="seat">
+									
+									<input type="checkbox" id="B6" disabled>
+									<label for="B7">B6</label>
+								</span> 	
+							</li>
+							<li class="row">
+								
+								<span class="seat">
+									
+									<input type="checkbox" id="C1" disabled>
+									<label for="C1">C1</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="C2" disabled>
+									<label for="C2">C2</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="C3" disabled>
+									<label for="C3">C3</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="C4" disabled>
+									<label for="C4">C4</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="C5" disabled>
+									<label for="C5">C5</label>
+								</span> 
+								<span class="seat">
+									
+									<input type="checkbox" id="C6" disabled>
+									<label for="C6">C6</label>
+								</span> 	
+								
+							</li>
+							<li class="row">
+								<span class="seat">				
+									<input type="checkbox" id="D1" >				
+									<label for="D1">D1</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="D2" disabled><label for="D2">D2</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="D3" disabled><label for="D3">D3</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="D4" disabled><label for="D4">D4</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="D5" disabled><label for="D5">D5</label>
+								</span> 
+								<span class="seat">
+									
+									<input type="checkbox" id="D6" disabled><label for="D6">D6</label>
+								</span> 	
+								
+							</li>
+							<li class="row">
+								
+								<span class="seat"><input type="checkbox" id="E1" disabled>
+									<label for="E1">D1</label>
+									
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="E2" disabled><label for="E2">E2</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="E3" disabled><label for="E3">E3</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="E4" disabled><label for="E4">E4</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="E5" disabled><label for="E5">E5</label>
+								</span> 
+								<span class="seat">
+									
+									<input type="checkbox" id="E6" disabled><label for="E6">E6</label>
+								</span> 	
+								
+							</li>
+							<li class="row">
+							
+									<span class="seat">
+										
+										<input type="checkbox" id="F1" disabled><label for="F1">F1</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="F2" disabled><label for="F2">F2</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="F3" disabled><label for="F3">F3</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="F4" disabled>
+										<label for="F4">F4</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="F5" disabled><label for="F5">F5</label>
+									</span> 
+									<span class="seat">
+										
+										<input type="checkbox" id="F6" disabled><label for="F6">F6</label>
+									</span> 	
+								
+							</li>
+							
+							<li class="row">
+									<span class="seat">
+										
+										<input type="checkbox" id="G1" disabled><label for="G1">G1</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="G2" disabled><label for="G2">G2</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="G3" disabled><label for="G3">G3</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="G4" disabled><label for="G4">G4</label>
+									</span>
+									<span class="seat">
+										
+										<input type="checkbox" id="G5" disabled><label for="G5">G5</label>
+									</span> 
+									<span class="seat">
+										
+										<input type="checkbox" id="G6" disabled><label for="G6">G6</label>
+									</span> 	
+							</li>
+							<li class="row">
+								<span class="seat">
+									
+									<input type="checkbox" id="H1" disabled><label for="H1">H1</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="H2" disabled><label for="H2">H2</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="H3" disabled><label for="H3">H3</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="H4" disabled><label for="H4">H4</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="H5" disabled><label for="H5">H5</label>
+								</span> 
+								<span class="seat">
+									
+									<input type="checkbox" id="H6" disabled><label for="H7">H6</label>
+								</span> 	
+							</li>
+							<li class="row">
+								<span class="seat">
+									
+									<input type="checkbox" id="I1" disabled><label for="I1">I1</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="I2" disabled><label for="I2">I2</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="I3" disabled><label for="I3">I3</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="I4" disabled><label for="I4">I4</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="I5" disabled><label for="I5">I5</label>
+								</span> 
+								<span class="seat">
+									
+									<input type="checkbox" id="I6" disabled><label for="I6">I6</label>
+								</span> 	
+							</li>
+							<li class="row">
+								<span class="seat">
+									
+									<input type="checkbox" id="J1" disabled><label for="J1">J1</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="J2" disabled><label for="J2">J2</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="J3" disabled><label for="J3">J3</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="J4" disabled><label for="J4">J4</label>
+								</span>
+								<span class="seat">
+									
+									<input type="checkbox" id="J5" disabled><label for="J5">J5</label>
+								</span> 
+								<span class="seat">
+									
+									<input type="checkbox" id="J6" disabled><label for="J6">J6</label>
+								</span> 	
+							</li>
+						</ol>
+					</div>
+				</div>
+				<div class="ticketNotice">
+					<div class="zone">
+						<div class="zone-notice-trong">
+							<a class="nope">trống</a>
+						</div>
+						<a class="noticeNope">Ghế trống</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-vip">
+							<a class="nope">vip</a>
+						</div>
+						<a class="noticeNope">Ghế Vip</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-checked">
+							<a class="nope">đang chọn</a>
+						</div>
+						<a class="noticeCheked">Ghế chọn</a>
+					</div>
+					<div class="zone">
+						<div class="zone-notice-occupied">
+							<a class="nope">đã đặt</a>
+						</div>
+						<a class="noticeOccupied">Ghế đã được đặt</a>
+					</div>
+				</div>
+				<div class="userbutton">
+					<a class="button button-book" id="bookBtn">Đặt vé</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$("document").ready(function() {
+
+		/*
+		$(".seat-seat-standard-active").click(function() {
+			$(".seat-seat-standard-active").css("background-color", " #ed9900");
+			$(".seat-seat-standard-active").css("color", "white");
+		})
+
+		$(".button-book").click(function() {
+			$(".pay").fadeIn(150);
+			$(".pay").css("display", "flex");
+		})
+
+		$(".button-cancel-order").click(function() {
+			$(".pay").css("display", "none");
+		})
+
+		$(".button-confirm").click(function() {
+			$(".orderSuccess").css("display", "flex");
+			$(".pay").css("display", "none");
+		})
+
+		$(".orderSuccess").click(function() {
+			$(".orderSuccess").css("display", "none");
+		})
+
+		$(".day").click(function() {
+			$(".list-times").slideDown();
+			$(".list-times").css("display", "block");
+		})
+
+		$(".time").click(function() {
+			$(".position-selector").slideDown("slow");
+		})
+
+		$(".button-cancel").click(function() {
+			$(".position-selector").slideUp("slow");
+		})
+
+		$(".day").on('change', function() {
+			$(".day").not(this).prop('checked', false);
+		})
+
+		$(".time").on('change', function() {
+			$(".time").not(this).prop('checked', false);
+		})
+		
+		*/
+		
+		function getSelectedTicketIds() {
+			let selectedPositions = []
+			$(".seat input").each( function(index, element) {
+				if (element.checked) {
+					selectedPositions.push(element.ticketId)
+				}
+			})
+			return selectedPositions;
+		}
+		
+		let selectedIssue = null;
+		
+		$("div.list-days a").click(function(event) {
+			event.preventDefault();
+			
+			let url = $(event.currentTarget).attr("href");
+			
+			$(".list-times #loadingMsg").show();
+			$(".list-times #emptyMsg").hide();
+			
+			$.get(url).done( function(issues) {
+				$(".list-times #loadingMsg").hide()
+				let listTimes = $(".list-times ol").empty();
+				$(".list-times").slideDown("slow");
+				$(".position-selector").hide();
+				if (issues.length > 0) {
+					issues.forEach( function(issue) {
+						listTimes.append(
+							$(`<li class="time">${issue.time}</li>`).click( function() {
+								let _url = /*[[@{/api/ticket/get-by-issue-id}]]*/ null;
+								
+								$.get(_url, {issueId: issue.id}).done( function(tickets) {
+									tickets.forEach( function(ticket) {
+										let el = document.getElementById(`${ticket.position}`);
+										el.ticketId = ticket.id;
+										el.checked = false;
+										
+										$(el).prop('disabled', !ticket.availiable)
+									});
+								});
+								
+								$(".position-selector").slideDown("slow");
+								$(".list-times .time").not(this).removeClass("time-selected");
+								$(this).addClass("time-selected");
+							})
+							
+							
+						);
+					});
+				} else {
+					$(".list-times #emptyMsg").show();
+				}
+			});
+			
+		});
+		
+		$("#bookBtn").click( function() {
+			let tickets = getSelectedTicketIds();
+			if (tickets.length == 0){ 
+				alert('vui lòng chọn ít nhất một xuất chiếu');
+			} else {
+			 	$.redirect({
+			 		url: /*[[@{/book}]]*/ '/book',
+			 		values: {
+			 			tickets: tickets	
+			 		},
+			 		method: "POST",
+			 		target: "_blank",
+			 		traditional: true
+			 	})
+			}
+		})
+		
+		$(".day").click( function(){
+			$(".day").not(this).removeClass("day-selected");
+			$(this).addClass("day-selected");
+		})
+		
+	})
+	/*]]>*/
+	</script>
+</body>
+</html>

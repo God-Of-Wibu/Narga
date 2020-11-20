@@ -7,5 +7,5 @@ import javax.servlet.http.HttpServletRequest;
 
 @FunctionalInterface
 public interface IHandler {
-	String doStuff(HttpServletRequest req) throws IOException, ServletException;
+	String execute(HttpServletRequest req) throws IOException, ServletException;
 }

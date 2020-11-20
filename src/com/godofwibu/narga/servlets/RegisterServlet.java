@@ -1,48 +1,39 @@
 package com.godofwibu.narga.servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionIdListener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
-import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
-import com.godofwibu.narga.repositories.IUserRepository;
-import com.godofwibu.narga.repositories.UserRepository;
+import com.godofwibu.narga.formdata.RegisterFormData;
 import com.godofwibu.narga.services.IAccountService;
-import com.godofwibu.narga.services.UserCreationException;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
+import com.godofwibu.narga.utils.FormParser;
 
 @WebServlet(name = "registerServlet", urlPatterns = { "/register" })
-public class RegisterServlet extends HttpServlet {
+public class RegisterServlet extends NargaServlet {
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(RegisterServlet.class);
 
 	private TemplateEngine templateEngine;
 	private IAccountService accountService;
-
-	public RegisterServlet() {
-		super();
-	}
+	private FormParser formParser;
 
 	@Override
 	public void init() throws ServletException {
 		super.init();
-		ServletContext ctx = getServletContext();
-		templateEngine = (TemplateEngine) ctx.getAttribute(TemplateEngine.class.getName());
-		accountService = (IAccountService) ctx.getAttribute(IAccountService.class.getName());
+		templateEngine = getAttributeByClassName(TemplateEngine.class);
+		accountService = getAttributeByClassName(IAccountService.class);
+		formParser = getAttributeByClassName(FormParser.class);
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -53,25 +44,19 @@ public class RegisterServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res)
 			throws ServletException, IOException {
-		
-		Map<String, String[]> params = req.getParameterMap();
-		String userId = params.get("userId")[0];
-		String password = params.get("password")[0];
-		String confirmPassword = params.get("confirmPassword")[0];
-		String personalId = params.get("personalId")[0];
-		String name = params.get("name")[0];
-		Role role = Role.MEMBER;
-		
 		try {
-			accountService.registerNewUser(userId, password, confirmPassword, role, name, personalId);
-			req.getSession().setAttribute("user", accountService.loadUserById(userId));
-			req.getRequestDispatcher("/index").forward(req, res);
-			LOGGER.error("registered new user: {}", userId);
-		} catch (UserCreationException e) {
-			LOGGER.error("Fail to register new user: {}", e.getMessage());
+			req.setCharacterEncoding("UTF-8");
+			User user = accountService.registerNewUser(formParser.parse(req, RegisterFormData.class));
+			req.getSession().setAttribute("user", user);
+			String returnPage = "/home";
+			res.sendRedirect(req.getContextPath() + returnPage);
+			
+		} catch (ServiceLayerException ex) {
 			WebContext webContext = new WebContext(req, res, getServletContext(), req.getLocale());
-			webContext.setVariable("message", e.getMessage());
+			webContext.setVariable("status", ex.getMessage());
 			templateEngine.process("register", webContext, res.getWriter());
 		}
+		
+		
 	}
 }

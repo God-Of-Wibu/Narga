@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta th:replace="~{fragments/header :: meta}">
 <link rel="stylesheet" type="text/css" href="../css/infoFilm.css"
 	th:href="@{/static/css/infoFilm.css}">
 <script type="text/javascript" src="../js/infoFilm.js"
 	th:src="@{/static/js/infoFilm.js}"></script>
 <title th:text="${film.title}"></title>
+<script th:replace="~{fragment/header :: script}"></script>
+<link th:replace="~{fragments/header :: link}">
+
 </head>
 <body>
-	<header class="header">
-		<img class="logo" src="../images/logo.png"
-			th:src="@{/static/images/logo.png}">
-	</header>
+	<header th:replace="~{fragments/header :: header}"></header>
 	<div class="text-center">
 		<h1>Title</h1>
 	</div>
@@ -21,7 +21,7 @@
 			<div class="thumb">
 				<img class="posterFilm" src="../images/film.jpg"
 					th:src="${film.poster.url}" alt="poster"> <a
-					class="button-order"> Đặt vé </a>
+					class="button-order" th:href="@{/book(filmId=${film.id})}"> Đặt vé </a>
 			</div>
 			<div class="attr">
 				<div class="content">
@@ -31,8 +31,8 @@
 					<dt>Đạo diễn:</dt>
 					<dd>
 						<a class="directors" th:if="${film.director}"
-							href="@{'/director/'+${director.id}}"
-							th:href="${film.director.name}">Thịn Thịn</a>
+							th:href="@{'/detail/director/'+${film.director.id}}"
+							th:text="${film.director.name}">Thịn Thịn</a>
 					</dd>
 					<br>
 					<dt class="dt-category">Thể loại:</dt>
@@ -45,7 +45,7 @@
 					<dt>Diễn viên:</dt>
 					<dd>
 						<a class="cast" href="#" th:each="actor : ${film.casting}"
-							th:text="${actor.name}" th:href="@{'/actor/'+${actor.id}}">Thịn</a>
+							th:text="${actor.name}" th:href="@{'/detail/actor/'+${actor.id}}">Thịn</a>
 					</dd>
 					<br>
 					<dt>Ngày khởi chiếu:</dt>

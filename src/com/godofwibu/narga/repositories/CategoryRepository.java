@@ -6,7 +6,7 @@ import org.hibernate.SessionFactory;
 
 import com.godofwibu.narga.entities.Category;
 
-public class CategoryRepository extends CurdRepository<Category, Integer> implements ICategoryRepository {
+public class CategoryRepository extends CrudRepository<Category, Integer> implements ICategoryRepository {
 	public CategoryRepository(SessionFactory sessionFactory) {
 		super(sessionFactory, Category.class);
 	}

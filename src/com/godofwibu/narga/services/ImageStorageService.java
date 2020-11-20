@@ -5,12 +5,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
+import javax.servlet.http.Part;
+
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.godofwibu.narga.entities.ImageData;
 import com.godofwibu.narga.repositories.IImageDataRepository;
+import com.godofwibu.narga.services.exception.ServiceLayerException;
+import com.godofwibu.narga.services.exception.UnableToSaveImageDataException;
 import com.godofwibu.narga.utils.ITransactionTemplate;
 
 public class ImageStorageService implements IImageStorageService {
@@ -44,11 +49,11 @@ public class ImageStorageService implements IImageStorageService {
 			try  {
 				writeToFile(inputStream, fileName);
 				String url = contextPath + fileResourcePrefix + "/" + fileName;
-				Integer id = imageDataRepository.insert(new ImageData(url, fileName));
+				Integer id = imageDataRepository.save(new ImageData(url, fileName));
 				ImageData imageData = imageDataRepository.findById(id);
 				return imageData;
 			} catch (IOException e) {
-				throw new ServiceLayerException("Unable to write image to file", e);
+				throw new UnableToSaveImageDataException("Unable to write image to file", e);
 			}
 		});
 	}
@@ -67,7 +72,7 @@ public class ImageStorageService implements IImageStorageService {
 	@Override
 	public ImageData saveImage(String url) {
 		return transactionTemplate.execute(() -> {
-			Integer id = imageDataRepository.insert(new ImageData(url, null));
+			Integer id = imageDataRepository.save(new ImageData(url, null));
 			return imageDataRepository.findById(id);
 		});
 	}
@@ -79,6 +84,16 @@ public class ImageStorageService implements IImageStorageService {
 			while ((read = inputStream.read(buffer, 0, BUFF_SIZE)) != -1) {
 				outputStream.write(buffer, 0, read);
 			}
+		}
+	}
+
+
+	@Override
+	public ImageData saveImage(Part part, String nameImage) throws ServiceLayerException {
+		try {
+			return saveImage(part.getInputStream(), nameImage);
+		} catch (IOException e) {
+			throw new UnableToSaveImageDataException("unable to get part's input stream", e);
 		}
 	}
 }

@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.Session;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
 import com.godofwibu.narga.entities.User;
-import com.godofwibu.narga.repositories.IUserRepository;
 import com.godofwibu.narga.services.IAccountService;
 
 @WebServlet(name = "loginServlet", urlPatterns = "/login")
@@ -53,14 +51,15 @@ public class LoginServlet extends HttpServlet {
 	}
 
 	private void login(HttpServletRequest req, HttpServletResponse res, String username, String password) throws ServletException, IOException {
-		User user = accountService.loadUserById(username);
+		User user = accountService.getUser(username);
 		
 		if (user != null && user.getPassword().equals(password)) {
 			HttpSession session = req.getSession();
 			session.setAttribute("user", user);
-			req.getRequestDispatcher("/index").forward(req, res);
+			res.sendRedirect(req.getContextPath() + "/home");
+			
 		} else {
-			req.setAttribute("fail", "username or password is incorrect.");
+			req.setAttribute("status", "username or password is incorrect.");
 			doGet(req, res);
 		}
 	}

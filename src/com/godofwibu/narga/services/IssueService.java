@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import com.godofwibu.narga.dto.*;
 import com.godofwibu.narga.entities.Film;
@@ -30,6 +33,8 @@ public class IssueService implements IIssueService {
 	private IFilmRepository filmRepository;
 	private ITicketRepository ticketRepository;
 	private Gson gson;
+	
+	private ScheduledExecutorService scheduledExecutorService;
 
 	public IssueService(ITransactionTemplate transactionTemplate, IIssueRepository issueRepository,
 			IFilmRepository filmRepository, ITicketRepository ticketRepository) {
@@ -39,15 +44,18 @@ public class IssueService implements IIssueService {
 		this.filmRepository = filmRepository;
 		this.ticketRepository = ticketRepository;
 		this.gson = new GsonBuilder().create();
+		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 	}
 
-	private final static boolean[] IS_VIP_ROW = { false, // A
+	private final static boolean[] IS_VIP_ROW = { 
+			false, // A
 			false, // B
 			false, // C
 			true, // D
 			true, // E
 			false, // F
-			true, // G
+			true, // G,
+			true, // H
 			false, // I
 			false, // J
 	};
@@ -63,8 +71,8 @@ public class IssueService implements IIssueService {
 					issue.setFilm(film);
 					issue.setDate(dateTime.getDate());
 					issue.setTime(dateTime.getTime());
-					issueRepository.save(issue);
-					for (char row = 'A'; row < 'J'; ++row) {
+					int id  = issueRepository.save(issue);
+					for (char row = 'A'; row <= 'J'; ++row) {
 						for (int col = 1; col <= 6; ++col) {
 							Ticket ticket = new Ticket();
 							ticket.setPosition("" + row + col);
@@ -73,6 +81,10 @@ public class IssueService implements IIssueService {
 							ticketRepository.save(ticket);
 						}
 					}
+					long time = dateTime.getDate().getTime() + dateTime.getTime().getTime() - System.currentTimeMillis();
+					scheduledExecutorService.schedule(() -> {
+						issueRepository.deleteById(id);
+					}, time, TimeUnit.MILLISECONDS);
 
 				}
 			});

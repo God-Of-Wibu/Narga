@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
+<meta th:replace="~{fragments/header :: meta}">
 <link rel="stylesheet" type="text/css" href="../css/infoFilm.css"
 	th:href="@{/static/css/infoFilm.css}">
 <script type="text/javascript" src="../js/infoFilm.js"
 	th:src="@{/static/js/infoFilm.js}"></script>
 <title th:text="${film.title}"></title>
+<script th:replace="~{fragment/header :: script}"></script>
+<link th:replace="~{fragments/header :: link}">
+
 </head>
 <body>
-	<header class="header">
-		<img class="logo" src="../images/logo.png"
-			th:src="@{/static/images/logo.png}">
-	</header>
+	<header th:replace="~{fragments/header :: header}"></header>
 	<div class="text-center">
 		<h1>Title</h1>
 	</div>

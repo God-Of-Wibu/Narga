@@ -3,54 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Import Boostrap css, js, font awesome here -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 <link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
 	rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="../../css/header.css"
+	th:href="@{/static/css/header.css}">
 <script
 	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-	
 </script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js">
-	
+</script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js">
 </script>
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<link rel="stylesheet" type="text/css" href="../../css/header.css"
-	th:href="@{/static/css/header.css}">
+
 <title>Insert title here</title>
 </head>
 <body>
-	<div th:fragment="header">
-		<nav class="navbar navbar-expand-md navbar-light bg-light sticky-top">
-			<div class="">
-				<div class="nav-bar-r1">
-					<a class="ticket" href="#"> Vé của bạn</a> <a class="login"
-						href="#">Đăng Nhập/Đăng Kí</a> <a class="login" href="#"
-						style="display: none;">Thịn Thịn</a>
-				</div>
-				<div class="nav-bar-r2">
-					<a class="navbar-branch" href="#"> <img
-						src="../../images/logo.png">
-					</a>
-					<button class="navbar-toggler" type="button" data-toggle="collapse"
-						data-target="#navbarResponsive">
-						<span class="navbar-toggler-icon"></span>
-					</button>
-					<div class="collapse navbar-collapse" id="navbarResponsive">
-						<ul class="navbar-nav ml-auto">
-							<li class="nav-item"><a class="nav-link" href="#">Trang
-									Chủ</a></li>
-							<li class="nav-item"><a class="nav-link" href="#">Phim
-									Sắp Chiếu</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</nav>
-	</div>
+	<!-- header -->
+	<header th:fragment="header">
+		<img src="../../images/header.png" class="img-fluid"
+			alt="Responsive image" th:src="@{/static/images/header.png}">
+		<ul class="nav justify-content-end nav-pills nav-fill navbar">
+			<li class="nav-item"><a class="fa fa-home" th:href="@{/home}" href="home.html">Home</a>
+			</li>
+			<li class="nav-item"><a class="fa fa-address-card"
+				href="myTicket.html" th:href="@{/my-tickets}">Your ticket</a></li>
+			<li th:if ="(!${#session}) or (!${session.user})" class="nav-item"><a class="fa fa-user-circle"
+				href="login.html" th:href="@{/login}">Đăng nhập</a></li>
+			<li th:if ="(!${#session}) or (!${session.user})" class="nav-item"><a class="fa fa-user-circle"
+				href="register.html" th:href="@{/register}">Đăng ký</a></li>
+		</ul>
+	</header>
 </head>
 </body>
 </html>

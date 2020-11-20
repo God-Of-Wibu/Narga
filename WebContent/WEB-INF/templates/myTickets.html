@@ -7,222 +7,52 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <!-- Bootstrap CSS -->
-<link rel="stylesheet" href="../css/bootstrap.min.css"
-	th:href="@{/static/css/bootstrap.min.css}">
-<script src="../js/jquery-3.5.1.min.js"
-	th:src="@{/static/js/jquery-3.5.1.min.js}"></script>
-<script src="../js/popper.min.js" th:src="@{/static/js/popper.min.js}"></script>
-<script src="../js/bootstrap.min.js"
-	th:src="@{/static/js/bootstrap.min.js}"></script>
-<title>Insert title here</title>
-<style type="text/css">
-@import url('https://fonts.googleapis.com/css?family=Oswald');
-@import url('https://fonts.googleapis.com/css2?family=Merriweather+Sans&display=swap');
-
-* {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	box-sizing: border-box;
-}
-
-.container small:after{
-    content: "";
-    background-image: url("../images/logo.png");
-    background-size: 50px;
-    display: inline-block;
-    width: 40px; 
-    height: 40px;
-    content:"";
-    position: relative;
-    top:10px;
-    left: 10px;
-}
-
-h3{
-    margin-top: 5px;
-}
-
-body 
-{
-	background-color: #fdf7dc;
-	font-family: arial;
-}
-
-.fl-left {
-	float: left;
-}
-
-.fl-right {
-	float: right;
-}
-
-.container {
-	width: 90%;
-	margin: 100px auto;
-}
-
-h1 {
-	text-transform: uppercase;
-	font-weight: 900;
-	border-left: 10px solid #fec500;
-	padding-left: 10px;
-	margin-bottom: 30px;
-	font-family: serif;
-	font-family: 'Merriweather Sans', sans-serif;
-}
-
-.row {
-	overflow: hidden
-}
-
-.card {
-	display: table-row;
-	width: 49%;
-	background-color: rgba(34, 49, 17, 0.7);
-	color: #989898;
-	margin-bottom: 10px;
-	font-family: 'Oswald', sans-serif;
-	text-transform: uppercase;
-	border-color: #198798;
-	border-radius: 4px;
-	position: relative;
-}
-
-.card+.card {
-	margin-left: 2%;
-}
-
-.date {
-	display: table-cell;
-	width: 30%;
-	position: relative;
-	text-align: center;
-	border-right: 2px dashed #198798;
-}
-
-.date:before, .date:after {
-	content: "";
-	display: block;
-	width: 30px;
-	height: 30px;
-	background-color: #fdf7dc;
-	position: absolute;
-	top: -15px;
-	right: -15px;
-	z-index: 1;
-	border-radius: 50%;
-}
-
-.date:after {
-	top: auto;
-	bottom: -15px;
-}
-
-.date time {
-	display: block;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	-webkit-transform: translate(-50%, -50%);
-	-ms-transform: translate(-50%, -50%);
-	transform: translate(-50%, -50%);
-}
-
-.date time span {
-	display: block;
-}
-
-.date time span:first-child {
-	color: rgb(29, 157, 175);
-	font-weight: 600;
-	font-size: 250%;
-}
-
-.date time span:last-child {
-	text-transform: uppercase;
-	font-weight: 600;
-	margin-top: -10px;
-	color: #ff6800;
-}
-
-.card-cont {
-	display: table-cell;
-	width: 75%;
-	font-size: 85%;
-	padding: 10px 10px 30px 50px;
-}
-
-.card-cont h3 {
-	color: #3C3C3C;
-	font-size: 130%;
-}
-
-.card-cont>div {
-	display: table-row
-}
-
-.card-cont .even-date i, .card-cont .even-info i, .card-cont .even-date time,
-	.card-cont .even-info p {
-	display: table-cell;
-}
-
-.card-cont .even-date i, .card-cont .even-info i {
-	padding: 5% 5% 0 0;
-}
-
-.card-cont .even-info p {
-	padding: 30px 50px 0 0;
-}
-
-.card-cont .even-date time span {
-	display: block;
-}
-
-.card-cont a {
-	display: block;
-	text-decoration: none;
-	width: 80px;
-	height: 30px;
-	background-color: #D8DDE0;
-	color: #fff;
-	text-align: center;
-	line-height: 30px;
-	border-radius: 2px;
-	position: absolute;
-	right: 10px;
-	bottom: 10px;
-}
-
-.row:last-child .card:first-child .card-cont a {
-	background-color: #037FDD;
-}
-
-.row:last-child .card:last-child .card-cont a {
-	background-color: #F8504C;
-}
-
-@media screen and (max-width: 860px) {
-	.card {
-		display: block;
-		float: none;
-		width: 100%;
-		margin-bottom: 10px;
-	}
-	.card+.card {
-		margin-left: 0;
-	}
-	.card-cont .even-date, .card-cont .even-info {
-		font-size: 75%;
-	}
-}
-</style>
+<!-- Import Boostrap css, js, font awesome here -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+<link href="https://use.fontawesome.com/releases/v5.0.4/css/all.css"
+	rel="stylesheet">
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">	
+</script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js">
+	
+</script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../css/home.css"
+	th:href="@{/static/css/home.css}">
+<link rel="stylesheet" type="text/css" href="../css/header.css"
+	th:href="@{/static/css/header.css}">
+<link rel="stylesheet" type="text/css" href="../css/myTicket.css"
+	th:href="@{/static/css/myTicket.css}">
+<title>My Ticket</title>
 </head>
 <body>
-	<section class="container">
-		<h1>Vé Của Bạn</h1>
+	<!-- header -->
+	<header>
+	<img src="../images/header.png" class="img-fluid" alt="Responsive image">
+	<ul class="nav justify-content-end nav-pills nav-fill navbar">
+  <li class="nav-item">
+    <a class="nav-link home" href="home.html">Home</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link ticket active " href="myTicket.html">Your ticket</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link login" href="login.html">Đăng nhập</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link login" href="login.html">Đăng kí</a>
+  </li>
+</ul>
+	</header>
+   <div class= "container-fluid">
+		<section class="container">
+		<img src="../images/myTicket.png" class="img-fluid" alt="Responsive image">
 		<div class="row">
-			<article  th:each="ticket : ${tickets}" class="card fl-left">
+			<article  th:each="ticket : ${tickets}" class="card col-sm-5">
 				<section class="date">
 					<time datetime="23th feb">
 						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
@@ -244,7 +74,162 @@ h1 {
 					</div>
 				</section>
 			</article>
+			<article  th:each="ticket : ${tickets}" class="card fl-left col-sm-5">
+				<section class="date">
+					<time datetime="23th feb">
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
+					</time>
+				</section>
+				<section class="card-cont">
+					<small>RẠP PHIM WIBU LORD</small>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
+					<div class="even-date">
+						<i class="fa fa-calendar"></i>
+						<time>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
+						</time>
+					</div>
+					<div class="even-info">
+						<i class="fa fa-map-marker"></i>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
+					</div>
+				</section>
+			</article>
+			<article  th:each="ticket : ${tickets}" class="card fl-left col-sm-5">
+				<section class="date">
+					<time datetime="23th feb">
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
+					</time>
+				</section>
+				<section class="card-cont">
+					<small>RẠP PHIM WIBU LORD</small>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
+					<div class="even-date">
+						<i class="fa fa-calendar"></i>
+						<time>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
+						</time>
+					</div>
+					<div class="even-info">
+						<i class="fa fa-map-marker"></i>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
+					</div>
+				</section>				
+			</article>
+			<article  th:each="ticket : ${tickets}" class="card fl-left col-sm-5">
+				<section class="date">
+					<time datetime="23th feb">
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
+					</time>
+				</section>
+				<section class="card-cont">
+					<small>RẠP PHIM WIBU LORD</small>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
+					<div class="even-date">
+						<i class="fa fa-calendar"></i>
+						<time>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
+						</time>
+					</div>
+					<div class="even-info">
+						<i class="fa fa-map-marker"></i>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
+					</div>
+				</section>				
+			</article>
+			<article  th:each="ticket : ${tickets}" class="card fl-left col-sm-5">
+				<section class="date">
+					<time datetime="23th feb">
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
+					</time>
+				</section>
+				<section class="card-cont">
+					<small>RẠP PHIM WIBU LORD</small>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
+					<div class="even-date">
+						<i class="fa fa-calendar"></i>
+						<time>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
+						</time>
+					</div>
+					<div class="even-info">
+						<i class="fa fa-map-marker"></i>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
+					</div>
+				</section>				
+			</article>
+			<article  th:each="ticket : ${tickets}" class="card fl-left col-sm-5">
+				<section class="date">
+					<time datetime="23th feb">
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
+					</time>
+				</section>
+				<section class="card-cont">
+					<small>RẠP PHIM WIBU LORD</small>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
+					<div class="even-date">
+						<i class="fa fa-calendar"></i>
+						<time>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
+						</time>
+					</div>
+					<div class="even-info">
+						<i class="fa fa-map-marker"></i>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
+					</div>
+				</section>				
+			</article>
+			<article  th:each="ticket : ${tickets}" class="card fl-left col-sm-5">
+				<section class="date">
+					<time datetime="23th feb">
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
+					</time>
+				</section>
+				<section class="card-cont">
+					<small>RẠP PHIM WIBU LORD</small>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
+					<div class="even-date">
+						<i class="fa fa-calendar"></i>
+						<time>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
+						</time>
+					</div>
+					<div class="even-info">
+						<i class="fa fa-map-marker"></i>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
+					</div>
+				</section>				
+			</article>
+			<article  th:each="ticket : ${tickets}" class="card fl-left col-sm-5">
+				<section class="date">
+					<time datetime="23th feb">
+						<span th:text="${#dates.day(ticket.date)}">23</span><span th:text="${#dates.monthNameShort(ticket.date)}">feb</span>
+					</time>
+				</section>
+				<section class="card-cont">
+					<small>RẠP PHIM WIBU LORD</small>
+					<h3 th:text="${ticket.filmTitle}">Mắt Chột</h3>
+					<div class="even-date">
+						<i class="fa fa-calendar"></i>
+						<time>
+							<span th:text="${#dates.format(ticket.date, 'dd/MM/yyyy')}">28/10/2014</span> <span th:text="${#dates.format(ticket.startingTime, 'HH:mm')}">9:30</span>
+						</time>
+					</div>
+					<div class="even-info">
+						<i class="fa fa-map-marker"></i>
+						<p th:text="${ticket.cost} + 'Đ'">80.000Đ</p>
+						<p th:text="${ticket.position}">A1</p>
+					</div>
+				</section>				
+			</article>
 		</div>
 	</section>
+	</div>
 </body>
 </html>

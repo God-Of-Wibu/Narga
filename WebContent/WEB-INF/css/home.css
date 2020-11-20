@@ -31,9 +31,16 @@ html, body {
     width: 100%;
     z-index: 999;
 }
-.navbar {
-	background-color:blue !important;
-	background-image: url("https://image.shutterstock.com/z/stock-photo-vintage-scratch-background-with-film-frame-59888398.jpg");
+.home-title {
+	background: url("../images/bg_h3_line.jpg") repeat-x scroll left center rgba(0, 0, 0, 0);
+	height: 60px;
+	text-align: center;
+	width: 100%;
+}
+ .home-title h2 {
+	background: url("../h3_movie_selection.gif") no-repeat scroll center center / 406px 41px #FDFCF0;
+	display: inline-block;
+	width: 425px;
 }
 .navbar li a {
     color: white !important;
@@ -47,7 +54,7 @@ html, body {
 }
 #carouselExampleIndicators{
    width:500px;
-   margin-left:400px;	
+   margin:auto;
    background-image: url("../css/images/bg-bottom-footer.jpg");
    background-repeat: repeat-x;
    

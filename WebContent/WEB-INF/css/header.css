@@ -9,9 +9,16 @@
 
 .navbar {
     background-color: #198798 !important;
-    min-width: 250px;
+    margin-bottom:50px;   
     }
-
+.home{
+	right: 50px;
+	top: 20px;
+	color: #ffba3b !important;
+    text-shadow: 2px 0px 2px red;
+    font-size: 30px;
+    
+}
 .login{
 	right: 50px;
 	top: 20px;
@@ -24,15 +31,15 @@
 	background-image: url("../images/icons/icon-user.png") ;
 	background-size: 20px;
     display: inline-block;
+    margin:0px,10px;
     width: 20px; 
     height: 20px;
     top: -20px;
     content:"";
     position: relative;
     top: 5px;
-    right: 5px;;
+    right: 5px;
 }
-
 .ticket{
 	right: 50px;
 	top: 20px;
@@ -65,11 +72,6 @@
     text-shadow: 2px 0px 2px red;
     text-transform: uppercase;
     padding: 0px;
-}
-
-#carouselExampleIndicators{
-   width:500px;
-   margin-left:500px;	
 }
 
 .carousel-caption {

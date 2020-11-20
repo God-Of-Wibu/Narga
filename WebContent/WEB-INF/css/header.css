@@ -68,8 +68,8 @@
 }
 
 .navbar li a {
-    color: #ffba3b !important;
-    text-shadow: 2px 0px 2px red;
+    color: #ffc800 !important;
+    text-shadow: 2px 0px 2px #ff0000;
     text-transform: uppercase;
     padding: 0px;
 }
@@ -77,6 +77,10 @@
 .carousel-caption {
 	position: absolute;
 	top: 50%;
+}
+
+.nav-item a{
+	text-decoration: none;
 }
 
 .hotfilm img{

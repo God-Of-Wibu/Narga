@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 
+import com.godofwibu.narga.entities.Role;
 import com.godofwibu.narga.entities.User;
 import com.godofwibu.narga.services.IAccountService;
 
@@ -56,7 +57,12 @@ public class LoginServlet extends HttpServlet {
 		if (user != null && user.getPassword().equals(password)) {
 			HttpSession session = req.getSession();
 			session.setAttribute("user", user);
-			res.sendRedirect(req.getContextPath() + "/home");
+			
+			if (user.getRole() == Role.ADMIN) {
+				res.sendRedirect(req.getContextPath() + "/admin");
+			} else {
+				res.sendRedirect(req.getContextPath() + "/home"); 
+			}
 			
 		} else {
 			req.setAttribute("status", "username or password is incorrect.");
